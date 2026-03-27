@@ -2686,44 +2686,43 @@ document.getElementById('aiInput')?.addEventListener('input',function(){
 });
 
 // ── CINEMA THEATER ──────────────────────────────────────
-// All video IDs below are verified working via YouTube oEmbed API
+// All IDs verified via YouTube oEmbed API — Taiwan film trailers only
 const CINEMA_VIDEOS = [
   {
-    id: '4iRupuNet3Q',
-    title: '想見你想見你想見你 Miss You 3000',
-    source: '八三〇 831 · 滾石唱片 ROCK RECORDS · 想見你 片尾曲',
-    desc: '跨越時空的愛，這首歌你聽過幾遍'
+    id: 'BDM693sTP4A',
+    title: '返校 Detention',
+    source: '華納兄弟台灣 Warner Bros. Taiwan · 2019 · 徐漢強 導演',
+    desc: '白色恐怖時代的校園恐怖，台灣遊戲改編電影最高票房'
   },
   {
-    id: '7jYDYon4sGQ',
-    title: 'Last Dance',
-    source: '伍佰 Wu Bai & China Blue · 澀石唱片 · 那些年，我們一起追的女孩 主題曲',
-    desc: '那個你一直記得的人，你還記得嗎'
+    id: 'SCjhTdatEos',
+    title: '老狐狸 Old Fox',
+    source: 'BIT 積木影像 · 2023 · 蕭雅全 導演',
+    desc: '一個孩子 一個老人 一個關於慾望與純真的台灣故事'
+  },
+  {
+    id: 'mJ_ICkOU9OU',
+    title: '瀑布 The Falls',
+    source: 'Netflix · 2021 · 鍾孟宏 導演',
+    desc: '疫情時代裡的母女關係 台灣最具份量的當代電影之一'
+  },
+  {
+    id: 'y5-FEtJTg44',
+    title: '陽光普照 A Sun',
+    source: 'SGIFF 2019 · 鍾孟宏 導演 · 金馬獎最佳影片',
+    desc: '一個台灣家庭的崩解與重組 金馬六項大獎'
   },
   {
     id: 'JkO4wZcZ-ig',
     title: '想見你 電影版 — 多重宇宙預告',
-    source: '車庫娛樂 GaragePlay · 2022 電影版 想見你',
-    desc: '如果可以穿越時空，你最想見誰'
+    source: '車庫娛樂 GaragePlay · 2022 電影版',
+    desc: '台灣最受歡迎的時空愛情劇 正式跨上大銀幕'
   },
   {
-    id: '-Km_NObPF5E',
-    title: 'Someday or One Day — 官方 MV',
-    source: '孫盛希 Shi Shi · 滾石唱片 · 想見你 片頭曲',
-    desc: '台灣近年最燒腦的時空戀愛劇，這首歌的循環播放量驚人',
-    id_note: 'verified via oEmbed'
-  },
-  {
-    id: 'jfKfPfyJRdk',
-    title: '拍片後的深夜',
-    source: 'Lofi Girl · 給所有殺青後還在剪片的你',
-    desc: '殺青了，但還沒真的結束，給所有還在熬夜剪片的劇組人'
-  },
-  {
-    id: 'Hgnpi3eBQ9o',
-    title: '太陽之子 Children of the Sun',
-    source: '周杰倫 Jay Chou · 第十六張專輯 · 2026 台北首映',
-    desc: '台灣音樂人的世界級製作，在台北取景，給所有拍出台灣故事的人'
+    id: '2_WPCrkDptk',
+    title: '消失的情人節 My Missing Valentine',
+    source: '華文創 MandarinVision · 2020 · 陳玉勳 導演',
+    desc: '金馬最佳影片 一個關於慢半拍的人生的魔幻愛情故事'
   },
 ];
 let cinemaIdx = 0;
@@ -2958,13 +2957,12 @@ document.querySelectorAll('.a-up,.a-left,.a-stagger,.a-scale,.a-wipe').forEach(e
 
 <!-- ── FLOATING AI CHATBOT ── -->
 <style>
-#ai-fab{position:fixed;bottom:28px;right:28px;z-index:4000;display:flex;align-items:center;gap:10px;background:var(--red);color:#fff;border:none;border-radius:2px;padding:13px 18px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;box-shadow:0 8px 32px rgba(200,66,42,.4),0 0 0 1px rgba(200,66,42,.3);transition:all .25s var(--spring)}
-#ai-fab:hover{background:#b33820;transform:translateY(-2px);box-shadow:0 12px 40px rgba(200,66,42,.5)}
-#ai-fab .fab-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.8);animation:aiPulse 2.5s ease-in-out infinite}
-#ai-fab .fab-close{display:none;font-size:16px;line-height:1}
-#ai-fab.open .fab-label{display:none}
+#ai-fab{position:fixed;bottom:28px;right:28px;z-index:4000;display:flex;align-items:center;justify-content:center;width:52px;height:52px;background:var(--red);color:#fff;border:none;border-radius:50%;cursor:pointer;box-shadow:0 8px 32px rgba(200,66,42,.45),0 0 0 1px rgba(200,66,42,.3);transition:all .25s var(--spring)}
+#ai-fab:hover{background:#b33820;transform:translateY(-2px) scale(1.06);box-shadow:0 12px 40px rgba(200,66,42,.55)}
+#ai-fab .fab-icon{transition:all .2s;display:block}
+#ai-fab .fab-close{display:none}
+#ai-fab.open .fab-icon{display:none}
 #ai-fab.open .fab-close{display:inline}
-#ai-fab.open .fab-dot{display:none}
 
 #ai-panel{position:fixed;bottom:88px;right:28px;z-index:3999;width:380px;max-height:560px;background:#111;border:1px solid rgba(240,235,227,.12);box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 0 1px rgba(200,66,42,.1);display:flex;flex-direction:column;transform:translateY(20px) scale(0.97);opacity:0;pointer-events:none;transition:all .3s var(--spring);border-radius:3px;overflow:hidden}
 #ai-panel.open{transform:translateY(0) scale(1);opacity:1;pointer-events:all}
@@ -2996,10 +2994,9 @@ document.querySelectorAll('.a-up,.a-left,.a-stagger,.a-scale,.a-wipe').forEach(e
 @media(max-width:480px){#ai-panel{width:calc(100vw - 24px);right:12px}#ai-fab{bottom:20px;right:16px}}
 </style>
 
-<button id="ai-fab" onclick="toggleAIChat()">
-  <span class="fab-dot"></span>
-  <span class="fab-label">AI 助手</span>
-  <span class="fab-close">✕</span>
+<button id="ai-fab" onclick="toggleAIChat()" title="CREWLOG AI 助手">
+  <svg class="fab-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><circle cx="9" cy="10" r=".5" fill="currentColor"/><circle cx="12" cy="10" r=".5" fill="currentColor"/><circle cx="15" cy="10" r=".5" fill="currentColor"/></svg>
+  <span class="fab-close" style="font-size:18px;line-height:1">✕</span>
 </button>
 
 <div id="ai-panel">
