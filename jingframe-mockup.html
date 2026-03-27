@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>景框 JINGFRAME — 台灣影視場景與攝影師的第一個家</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Noto+Sans+TC:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #FAFAF8;
+    --surface: #FFFFFF;
+    --border: #E8E4DF;
+    --text: #1A1A18;
+    --muted: #6B6860;
+    --subtle: #A8A49F;
+    --accent: #C8422A;
+    --accent-light: #F5EAE8;
+    --dark: #0E0D0C;
+    --dark-surface: #1A1916;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --radius-pill: 999px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', 'Noto Sans TC', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── NAVBAR ───────────────────────────────── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(250,250,248,0.88);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    gap: 0;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    text-decoration: none;
+    margin-right: auto;
+  }
+
+  .nav-logo-zh {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--text);
+    letter-spacing: 0.02em;
+  }
+
+  .nav-logo-en {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    list-style: none;
+    margin-right: 20px;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 400;
+    padding: 6px 14px;
+    border-radius: var(--radius-pill);
+    transition: all 0.18s ease;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+
+  .nav-links a:hover {
+    color: var(--text);
+    background: rgba(0,0,0,0.05);
+  }
+
+  .btn-login {
+    background: var(--text);
+    color: #fff;
+    border: none;
+    padding: 7px 18px;
+    border-radius: var(--radius-pill);
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'Noto Sans TC', sans-serif;
+    letter-spacing: 0.02em;
+    transition: all 0.18s ease;
+  }
+
+  .btn-login:hover { background: #333; }
+
+  /* ── HERO ─────────────────────────────────── */
+  .hero {
+    margin-top: 60px;
+    min-height: 92vh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    text-align: center;
+    padding: 80px 32px 0;
+  }
+
+  .hero-film-grid {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 3px;
+    opacity: 0.32;
+  }
+
+  .hero-film-grid div {
+    background: var(--dark);
+  }
+
+  .hero-film-grid div:nth-child(1)  { background: linear-gradient(135deg, #1a0a00, #3d1f0a); }
+  .hero-film-grid div:nth-child(2)  { background: linear-gradient(135deg, #0a0f1a, #1a2533); }
+  .hero-film-grid div:nth-child(3)  { background: linear-gradient(135deg, #0d1a0a, #1a2e15); }
+  .hero-film-grid div:nth-child(4)  { background: linear-gradient(135deg, #1a0a12, #2e1520); }
+  .hero-film-grid div:nth-child(5)  { background: linear-gradient(135deg, #0a0a1a, #15152e); }
+  .hero-film-grid div:nth-child(6)  { background: linear-gradient(135deg, #1a1000, #332200); }
+  .hero-film-grid div:nth-child(7)  { background: linear-gradient(135deg, #001a1a, #003333); }
+  .hero-film-grid div:nth-child(8)  { background: linear-gradient(135deg, #1a0000, #330000); }
+  .hero-film-grid div:nth-child(9)  { background: linear-gradient(135deg, #0a0a0a, #1a1a1a); }
+  .hero-film-grid div:nth-child(10) { background: linear-gradient(135deg, #1a1000, #2e1e00); }
+  .hero-film-grid div:nth-child(11) { background: linear-gradient(135deg, #000a1a, #00152e); }
+  .hero-film-grid div:nth-child(12) { background: linear-gradient(135deg, #0a1a00, #152e00); }
+  .hero-film-grid div:nth-child(13) { background: linear-gradient(135deg, #1a000a, #2e0015); }
+  .hero-film-grid div:nth-child(14) { background: linear-gradient(135deg, #0a0a1a, #15152e); }
+  .hero-film-grid div:nth-child(15) { background: linear-gradient(135deg, #1a0a00, #2e1500); }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg,
+      rgba(14,13,12,0.72) 0%,
+      rgba(14,13,12,0.55) 50%,
+      rgba(14,13,12,0.88) 100%
+    );
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 780px;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(200,66,42,0.18);
+    border: 1px solid rgba(200,66,42,0.35);
+    color: #f09080;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: var(--radius-pill);
+    margin-bottom: 28px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .hero-badge span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: block; animation: pulse 2s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .hero-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(36px, 5.5vw, 64px);
+    font-weight: 400;
+    color: #FAFAF8;
+    line-height: 1.25;
+    letter-spacing: 0.04em;
+    margin-bottom: 20px;
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: rgba(250,250,248,0.65);
+    max-width: 500px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 300;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 13px 28px;
+    border-radius: var(--radius-pill);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'Noto Sans TC', sans-serif;
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-primary:hover { background: #a83520; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(200,66,42,0.35); }
+
+  .btn-outline {
+    background: transparent;
+    color: rgba(250,250,248,0.88);
+    border: 1px solid rgba(250,250,248,0.3);
+    padding: 13px 28px;
+    border-radius: var(--radius-pill);
+    font-size: 15px;
+    font-weight: 400;
+    cursor: pointer;
+    font-family: 'Noto Sans TC', sans-serif;
+    transition: all 0.2s ease;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-outline:hover { border-color: rgba(250,250,248,0.7); background: rgba(250,250,248,0.08); }
+
+  .hero-stats {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    background: rgba(14,13,12,0.6);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    padding: 0;
+    height: 60px;
+    z-index: 2;
+  }
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 40px;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .stat-item:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: #FAFAF8;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: rgba(250,250,248,0.5);
+    font-family: 'Noto Sans TC', sans-serif;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── SECTION SHARED ───────────────────────── */
+  section { padding: 80px 32px; max-width: 1160px; margin: 0 auto; }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 36px;
+  }
+
+  .section-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--text);
+    letter-spacing: 0.04em;
+  }
+
+  .section-link {
+    font-size: 13px;
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.15s;
+  }
+
+  .section-link:hover { opacity: 0.7; }
+
+  /* ── FEATURES ─────────────────────────────── */
+  .features-section {
+    background: var(--dark);
+    padding: 80px 0;
+    margin: 0;
+    max-width: none;
+  }
+
+  .features-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .features-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-family: 'DM Sans', sans-serif;
+    margin-bottom: 12px;
+  }
+
+  .features-heading {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: rgba(250,250,248,0.92);
+    margin-bottom: 48px;
+    letter-spacing: 0.04em;
+  }
+
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .feature-card {
+    background: var(--dark-surface);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--radius);
+    padding: 32px;
+    transition: all 0.22s ease;
+    cursor: default;
+  }
+
+  .feature-card:hover {
+    border-color: rgba(200,66,42,0.3);
+    background: #211f1c;
+    transform: translateY(-2px);
+  }
+
+  .feature-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .feature-card h3 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(250,250,248,0.92);
+    margin-bottom: 10px;
+    letter-spacing: 0.04em;
+  }
+
+  .feature-card p {
+    font-size: 14px;
+    color: rgba(250,250,248,0.45);
+    line-height: 1.7;
+    font-family: 'Noto Sans TC', sans-serif;
+    font-weight: 300;
+  }
+
+  /* ── MAP CARDS ────────────────────────────── */
+  .map-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .location-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: all 0.22s ease;
+    cursor: pointer;
+  }
+
+  .location-card:hover {
+    border-color: #ccc;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+  }
+
+  .location-img {
+    aspect-ratio: 3/2;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .location-img .img-gradient {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.4s ease;
+  }
+
+  .location-card:hover .img-gradient { transform: scale(1.04); }
+
+  .location-img-1 { background: linear-gradient(135deg, #0a1628 0%, #1a2d50 40%, #2a1505 100%); }
+  .location-img-2 { background: linear-gradient(135deg, #1a0e02 0%, #3d2a10 40%, #5c3d18 100%); }
+  .location-img-3 { background: linear-gradient(135deg, #0e1a0a 0%, #1f3318 40%, #0a0e05 100%); }
+  .location-img-4 { background: linear-gradient(135deg, #1a0a0a 0%, #2d1515 40%, #1a0a0a 100%); }
+
+  .location-pin {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(200,66,42,0.9);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    padding: 3px 8px;
+    border-radius: var(--radius-pill);
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+
+  .location-info {
+    padding: 14px 16px;
+  }
+
+  .location-name {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  .tag-row {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+  }
+
+  .tag {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: var(--radius-pill);
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.02em;
+  }
+
+  .tag-drama { background: #EEF0F8; color: #4050A0; }
+  .tag-mv    { background: #F0F5EE; color: #3A6020; }
+  .tag-movie { background: #F5EAE8; color: var(--accent); }
+  .tag-region { background: var(--bg); color: var(--muted); border: 1px solid var(--border); }
+
+  .location-works {
+    font-size: 12px;
+    color: var(--subtle);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* ── PORTFOLIO ROW ────────────────────────── */
+  .portfolio-scroll {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding-bottom: 16px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .portfolio-scroll::-webkit-scrollbar { display: none; }
+
+  .photo-card {
+    flex: 0 0 200px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.22s ease;
+  }
+
+  .photo-card:hover {
+    border-color: #ccc;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.1);
+  }
+
+  .photo-portrait {
+    aspect-ratio: 3/4;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .photo-portrait .img-gradient { position: absolute; inset: 0; transition: transform 0.4s ease; }
+  .photo-card:hover .img-gradient { transform: scale(1.05); }
+
+  .portrait-1 { background: linear-gradient(170deg, #1a1520 0%, #2d2535 60%, #3d1a2a 100%); }
+  .portrait-2 { background: linear-gradient(170deg, #0a1520 0%, #152535 60%, #0a1a2a 100%); }
+  .portrait-3 { background: linear-gradient(170deg, #1a1500 0%, #2d2500 60%, #3d2a00 100%); }
+  .portrait-4 { background: linear-gradient(170deg, #0a1510 0%, #152510 60%, #0a2015 100%); }
+  .portrait-5 { background: linear-gradient(170deg, #1a0a10 0%, #2d1520 60%, #1a0a15 100%); }
+
+  .photo-info {
+    padding: 12px 14px;
+  }
+
+  .photo-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+
+  .photo-city {
+    font-size: 11px;
+    color: var(--subtle);
+    margin-top: 6px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* ── DRAMA FEATURE ────────────────────────── */
+  .drama-section {
+    background: var(--dark);
+    padding: 80px 0;
+    margin: 0;
+    max-width: none;
+  }
+
+  .drama-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .drama-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 36px;
+  }
+
+  .drama-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 26px;
+    font-weight: 400;
+    color: rgba(250,250,248,0.92);
+    letter-spacing: 0.04em;
+  }
+
+  .drama-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .drama-card {
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+    aspect-ratio: 16/9;
+    cursor: pointer;
+    transition: transform 0.22s ease;
+  }
+
+  .drama-card:hover { transform: scale(1.015); }
+
+  .drama-bg-1 { background: linear-gradient(135deg, #0d1520 0%, #1a2535 30%, #0d1520 100%); }
+  .drama-bg-2 { background: linear-gradient(135deg, #1a0d20 0%, #2d1535 30%, #1a0820 100%); }
+
+  .drama-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.2) 60%, transparent 100%);
+  }
+
+  .drama-content {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    padding: 24px;
+  }
+
+  .drama-label {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(250,250,248,0.5);
+    font-family: 'DM Sans', sans-serif;
+    margin-bottom: 6px;
+  }
+
+  .drama-name {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: #FAFAF8;
+    margin-bottom: 10px;
+    letter-spacing: 0.04em;
+  }
+
+  .drama-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(200,66,42,0.25);
+    border: 1px solid rgba(200,66,42,0.4);
+    color: #f09080;
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* ── VENDOR ───────────────────────────────── */
+  .filter-pills {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+
+  .pill {
+    padding: 6px 16px;
+    border-radius: var(--radius-pill);
+    font-size: 13px;
+    font-family: 'Noto Sans TC', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .pill:hover { border-color: var(--text); color: var(--text); }
+  .pill.active { background: var(--text); color: #fff; border-color: var(--text); }
+
+  .vendor-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+
+  .vendor-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: all 0.22s ease;
+    cursor: pointer;
+  }
+
+  .vendor-card:hover {
+    border-color: #bbb;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+  }
+
+  .vendor-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 12px;
+  }
+
+  .vendor-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .vendor-avatar-1 { background: #EEF0F8; }
+  .vendor-avatar-2 { background: #F0F5EE; }
+  .vendor-avatar-3 { background: #F5EAE8; }
+
+  .verified-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: #F0F8F4;
+    color: #2A7A4A;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: var(--radius-pill);
+    font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.04em;
+  }
+
+  .vendor-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+    font-family: 'Noto Sans TC', sans-serif;
+  }
+
+  .vendor-cat {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    margin-bottom: 12px;
+  }
+
+  .vendor-meta {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .vendor-region {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .price-dots {
+    display: flex;
+    gap: 3px;
+    margin-left: auto;
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+
+  .dot.filled { background: var(--text); }
+
+  /* ── MEMBERSHIP ───────────────────────────── */
+  .pricing-section {
+    background: var(--dark);
+    padding: 80px 0;
+    margin: 0;
+    max-width: none;
+  }
+
+  .pricing-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 0 32px;
+    text-align: center;
+  }
+
+  .pricing-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-family: 'DM Sans', sans-serif;
+    margin-bottom: 10px;
+  }
+
+  .pricing-heading {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: rgba(250,250,248,0.92);
+    margin-bottom: 48px;
+    letter-spacing: 0.04em;
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .pricing-card {
+    background: var(--dark-surface);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: var(--radius);
+    padding: 32px;
+    text-align: left;
+    position: relative;
+  }
+
+  .pricing-card.highlighted {
+    border-color: var(--accent);
+    background: linear-gradient(135deg, #1f1008 0%, #2a1208 100%);
+  }
+
+  .pricing-badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: #fff;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: var(--radius-pill);
+    font-family: 'DM Sans', sans-serif;
+    white-space: nowrap;
+  }
+
+  .pricing-tier {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(250,250,248,0.7);
+    margin-bottom: 8px;
+    letter-spacing: 0.04em;
+  }
+
+  .pricing-price {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 36px;
+    font-weight: 500;
+    color: rgba(250,250,248,0.92);
+    letter-spacing: -0.03em;
+    margin-bottom: 4px;
+  }
+
+  .pricing-price span {
+    font-size: 14px;
+    color: rgba(250,250,248,0.4);
+    font-weight: 300;
+    letter-spacing: 0;
+  }
+
+  .pricing-free { font-size: 14px; color: rgba(250,250,248,0.35); font-family: 'Noto Sans TC', sans-serif; margin-bottom: 4px; }
+
+  .pricing-divider {
+    height: 1px;
+    background: rgba(255,255,255,0.07);
+    margin: 20px 0;
+  }
+
+  .pricing-features { list-style: none; }
+
+  .pricing-features li {
+    font-size: 13px;
+    color: rgba(250,250,248,0.5);
+    padding: 5px 0;
+    font-family: 'Noto Sans TC', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 300;
+  }
+
+  .pricing-features li::before {
+    content: '';
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .pricing-card.highlighted .pricing-features li { color: rgba(250,250,248,0.72); }
+  .pricing-card.highlighted .pricing-features li::before {
+    background: rgba(200,66,42,0.2);
+    border-color: rgba(200,66,42,0.4);
+  }
+
+  .pricing-cta {
+    width: 100%;
+    margin-top: 24px;
+    padding: 11px;
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    font-family: 'Noto Sans TC', sans-serif;
+    transition: all 0.18s ease;
+    border: 1px solid rgba(255,255,255,0.12);
+    background: transparent;
+    color: rgba(250,250,248,0.7);
+    letter-spacing: 0.02em;
+  }
+
+  .pricing-card.highlighted .pricing-cta {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  .pricing-card.highlighted .pricing-cta:hover { background: #a83520; }
+
+  /* ── FOOTER ───────────────────────────────── */
+  footer {
+    background: #080807;
+    padding: 48px 32px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .footer-inner {
+    max-width: 1160px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .footer-logo-zh {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: rgba(250,250,248,0.7);
+    letter-spacing: 0.04em;
+  }
+
+  .footer-logo-en {
+    font-size: 10px;
+    font-weight: 500;
+    color: rgba(200,66,42,0.7);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 20px;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-size: 13px;
+    color: rgba(250,250,248,0.35);
+    text-decoration: none;
+    font-family: 'Noto Sans TC', sans-serif;
+    transition: color 0.15s;
+  }
+
+  .footer-links a:hover { color: rgba(250,250,248,0.7); }
+
+  .footer-social {
+    display: flex;
+    gap: 12px;
+    list-style: none;
+  }
+
+  .footer-social a {
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    text-decoration: none;
+    color: rgba(250,250,248,0.5);
+    transition: all 0.15s ease;
+  }
+
+  .footer-social a:hover {
+    border-color: rgba(255,255,255,0.25);
+    color: rgba(250,250,248,0.9);
+  }
+
+  .footer-copy {
+    font-size: 12px;
+    color: rgba(250,250,248,0.2);
+    font-family: 'DM Sans', sans-serif;
+    margin-top: 32px;
+    text-align: center;
+  }
+
+  /* ── DIVIDER ──────────────────────────────── */
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    max-width: 1160px;
+    margin: 0 auto;
+  }
+
+  /* ── HOVER EFFECTS ────────────────────────── */
+  .pill:nth-child(1).active { background: var(--text); }
+
+  /* Smooth link hover underline */
+  a { transition: opacity 0.15s ease; }
+
+  /* Scrollbar global */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<!-- ── NAVBAR ──────────────────────────────────── -->
+<nav>
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-zh">景框</span>
+    <span class="nav-logo-en">JINGFRAME</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">地圖</a></li>
+    <li><a href="#">作品集</a></li>
+    <li><a href="#">商家</a></li>
+    <li><a href="#">教學</a></li>
+  </ul>
+  <button class="btn-login">登入 / 註冊</button>
+</nav>
+
+<!-- ── HERO ────────────────────────────────────── -->
+<div class="hero">
+  <div class="hero-film-grid">
+    <div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div>
+    <div></div><div></div><div></div><div></div><div></div>
+  </div>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span></span>
+      台灣影視場景平台 · 現正開放
+    </div>
+    <h1 class="hero-title">台灣每一個角落，<br>都是故事的開場</h1>
+    <p class="hero-sub">整合北中南拍攝場景、攝影師作品集與製片資源，<br>讓每個創作者找到屬於自己的畫框。</p>
+    <div class="hero-ctas">
+      <button class="btn-primary">探索拍攝地圖</button>
+      <button class="btn-outline">加入攝影師</button>
+    </div>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <span class="stat-num">320+</span>
+      <span class="stat-label">拍攝景點</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">1,200+</span>
+      <span class="stat-label">攝影師</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">580+</span>
+      <span class="stat-label">合作商家</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── FEATURES ─────────────────────────────────── -->
+<div class="features-section">
+  <div class="features-inner">
+    <p class="features-eyebrow">平台功能</p>
+    <h2 class="features-heading">從找景到成片，一個平台搞定</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">🗺️</span>
+        <h3>拍攝地圖</h3>
+        <p>北中南私密場景，MV、戲劇、電影拍攝地一次整合。每個地點附帶完整資訊與交通說明。</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">📸</span>
+        <h3>攝影師作品集</h3>
+        <p>滑動探索台灣獨立攝影師，找到你的合作夥伴。支援 IG 連結一鍵匯入，零門檻加入。</p>
+      </div>
+      <div class="feature-card">
+        <span class="feature-icon">🏪</span>
+        <h3>製片商家庫</h3>
+        <p>餐食、器材、場地租借，製片組的口袋資源。業界口耳相傳的私藏名單，數位化整合。</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── MAP SECTION ──────────────────────────────── -->
+<section>
+  <div class="section-header">
+    <h2 class="section-title">熱門拍攝場景</h2>
+    <a href="#" class="section-link">查看全部地圖 →</a>
+  </div>
+  <div class="map-grid">
+    <div class="location-card">
+      <div class="location-img">
+        <div class="img-gradient location-img-1"></div>
+        <span class="location-pin">台北</span>
+      </div>
+      <div class="location-info">
+        <div class="location-name">象山星空步道</div>
+        <div class="tag-row">
+          <span class="tag tag-drama">戲劇</span>
+          <span class="tag tag-mv">MV</span>
+        </div>
+        <div class="location-works">出現於 18 部作品</div>
+      </div>
+    </div>
+    <div class="location-card">
+      <div class="location-img">
+        <div class="img-gradient location-img-2"></div>
+        <span class="location-pin">台中</span>
+      </div>
+      <div class="location-info">
+        <div class="location-name">廢棄糖廠廠區</div>
+        <div class="tag-row">
+          <span class="tag tag-movie">電影</span>
+          <span class="tag tag-mv">MV</span>
+        </div>
+        <div class="location-works">出現於 7 部作品</div>
+      </div>
+    </div>
+    <div class="location-card">
+      <div class="location-img">
+        <div class="img-gradient location-img-3"></div>
+        <span class="location-pin">新竹</span>
+      </div>
+      <div class="location-info">
+        <div class="location-name">北埔老街巷弄</div>
+        <div class="tag-row">
+          <span class="tag tag-drama">戲劇</span>
+        </div>
+        <div class="location-works">出現於 4 部作品</div>
+      </div>
+    </div>
+    <div class="location-card">
+      <div class="location-img">
+        <div class="img-gradient location-img-4"></div>
+        <span class="location-pin">台北</span>
+      </div>
+      <div class="location-info">
+        <div class="location-name">大稻埕河岸</div>
+        <div class="tag-row">
+          <span class="tag tag-drama">戲劇</span>
+          <span class="tag tag-movie">電影</span>
+        </div>
+        <div class="location-works">出現於 23 部作品</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ── PORTFOLIO SECTION ────────────────────────── -->
+<section>
+  <div class="section-header">
+    <h2 class="section-title">探索攝影師</h2>
+    <a href="#" class="section-link">瀏覽全部 →</a>
+  </div>
+  <div class="portfolio-scroll">
+    <div class="photo-card">
+      <div class="photo-portrait"><div class="img-gradient portrait-1"></div></div>
+      <div class="photo-info">
+        <div class="photo-name">陳威宇</div>
+        <div class="tag-row">
+          <span class="tag tag-movie">電影感</span>
+          <span class="tag tag-drama">人像</span>
+        </div>
+        <div class="photo-city">📍 台北</div>
+      </div>
+    </div>
+    <div class="photo-card">
+      <div class="photo-portrait"><div class="img-gradient portrait-2"></div></div>
+      <div class="photo-info">
+        <div class="photo-name">林雨晴</div>
+        <div class="tag-row">
+          <span class="tag tag-mv">紀實</span>
+          <span class="tag tag-movie">電影感</span>
+        </div>
+        <div class="photo-city">📍 台中</div>
+      </div>
+    </div>
+    <div class="photo-card">
+      <div class="photo-portrait"><div class="img-gradient portrait-3"></div></div>
+      <div class="photo-info">
+        <div class="photo-name">張書豪</div>
+        <div class="tag-row">
+          <span class="tag tag-drama">商業</span>
+        </div>
+        <div class="photo-city">📍 高雄</div>
+      </div>
+    </div>
+    <div class="photo-card">
+      <div class="photo-portrait"><div class="img-gradient portrait-4"></div></div>
+      <div class="photo-info">
+        <div class="photo-name">吳欣儀</div>
+        <div class="tag-row">
+          <span class="tag tag-mv">MV 專案</span>
+        </div>
+        <div class="photo-city">📍 台北</div>
+      </div>
+    </div>
+    <div class="photo-card">
+      <div class="photo-portrait"><div class="img-gradient portrait-5"></div></div>
+      <div class="photo-info">
+        <div class="photo-name">洪韋志</div>
+        <div class="tag-row">
+          <span class="tag tag-movie">電影感</span>
+          <span class="tag tag-drama">人像</span>
+        </div>
+        <div class="photo-city">📍 台南</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── DRAMA FEATURE ─────────────────────────────── -->
+<div class="drama-section">
+  <div class="drama-inner">
+    <div class="drama-header">
+      <h2 class="drama-title">你最愛的劇，在這裡拍的</h2>
+      <a href="#" class="section-link" style="color: rgba(250,250,248,0.4)">查看全部 →</a>
+    </div>
+    <div class="drama-grid">
+      <div class="drama-card drama-bg-1">
+        <div class="drama-overlay"></div>
+        <div class="drama-content">
+          <div class="drama-label">台灣戲劇 · 2019</div>
+          <div class="drama-name">《想見你》拍攝地圖</div>
+          <span class="drama-count">📍 14 個拍攝地點</span>
+        </div>
+      </div>
+      <div class="drama-card drama-bg-2">
+        <div class="drama-overlay"></div>
+        <div class="drama-content">
+          <div class="drama-label">K-POP MV · 台灣場景</div>
+          <div class="drama-name">NewJeans 台灣 MV 場景</div>
+          <span class="drama-count">📍 8 個拍攝地點</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── VENDOR SECTION ────────────────────────────── -->
+<section>
+  <div class="section-header">
+    <h2 class="section-title">製片資源庫</h2>
+    <a href="#" class="section-link">查看全部 →</a>
+  </div>
+  <div class="filter-pills">
+    <button class="pill active" onclick="setActive(this)">全部</button>
+    <button class="pill" onclick="setActive(this)">餐飲外燴</button>
+    <button class="pill" onclick="setActive(this)">器材租借</button>
+    <button class="pill" onclick="setActive(this)">場地租借</button>
+    <button class="pill" onclick="setActive(this)">後製剪輯</button>
+  </div>
+  <div class="vendor-grid">
+    <div class="vendor-card">
+      <div class="vendor-header">
+        <div class="vendor-avatar vendor-avatar-1">🍱</div>
+        <span class="verified-badge">✓ 認證</span>
+      </div>
+      <div class="vendor-name">好味外燴便當</div>
+      <div class="vendor-cat">餐飲外燴 · 片場便當供應</div>
+      <div class="vendor-meta">
+        <span class="vendor-region">📍 台中</span>
+        <div class="price-dots">
+          <div class="dot filled"></div>
+          <div class="dot filled"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+    </div>
+    <div class="vendor-card">
+      <div class="vendor-header">
+        <div class="vendor-avatar vendor-avatar-2">🎥</div>
+        <span class="verified-badge">✓ 認證</span>
+      </div>
+      <div class="vendor-name">光影器材租借</div>
+      <div class="vendor-cat">器材租借 · Sony / ARRI / DJI</div>
+      <div class="vendor-meta">
+        <span class="vendor-region">📍 台北</span>
+        <div class="price-dots">
+          <div class="dot filled"></div>
+          <div class="dot filled"></div>
+          <div class="dot filled"></div>
+        </div>
+      </div>
+    </div>
+    <div class="vendor-card">
+      <div class="vendor-header">
+        <div class="vendor-avatar vendor-avatar-3">✂️</div>
+      </div>
+      <div class="vendor-name">剪輯工作室 CUTS</div>
+      <div class="vendor-cat">後製剪輯 · 調色 / 混音</div>
+      <div class="vendor-meta">
+        <span class="vendor-region">📍 台北</span>
+        <div class="price-dots">
+          <div class="dot filled"></div>
+          <div class="dot filled"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── MEMBERSHIP ────────────────────────────────── -->
+<div class="pricing-section">
+  <div class="pricing-inner">
+    <p class="pricing-eyebrow">會員方案</p>
+    <h2 class="pricing-heading">選擇適合你的方案</h2>
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-tier">基本會員</div>
+        <div class="pricing-free">永久免費</div>
+        <div class="pricing-price">NT$0 <span>/ 月</span></div>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-features">
+          <li>瀏覽拍攝地圖</li>
+          <li>探索攝影師作品集</li>
+          <li>搜尋商家資料庫</li>
+          <li>建立個人作品集頁面</li>
+        </ul>
+        <button class="pricing-cta">免費加入</button>
+      </div>
+      <div class="pricing-card highlighted">
+        <div class="pricing-badge">最受歡迎</div>
+        <div class="pricing-tier">專業會員</div>
+        <div class="pricing-price">NT$299 <span>/ 月</span></div>
+        <div class="pricing-divider"></div>
+        <ul class="pricing-features">
+          <li>所有基本功能</li>
+          <li>私密場景地圖解鎖</li>
+          <li>Discord 私密社群入口</li>
+          <li>完整商家資料（含評價）</li>
+          <li>優先曝光作品集</li>
+        </ul>
+        <button class="pricing-cta">開始專業方案</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── FOOTER ────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <span class="footer-logo-zh">景框</span>
+      <span class="footer-logo-en">JINGFRAME</span>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#">地圖</a></li>
+      <li><a href="#">作品集</a></li>
+      <li><a href="#">商家</a></li>
+      <li><a href="#">教學</a></li>
+      <li><a href="#">關於我們</a></li>
+      <li><a href="#">隱私政策</a></li>
+    </ul>
+    <ul class="footer-social">
+      <li><a href="#" title="Instagram">📷</a></li>
+      <li><a href="#" title="Threads">🧵</a></li>
+    </ul>
+  </div>
+  <p class="footer-copy">© 2025 景框 JINGFRAME. 保留所有權利。</p>
+</footer>
+
+<script>
+  function setActive(el) {
+    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // Smooth scroll shadow on nav
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 10) {
+      nav.style.boxShadow = '0 1px 20px rgba(0,0,0,0.08)';
+    } else {
+      nav.style.boxShadow = 'none';
+    }
+  });
+</script>
+
+</body>
+</html>

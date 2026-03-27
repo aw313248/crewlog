@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CREWLOG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Noto+Sans+TC:wght@700;900&family=Barlow:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black: #000;
+  --white: #fff;
+  --red: #C8422A;
+  --grey: #888;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 700;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* ── NAV ──────────────────────────────────────── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  height: 52px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  background: #000;
+  mix-blend-mode: normal;
+}
+
+.logo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 24px;
+  letter-spacing: 0.16em;
+  color: var(--white);
+  text-decoration: none;
+  margin-right: auto;
+}
+
+.logo-dot { color: var(--red); }
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 0;
+}
+
+.nav-links a {
+  display: block;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.4);
+  text-decoration: none;
+  padding: 0 20px;
+  line-height: 52px;
+  transition: color 0.12s;
+  border-left: 1px solid rgba(255,255,255,0.08);
+}
+
+.nav-links a:last-child { border-right: 1px solid rgba(255,255,255,0.08); }
+.nav-links a:hover { color: #fff; }
+
+.nav-join {
+  background: var(--white);
+  color: var(--black);
+  border: none;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  padding: 8px 22px;
+  cursor: pointer;
+  margin-left: 24px;
+  transition: background 0.12s;
+}
+
+.nav-join:hover { background: var(--red); color: #fff; }
+
+/* ── HERO ──────────────────────────────────────── */
+.hero {
+  padding-top: 52px;
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.hero-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 80px 40px 56px;
+}
+
+.hero-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.hero-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: clamp(72px, 12vw, 160px);
+  line-height: 0.92;
+  letter-spacing: -0.01em;
+  color: var(--white);
+  text-transform: uppercase;
+  margin-bottom: 48px;
+}
+
+.hero-title .zh {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 900;
+  font-size: clamp(36px, 6vw, 80px);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  display: block;
+  color: rgba(255,255,255,0.88);
+}
+
+.hero-title .red { color: var(--red); }
+
+.hero-bottom {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 40px;
+}
+
+.hero-desc {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.7;
+  max-width: 400px;
+  letter-spacing: 0.04em;
+}
+
+.hero-ctas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.btn-w {
+  background: var(--white);
+  color: var(--black);
+  border: none;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  padding: 14px 40px;
+  cursor: pointer;
+  transition: background 0.12s;
+  white-space: nowrap;
+}
+
+.btn-w:hover { background: var(--red); color: #fff; }
+
+.btn-border {
+  background: transparent;
+  color: rgba(255,255,255,0.5);
+  border: 1px solid rgba(255,255,255,0.2);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  padding: 13px 40px;
+  cursor: pointer;
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+
+.btn-border:hover { border-color: #fff; color: #fff; }
+
+/* ── STAT BAR ─────────────────────────────────── */
+.stat-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.stat-item {
+  padding: 28px 40px;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat-item:last-child { border-right: none; }
+
+.stat-n {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 48px;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: var(--white);
+}
+
+.stat-l {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ── SECTION ──────────────────────────────────── */
+.sec {
+  padding: 96px 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.sec-head {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  margin-bottom: 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 24px;
+}
+
+.sec-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: clamp(40px, 5vw, 72px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.sec-title .zh {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 900;
+  font-size: 0.5em;
+  letter-spacing: 0.06em;
+  display: block;
+  color: rgba(255,255,255,0.5);
+  font-size: clamp(14px, 2vw, 24px);
+  margin-bottom: 4px;
+}
+
+.sec-link {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.3);
+  text-decoration: none;
+  transition: color 0.12s;
+  white-space: nowrap;
+}
+
+.sec-link:hover { color: var(--red); }
+
+/* ── MAP GRID ──────────────────────────────────── */
+.map-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.06);
+}
+
+.loc {
+  background: #0a0a0a;
+  aspect-ratio: 3/4;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.loc:hover .loc-fill { transform: scale(1.04); }
+
+.loc-fill {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.5s cubic-bezier(0.25, 0, 0, 1);
+}
+
+.lf1 { background: linear-gradient(160deg, #060d18, #0f1e2f); }
+.lf2 { background: linear-gradient(160deg, #140600, #281000); }
+.lf3 { background: linear-gradient(160deg, #040e06, #0a1a0c); }
+.lf4 { background: linear-gradient(160deg, #120404, #200808); }
+
+.loc-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 55%);
+}
+
+.loc-body {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px;
+}
+
+.loc-tags {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.tag-r {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--red);
+  border: 1px solid rgba(200,66,42,0.4);
+  padding: 2px 7px;
+}
+
+.tag-w {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  border: 1px solid rgba(255,255,255,0.14);
+  padding: 2px 7px;
+}
+
+.loc-name {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 900;
+  font-size: 18px;
+  color: #fff;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+.loc-count {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+}
+
+/* ── PORTFOLIO ──────────────────────────────────── */
+.port-row {
+  display: flex;
+  gap: 1px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: rgba(255,255,255,0.06);
+}
+
+.port-row::-webkit-scrollbar { display: none; }
+
+.port {
+  flex: 0 0 200px;
+  aspect-ratio: 2/3;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  background: #0a0a0a;
+}
+
+.port:hover .port-fill { transform: scale(1.05); }
+
+.port-fill {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.5s cubic-bezier(0.25, 0, 0, 1);
+}
+
+.pf1 { background: linear-gradient(180deg, #100816, #1e1028); }
+.pf2 { background: linear-gradient(180deg, #080f18, #101a28); }
+.pf3 { background: linear-gradient(180deg, #120e00, #201800); }
+.pf4 { background: linear-gradient(180deg, #060f08, #0c1a10); }
+.pf5 { background: linear-gradient(180deg, #100408, #1e0810); }
+.pf6 { background: linear-gradient(180deg, #0a0a0a, #141414); }
+
+.port-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, transparent 50%);
+}
+
+.port-body {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 16px;
+}
+
+.port-name {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 900;
+  font-size: 14px;
+  color: #fff;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.port-spec {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.35);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.port-city {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.25);
+  text-transform: uppercase;
+}
+
+/* ── DRAMA SECTION ─────────────────────────────── */
+.drama-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(255,255,255,0.06);
+}
+
+.drama {
+  aspect-ratio: 16/9;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  background: #080808;
+}
+
+.drama:hover .drama-fill { transform: scale(1.03); }
+
+.drama-fill {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.5s cubic-bezier(0.25,0,0,1);
+}
+
+.df1 { background: linear-gradient(135deg, #040a14, #0a1828); }
+.df2 { background: linear-gradient(135deg, #0a0414, #141028); }
+
+.drama-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.15) 55%, transparent 100%);
+}
+
+.drama-body {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 32px;
+}
+
+.drama-meta {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.drama-title-text {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 900;
+  font-size: clamp(20px, 2.5vw, 32px);
+  color: #fff;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+
+.drama-badge {
+  display: inline-block;
+  border: 1px solid rgba(200,66,42,0.5);
+  color: rgba(200,66,42,0.8);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 5px 14px;
+}
+
+/* ── VENDOR ──────────────────────────────────────── */
+.vendor-sec {
+  background: #000;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.filter-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 40px;
+}
+
+.ftab {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: rgba(255,255,255,0.3);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: all 0.12s;
+  margin-bottom: -1px;
+}
+
+.ftab:hover { color: rgba(255,255,255,0.7); }
+.ftab.on { color: #fff; border-bottom-color: var(--red); }
+
+.vendor-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.08);
+}
+
+.ven {
+  background: #000;
+  padding: 32px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.ven:hover { background: #0f0f0f; }
+
+.ven-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.ven-icon {
+  width: 44px;
+  height: 44px;
+  border: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-family: initial;
+}
+
+.ven-badge {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.25);
+}
+
+.ven-badge.ok { color: rgba(80,200,120,0.7); border-color: rgba(80,200,120,0.25); }
+
+.ven-name {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 900;
+  font-size: 17px;
+  color: #fff;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+.ven-cat {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.28);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.ven-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding-top: 16px;
+}
+
+.ven-loc {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.2);
+  text-transform: uppercase;
+}
+
+.dots {
+  display: flex;
+  gap: 4px;
+}
+
+.d {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.12);
+}
+
+.d.on { background: rgba(255,255,255,0.65); }
+
+/* ── PRICING ─────────────────────────────────────── */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(255,255,255,0.08);
+  max-width: 880px;
+}
+
+.pc {
+  background: #000;
+  padding: 56px;
+}
+
+.pc.hl { background: #0c0804; }
+
+.pc-plan {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  margin-bottom: 20px;
+}
+
+.pc.hl .pc-plan { color: var(--red); }
+
+.pc-price {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 80px;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.pc-unit {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.25);
+  margin-bottom: 36px;
+}
+
+.pc-rule {
+  width: 32px; height: 2px;
+  background: rgba(255,255,255,0.12);
+  margin-bottom: 28px;
+}
+
+.pc.hl .pc-rule { background: var(--red); }
+
+.pc-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.pc-list li {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: rgba(255,255,255,0.35);
+  padding-left: 18px;
+  position: relative;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+}
+
+.pc-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  font-family: 'Barlow', sans-serif;
+  font-size: 10px;
+  color: rgba(255,255,255,0.15);
+}
+
+.pc.hl .pc-list li { color: rgba(255,255,255,0.7); }
+.pc.hl .pc-list li::before { color: var(--red); }
+
+.pc-btn {
+  width: 100%;
+  padding: 14px;
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  transition: all 0.12s;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.35);
+}
+
+.pc.hl .pc-btn {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+.pc.hl .pc-btn:hover { background: #a83520; }
+
+/* ── FEATURE ROW ────────────────────────────────── */
+.feature-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.08);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.feat {
+  background: #000;
+  padding: 48px 40px;
+  cursor: default;
+  transition: background 0.12s;
+  border-bottom: 3px solid transparent;
+}
+
+.feat:hover {
+  background: #0a0a0a;
+  border-bottom-color: var(--red);
+}
+
+.feat-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 0.2em;
+  color: rgba(255,255,255,0.15);
+  margin-bottom: 32px;
+}
+
+.feat-icon {
+  font-size: 32px;
+  display: block;
+  margin-bottom: 20px;
+  font-family: initial;
+}
+
+.feat-title {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  color: #fff;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+
+.feat-desc {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  color: rgba(255,255,255,0.3);
+  line-height: 1.7;
+  letter-spacing: 0.04em;
+}
+
+/* ── FOOTER ─────────────────────────────────────── */
+footer {
+  padding: 48px 40px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 40px;
+}
+
+.foot-logo {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: 0.16em;
+  color: rgba(255,255,255,0.3);
+}
+
+.foot-logo span { color: rgba(200,66,42,0.5); }
+
+.foot-links {
+  display: flex;
+  gap: 24px;
+  list-style: none;
+}
+
+.foot-links a {
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.18);
+  text-decoration: none;
+  transition: color 0.12s;
+}
+
+.foot-links a:hover { color: rgba(255,255,255,0.6); }
+
+.foot-social {
+  display: flex;
+  gap: 1px;
+  list-style: none;
+}
+
+.foot-social a {
+  width: 38px; height: 38px;
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.25);
+  text-decoration: none;
+  transition: all 0.12s;
+}
+
+.foot-social a:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
+
+.foot-copy {
+  grid-column: 1/-1;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.1);
+  text-align: center;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">CREW<span class="logo-dot">.</span>LOG</a>
+  <ul class="nav-links">
+    <li><a href="#">地圖</a></li>
+    <li><a href="#">作品集</a></li>
+    <li><a href="#">商家</a></li>
+    <li><a href="#">教學</a></li>
+  </ul>
+  <button class="nav-join">加入</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-main">
+    <p class="hero-label">台灣影視場景 × 攝影師平台</p>
+    <h1 class="hero-title">
+      <span class="zh">每個劇組人的日誌</span>
+      CREW<span class="red">.</span>LOG
+    </h1>
+    <div class="hero-bottom">
+      <p class="hero-desc">整合台灣北中南拍攝場景、攝影師作品集、製片商家資源。<br>你在現場累積的一切，都值得被記錄下來。</p>
+      <div class="hero-ctas">
+        <button class="btn-w">探索拍攝地圖</button>
+        <button class="btn-border">加入 Crew</button>
+      </div>
+    </div>
+  </div>
+  <div class="stat-bar">
+    <div class="stat-item">
+      <span class="stat-n">320+</span>
+      <span class="stat-l">拍攝景點</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-n">1,200+</span>
+      <span class="stat-l">攝影師</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-n">580+</span>
+      <span class="stat-l">合作商家</span>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="feature-row">
+  <div class="feat">
+    <div class="feat-num">01</div>
+    <span class="feat-icon">🗺️</span>
+    <div class="feat-title">拍攝地圖</div>
+    <p class="feat-desc">北中南私密場景，MV、戲劇、電影拍攝地一次整合。每個地點附完整資訊與交通說明。</p>
+  </div>
+  <div class="feat">
+    <div class="feat-num">02</div>
+    <span class="feat-icon">📸</span>
+    <div class="feat-title">攝影師作品集</div>
+    <p class="feat-desc">滑動探索台灣獨立攝影師，找到合作夥伴。支援 IG 連結一鍵匯入，零門檻加入。</p>
+  </div>
+  <div class="feat">
+    <div class="feat-num">03</div>
+    <span class="feat-icon">🏪</span>
+    <div class="feat-title">製片商家庫</div>
+    <p class="feat-desc">餐食、器材、場地租借，製片組的口袋資源。業界口耳相傳的私藏名單，數位化整合。</p>
+  </div>
+</div>
+
+<!-- MAP -->
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-title">
+      <span class="zh">熱門拍攝場景</span>
+      MAP
+    </div>
+    <a href="#" class="sec-link">查看全部地圖 →</a>
+  </div>
+  <div class="map-grid">
+    <div class="loc">
+      <div class="loc-fill lf1"></div>
+      <div class="loc-shade"></div>
+      <div class="loc-body">
+        <div class="loc-tags">
+          <span class="tag-r">戲劇</span>
+          <span class="tag-w">台北</span>
+        </div>
+        <div class="loc-name">大稻埕河岸</div>
+        <div class="loc-count">23 部作品</div>
+      </div>
+    </div>
+    <div class="loc">
+      <div class="loc-fill lf2"></div>
+      <div class="loc-shade"></div>
+      <div class="loc-body">
+        <div class="loc-tags">
+          <span class="tag-r">電影</span>
+          <span class="tag-w">台中</span>
+        </div>
+        <div class="loc-name">廢棄糖廠廠區</div>
+        <div class="loc-count">7 部作品</div>
+      </div>
+    </div>
+    <div class="loc">
+      <div class="loc-fill lf3"></div>
+      <div class="loc-shade"></div>
+      <div class="loc-body">
+        <div class="loc-tags">
+          <span class="tag-r">MV</span>
+          <span class="tag-w">新竹</span>
+        </div>
+        <div class="loc-name">北埔老街巷弄</div>
+        <div class="loc-count">4 部作品</div>
+      </div>
+    </div>
+    <div class="loc">
+      <div class="loc-fill lf4"></div>
+      <div class="loc-shade"></div>
+      <div class="loc-body">
+        <div class="loc-tags">
+          <span class="tag-r">MV</span>
+          <span class="tag-w">台北</span>
+        </div>
+        <div class="loc-name">象山星空步道</div>
+        <div class="loc-count">18 部作品</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PORTFOLIO -->
+<div class="sec" style="background:#050505">
+  <div class="sec-head">
+    <div class="sec-title">
+      <span class="zh">探索攝影師</span>
+      CREW
+    </div>
+    <a href="#" class="sec-link">瀏覽全部 →</a>
+  </div>
+  <div class="port-row">
+    <div class="port"><div class="port-fill pf1"></div><div class="port-shade"></div><div class="port-body"><div class="port-name">陳威宇</div><div class="port-spec">電影感 · 人像</div><div class="port-city">Taipei</div></div></div>
+    <div class="port"><div class="port-fill pf2"></div><div class="port-shade"></div><div class="port-body"><div class="port-name">林雨晴</div><div class="port-spec">紀實</div><div class="port-city">Taichung</div></div></div>
+    <div class="port"><div class="port-fill pf3"></div><div class="port-shade"></div><div class="port-body"><div class="port-name">張書豪</div><div class="port-spec">商業 · MV</div><div class="port-city">Kaohsiung</div></div></div>
+    <div class="port"><div class="port-fill pf4"></div><div class="port-shade"></div><div class="port-body"><div class="port-name">吳欣儀</div><div class="port-spec">MV 專案</div><div class="port-city">Taipei</div></div></div>
+    <div class="port"><div class="port-fill pf5"></div><div class="port-shade"></div><div class="port-body"><div class="port-name">洪韋志</div><div class="port-spec">電影感</div><div class="port-city">Tainan</div></div></div>
+    <div class="port" style="opacity:0.35"><div class="port-fill pf6"></div><div class="port-shade"></div><div class="port-body"><div class="port-name">+1,200</div><div class="port-spec">攝影師</div><div class="port-city">Taiwan</div></div></div>
+  </div>
+</div>
+
+<!-- DRAMA -->
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-title">
+      <span class="zh">你最愛的劇，在這裡拍的</span>
+      LOCATIONS
+    </div>
+    <a href="#" class="sec-link">查看全部 →</a>
+  </div>
+  <div class="drama-grid">
+    <div class="drama"><div class="drama-fill df1"></div><div class="drama-shade"></div><div class="drama-body"><div class="drama-meta">台灣戲劇 · 2019</div><div class="drama-title-text">《想見你》<br>拍攝地圖</div><span class="drama-badge">14 個拍攝地點</span></div></div>
+    <div class="drama"><div class="drama-fill df2"></div><div class="drama-shade"></div><div class="drama-body"><div class="drama-meta">K-POP MV · 台灣場景</div><div class="drama-title-text">NewJeans<br>台灣 MV 場景</div><span class="drama-badge">8 個拍攝地點</span></div></div>
+  </div>
+</div>
+
+<!-- VENDOR -->
+<div class="sec vendor-sec">
+  <div class="sec-head">
+    <div class="sec-title">
+      <span class="zh">製片資源庫</span>
+      VENDORS
+    </div>
+    <a href="#" class="sec-link">查看全部 →</a>
+  </div>
+  <div class="filter-tabs">
+    <button class="ftab on" onclick="setTab(this)">全部</button>
+    <button class="ftab" onclick="setTab(this)">餐飲外燴</button>
+    <button class="ftab" onclick="setTab(this)">器材租借</button>
+    <button class="ftab" onclick="setTab(this)">場地租借</button>
+    <button class="ftab" onclick="setTab(this)">後製剪輯</button>
+  </div>
+  <div class="vendor-grid">
+    <div class="ven">
+      <div class="ven-top"><div class="ven-icon">🍱</div><span class="ven-badge ok">Verified</span></div>
+      <div class="ven-name">好味外燴便當</div>
+      <div class="ven-cat">Catering · 片場便當供應</div>
+      <div class="ven-foot"><span class="ven-loc">Taichung</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d"></div></div></div>
+    </div>
+    <div class="ven">
+      <div class="ven-top"><div class="ven-icon">🎥</div><span class="ven-badge ok">Verified</span></div>
+      <div class="ven-name">光影器材租借</div>
+      <div class="ven-cat">Equipment · Sony / ARRI / DJI</div>
+      <div class="ven-foot"><span class="ven-loc">Taipei</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d on"></div></div></div>
+    </div>
+    <div class="ven">
+      <div class="ven-top"><div class="ven-icon">✂️</div><span class="ven-badge">Pending</span></div>
+      <div class="ven-name">剪輯工作室 CUTS</div>
+      <div class="ven-cat">Post-Production · 調色 / 混音</div>
+      <div class="ven-foot"><span class="ven-loc">Taipei</span><div class="dots"><div class="d on"></div><div class="d on"></div><div class="d"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING -->
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-title">
+      <span class="zh">選擇你的方案</span>
+      PLANS
+    </div>
+  </div>
+  <div class="pricing-grid">
+    <div class="pc">
+      <div class="pc-plan">Free · 基本會員</div>
+      <div class="pc-price">$0</div>
+      <div class="pc-unit">永久免費</div>
+      <div class="pc-rule"></div>
+      <ul class="pc-list">
+        <li>瀏覽拍攝地圖</li>
+        <li>探索攝影師作品集</li>
+        <li>搜尋商家資料庫</li>
+        <li>建立個人作品集頁面</li>
+      </ul>
+      <button class="pc-btn">免費加入</button>
+    </div>
+    <div class="pc hl">
+      <div class="pc-plan">Pro · 專業會員</div>
+      <div class="pc-price">$299</div>
+      <div class="pc-unit">每月 · NT</div>
+      <div class="pc-rule"></div>
+      <ul class="pc-list">
+        <li>所有基本功能</li>
+        <li>私密場景地圖解鎖</li>
+        <li>Discord 私密社群入口</li>
+        <li>完整商家資料與評價</li>
+        <li>優先曝光作品集</li>
+      </ul>
+      <button class="pc-btn">開始專業方案</button>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="foot-logo">CREW<span>.</span>LOG</div>
+  <ul class="foot-links">
+    <li><a href="#">地圖</a></li>
+    <li><a href="#">作品集</a></li>
+    <li><a href="#">商家</a></li>
+    <li><a href="#">教學</a></li>
+    <li><a href="#">關於</a></li>
+  </ul>
+  <ul class="foot-social">
+    <li><a href="#">IG</a></li>
+    <li><a href="#">TH</a></li>
+  </ul>
+  <p class="foot-copy">© 2025 CREWLOG · 台灣影視場景與攝影師平台 · All Rights Reserved</p>
+</footer>
+
+<script>
+function setTab(el) {
+  document.querySelectorAll('.ftab').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+}
+</script>
+</body>
+</html>

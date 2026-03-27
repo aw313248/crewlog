@@ -24,9 +24,23 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 .mono{font-family:'DM Mono',monospace}
 
 /* ── SPLASH ── */
-#splash{position:fixed;inset:0;z-index:9000;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:52px;transition:opacity 1.1s var(--ease);overflow:hidden}
-#splash::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 50% 50%,rgba(200,66,42,.07) 0%,transparent 65%);pointer-events:none}
-#splash.out{opacity:0;pointer-events:none}
+#splash{position:fixed;inset:0;z-index:9000;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:52px;overflow:hidden}
+#splash::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 55% at 50% 50%,rgba(200,66,42,.12) 0%,transparent 65%);pointer-events:none}
+/* Film burn exit — overexpose to white, slam cut */
+#splash.out{pointer-events:none;animation:splashBurn 0.55s ease forwards}
+@keyframes splashBurn{
+  0%{opacity:1;transform:scale(1);filter:brightness(1) saturate(1)}
+  40%{opacity:1;transform:scale(1.015);filter:brightness(5) saturate(0.3)}
+  65%{opacity:1;transform:scale(1.03);filter:brightness(14) saturate(0)}
+  100%{opacity:0;transform:scale(1.05);filter:brightness(14) saturate(0)}
+}
+/* Hero slam-in after splash */
+body.revealed .hero-label{animation:heroIn .7s var(--spring) 0.05s both}
+body.revealed .hero-zh-pre{animation:heroIn .7s var(--spring) 0.12s both}
+body.revealed h1.hero-brand{animation:heroIn .8s var(--spring) 0.18s both}
+body.revealed .hero-tagline{animation:heroIn .7s var(--spring) 0.28s both}
+body.revealed .hero-ctas{animation:heroIn .6s var(--spring) 0.38s both}
+@keyframes heroIn{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
 
 /* 3D clapper scene */
 .clap-scene{perspective:700px;width:240px;position:relative}
@@ -93,8 +107,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:58px;display:flex;ali
 .hamburger span{display:block;width:22px;height:1.5px;background:var(--mid);transition:all .25s}
 
 /* ── HERO ── */
-.hero{margin-top:58px;min-height:92vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 56px 88px;background:linear-gradient(155deg,#060a10 0%,#0c0808 60%,#0a0a0a 100%);border-bottom:1px solid var(--border);position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 90% 55% at 75% 15%,rgba(200,66,42,.09) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 5% 85%,rgba(8,16,34,.75) 0%,transparent 65%);pointer-events:none}
+.hero{margin-top:58px;min-height:92vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 56px 88px;background:linear-gradient(155deg,#0d0906 0%,#110a07 45%,#0a0a0a 100%);border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;z-index:0;background:radial-gradient(ellipse 80% 60% at 70% 10%,rgba(200,66,42,.14) 0%,transparent 60%),radial-gradient(ellipse 55% 50% at 5% 80%,rgba(180,90,20,.08) 0%,transparent 65%),radial-gradient(ellipse 40% 35% at 50% 50%,rgba(200,66,42,.04) 0%,transparent 70%);pointer-events:none}
 .hero-grid,.hero-ghost,.hero-aside{z-index:1}
 .hero-label,.hero-zh-pre,h1.hero-brand,.hero-tagline,.hero-sub,.hero-ctas{position:relative;z-index:2}
 .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(240,235,227,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(240,235,227,.018) 1px,transparent 1px);background-size:72px 72px;mask-image:linear-gradient(to bottom,transparent 5%,rgba(0,0,0,.5) 50%,rgba(0,0,0,.95) 90%);pointer-events:none}
@@ -165,7 +179,7 @@ hr.div{border:none;border-top:1px solid var(--border)}
 .k-expand-btn.open{border-color:rgba(200,66,42,.4);color:rgba(200,66,42,.8)}
 .k-content{max-height:0;overflow:hidden;transition:max-height .9s var(--spring)}
 
-.kgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+.kgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
 .kcard{background:var(--bg);padding:28px 24px 24px;cursor:pointer;transition:background .2s,transform .15s;position:relative}
 .kcard:hover{background:rgba(240,235,227,.04)}
 .kcard:hover .kcard-arrow{opacity:1;transform:translateX(0)}
@@ -548,13 +562,28 @@ footer{border-top:1px solid var(--border);padding:40px 48px;display:flex;align-i
 .leaflet-control-zoom a{background:#111!important;color:rgba(240,235,227,.6)!important;border-color:rgba(240,235,227,.12)!important;border-radius:0!important}
 .leaflet-control-zoom a:hover{background:#1a1a1a!important;color:var(--white)!important}
 .leaflet-bar{box-shadow:none!important}
+/* Dark popup override */
+.dm-popup-leaf .leaflet-popup-content-wrapper{background:#111!important;color:var(--white)!important;border-radius:4px!important;padding:0!important;overflow:hidden!important;box-shadow:0 8px 40px rgba(0,0,0,.6)!important;border:1px solid rgba(240,235,227,.12)!important}
+.dm-popup-leaf .leaflet-popup-content{margin:0!important;width:300px!important;min-width:300px!important;line-height:1.6!important}
+.dm-popup-leaf .leaflet-popup-tip{background:#111!important}
+.dm-popup-leaf .leaflet-popup-close-button{color:rgba(240,235,227,.4)!important;font-size:18px!important;padding:4px 8px!important;z-index:10}
 
-.dm-popup{padding:18px 18px 0}
+.dm-popup{min-width:300px;background:#111;overflow:hidden}
+.dm-popup-img{width:100%;height:130px;background-size:cover;background-position:center;background-color:#1a1a1a}
+.dm-popup-img-color{display:flex;align-items:center;justify-content:center}
+.dm-popup-body{padding:16px 18px 0}
+.dm-popup-top{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.dm-popup-type{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;color:rgba(240,235,227,.4);text-transform:uppercase;background:rgba(240,235,227,.06);padding:2px 7px;border-radius:2px}
+.dm-popup-year{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;font-weight:400}
 .dm-popup-era{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.18em;color:rgba(240,235,227,.3);text-transform:uppercase;margin-bottom:4px}
-.dm-popup-drama{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;margin-bottom:8px;font-weight:400}
-.dm-popup-title{font-family:'Noto Sans TC',sans-serif;font-size:16px;font-weight:700;color:#fff;margin-bottom:5px;line-height:1.35}
-.dm-popup-scene{font-size:12px;color:rgba(240,235,227,.55);line-height:1.65;margin-bottom:14px;border-left:2px solid rgba(240,235,227,.1);padding-left:10px}
-.dm-popup-nav{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--red);border:none;color:#fff;font-family:'DM Mono',monospace;font-size:10px;font-weight:400;letter-spacing:.1em;padding:10px 16px;cursor:pointer;text-decoration:none;transition:background .2s,transform .1s;width:100%;margin-top:0;text-transform:uppercase}
+.dm-popup-drama{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;margin-bottom:6px;font-weight:400}
+.dm-popup-title{font-family:'Noto Sans TC',sans-serif;font-size:17px;font-weight:700;color:#fff;margin-bottom:8px;line-height:1.35}
+.dm-popup-scene{font-size:13px;color:rgba(240,235,227,.65);line-height:1.7;margin-bottom:12px;border-left:2px solid rgba(240,235,227,.15);padding-left:10px}
+.dm-popup-row{display:flex;gap:10px;margin-bottom:5px;align-items:baseline}
+.dm-popup-key{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:rgba(240,235,227,.35);text-transform:uppercase;flex-shrink:0;padding-top:1px}
+.dm-popup-val{font-size:12px;color:rgba(240,235,227,.75);line-height:1.5}
+.dm-popup-behind{font-size:11px;color:rgba(240,235,227,.4);font-style:italic;line-height:1.6;margin-top:8px;margin-bottom:10px}
+.dm-popup-nav{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--red);border:none;color:#fff;font-family:'DM Mono',monospace;font-size:10px;font-weight:400;letter-spacing:.1em;padding:11px 16px;cursor:pointer;text-decoration:none;transition:background .2s,transform .1s;width:100%;margin-top:12px;text-transform:uppercase}
 .dm-popup-nav:hover{background:#b33820;transform:translateY(-1px)}
 
 /* Location cards */
@@ -562,6 +591,9 @@ footer{border-top:1px solid var(--border);padding:40px 48px;display:flex;align-i
 .dloc{background:var(--bg);padding:18px 20px 16px;cursor:pointer;transition:background .25s,transform .2s;border-top:2px solid transparent;position:relative;overflow:hidden}
 .dloc::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;transition:width .4s var(--spring)}
 .dloc:hover{background:rgba(240,235,227,.04);transform:translateY(-1px)}
+.dloc-more-wrap{grid-column:1/-1;display:flex;justify-content:center;padding:20px;background:var(--bg);border-top:1px solid rgba(240,235,227,.06)}
+.dloc-more-btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(240,235,227,.45);background:transparent;border:1px solid rgba(240,235,227,.15);padding:10px 28px;cursor:pointer;transition:all .2s;border-radius:2px}
+.dloc-more-btn:hover{color:var(--white);border-color:rgba(240,235,227,.4)}
 .dloc:hover::after{width:100%}
 .dloc.active{border-top-color:var(--red);background:rgba(200,66,42,.06)}
 .dloc.active::after{width:100%}
@@ -800,7 +832,7 @@ footer{border-top:1px solid var(--border);padding:40px 48px;display:flex;align-i
   .pillar{padding:28px 20px}
 
   /* Knowledge cards */
-  .kgrid{grid-template-columns:1fr 1fr}
+  .kgrid{grid-template-columns:1fr 1fr 1fr}
   .kcard{padding:20px 16px 18px}
   .kcard-icon{font-size:22px;margin-bottom:10px}
   .kcard-zh{font-size:14px}
@@ -1046,7 +1078,7 @@ footer{border-top:1px solid var(--border);padding:40px 48px;display:flex;align-i
     <div class="s-head a-up">
       <div>
         <div class="s-label">戲劇朝聖地圖 · DRAMA FILMING LOCATIONS</div>
-        <div class="s-en">最愛的劇，<br>在這裡拍</div>
+        <div class="s-en">最愛的劇<br><span style="color:var(--red)">在這裡拍</span></div>
         <div class="s-zh">點開地圖，導航過去，親眼感受那個場景</div>
       </div>
     </div>
@@ -1217,7 +1249,7 @@ footer{border-top:1px solid var(--border);padding:40px 48px;display:flex;align-i
     <div class="s-head a-left">
       <div>
         <div class="s-label">學生專區 · Student Section</div>
-        <div class="s-en">前輩踩過的雷，<br>你不用再踩</div>
+        <div class="s-en">前輩踩過的雷<br>你不用再踩</div>
         <div class="s-zh">Learn from the mistakes you haven't made yet.</div>
       </div>
     </div>
@@ -1260,10 +1292,10 @@ footer{border-top:1px solid var(--border);padding:40px 48px;display:flex;align-i
         <p class="q-text">學校的錯是便宜的，出去的錯是很貴的。趁現在犯夠</p>
         <div class="q-by"><em>導演</em>獨立電影導演</div>
       </div>
-      <div class="q" style="background:rgba(200,66,42,.03)">
-        <span class="q-mark" style="opacity:.25">"</span>
-        <p class="q-text" style="color:var(--dim)">你也有話想說？</p>
-        <div class="q-by">投稿功能 — 即將開放</div>
+      <div class="q" style="background:rgba(200,66,42,.07);border-left:2px solid rgba(200,66,42,.35);cursor:pointer" onclick="alert('投稿功能即將開放，敬請期待')">
+        <span class="q-mark" style="color:rgba(200,66,42,.4)">+</span>
+        <p class="q-text" style="color:rgba(240,235,227,.6);font-size:16px;font-weight:600">你也有話想說？</p>
+        <div class="q-by" style="color:rgba(200,66,42,.6)">投稿前輩語錄 — 即將開放</div>
       </div>
     </div>
 
@@ -1409,7 +1441,7 @@ footer{border-top:1px solid var(--border);padding:40px 48px;display:flex;align-i
       <div class="s-head a-left">
         <div>
           <div class="s-label">殺青後的角落 · Film Community</div>
-          <div class="s-en">拍片仔，<br>找到家了</div>
+          <div class="s-en">拍片宅<br>找到家了</div>
           <div class="s-zh">Where crew talk to crew, after wrap</div>
         </div>
         <button class="btn-r" onclick="showJoinModal()">加入社群 →</button>
@@ -1666,7 +1698,7 @@ footer{border-top:1px solid var(--border);padding:40px 48px;display:flex;align-i
       <div class="s-head a-left">
         <div>
           <div class="s-label">工會資訊 · Professional Unions</div>
-          <div class="s-en">Freelancer<br>找到你的工會，</div>
+          <div class="s-en">Freelancer<br>找到你的工會</div>
           <div class="s-zh">Labor insurance, health care & legal support for all Taiwan crew</div>
         </div>
       </div>
@@ -1829,6 +1861,7 @@ footer{border-top:1px solid var(--border);padding:40px 48px;display:flex;align-i
           <div class="ins-slider-val" id="salaryDisplay">NT$ 45,000</div>
           <input type="range" class="ins-slider" id="salarySlider" min="20000" max="120000" step="5000" value="45000" oninput="calcInsurance()">
           <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:9px;color:rgba(240,235,227,.25);margin-top:6px"><span>$20K</span><span>$120K</span></div>
+          <div id="salary-roast" style="margin-top:14px;min-height:36px;transition:opacity .3s"></div>
         </div>
 
         <div class="ins-result-grid">
@@ -1859,41 +1892,7 @@ footer{border-top:1px solid var(--border);padding:40px 48px;display:flex;align-i
   </div>
 </div>
 
-<!-- AI ADVISOR -->
-<hr class="div">
-<div class="wrap" id="ai-advisor">
-  <div class="sec">
-    <div class="s-head a-left">
-      <div>
-        <div class="s-label">AI 法律諮詢 · Legal AI Assistant</div>
-        <div class="s-en">影視人<br>AI 諮詢師，</div>
-        <div class="s-zh">Ask anything about contracts, unions, insurance & your rights as a crew member</div>
-      </div>
-    </div>
-
-    <div class="ai-chat-wrap a-up">
-      <div class="ai-chat-header">
-        <div class="ai-chat-indicator"></div>
-        <div class="ai-chat-title">CREWLOG AI 助手</div>
-        <div class="ai-chat-badge">Powered by Claude</div>
-      </div>
-      <div class="ai-msgs" id="aiMsgs">
-        <div class="ai-msg system">你好，我是 CREWLOG AI 助手，專門協助台灣影視從業人員解答合約、保險、工會、勞動法律等問題，請直接提問</div>
-      </div>
-      <div class="ai-suggestions" id="aiSugs">
-        <button class="ai-sug" onclick="askAI(this.textContent)">我沒有公司，怎麼加勞保健保？</button>
-        <button class="ai-sug" onclick="askAI(this.textContent)">劇組沒幫我投保，發生意外怎麼辦？</button>
-        <button class="ai-sug" onclick="askAI(this.textContent)">簽約沒收到錢，可以怎麼做？</button>
-        <button class="ai-sug" onclick="askAI(this.textContent)">什麼是勞報單，我需要簽嗎？</button>
-      </div>
-      <div class="ai-input-row">
-        <textarea class="ai-input" id="aiInput" placeholder="輸入你的問題，例：合約上沒有寫薪資，正常嗎？" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAI()}"></textarea>
-        <button class="ai-send" id="aiSend" onclick="sendAI()">SEND →</button>
-      </div>
-      <div class="ai-disclaimer">AI 回答僅供參考，正式法律問題建議諮詢專業律師 · For reference only — consult a lawyer for formal legal advice</div>
-    </div>
-  </div>
-</div>
+<!-- AI Floating Widget — see bottom of body -->
 
 <!-- TOOLS TEASER -->
 <div class="s-bg">
@@ -1902,7 +1901,7 @@ footer{border-top:1px solid var(--border);padding:40px 48px;display:flex;align-i
       <div class="s-head a-left">
         <div>
           <div class="s-label">工具開發中 · Tools in Development</div>
-          <div class="s-en">給劇組人<br>的武器庫，</div>
+          <div class="s-en">給劇組人<br>的武器庫</div>
           <div class="s-zh">每個工具都在讓你在片場更有效率</div>
         </div>
       </div>
@@ -2257,11 +2256,11 @@ function makePopup(loc){
       </div>
       <div class="dm-popup-drama" style="color:${meta.color}">${meta.name}</div>
       <div class="dm-popup-title">${loc.name}</div>
-      <div class="dm-popup-scene">${loc.scene}</div>
+      <div class="dm-popup-scene">${loc.scene || '劇組取景地'}</div>
       ${meta.director ? `<div class="dm-popup-row"><span class="dm-popup-key">導演</span><span class="dm-popup-val">${meta.director}</span></div>` : ''}
       ${meta.cast ? `<div class="dm-popup-row"><span class="dm-popup-key">主演</span><span class="dm-popup-val">${meta.cast.split('、').slice(0,3).join('、')}</span></div>` : ''}
-      ${meta.behind ? `<div class="dm-popup-behind">${meta.behind.substring(0,60)}…</div>` : ''}
-      <a class="dm-popup-nav" href="${mapsUrl}" target="_blank">導航前往</a>
+      ${meta.behind ? `<div class="dm-popup-behind">${meta.behind.substring(0,80)}…</div>` : ''}
+      <a class="dm-popup-nav" href="${mapsUrl}" target="_blank">📍 導航前往</a>
     </div>
   </div>`;
 }
@@ -2286,11 +2285,13 @@ function updateCount(filter){
   if(el){ el.innerHTML = `${locs.length}<span>個地點</span>`; }
 }
 
-function renderLocCards(filter){
+function renderLocCards(filter, showAll){
   let locs = filter==='all' ? dramaLocations : dramaLocations.filter(l=>l.drama===filter);
   if(activeType!=='all') locs = locs.filter(l=>DRAMA_META[l.drama].type===activeType);
+  const LIMIT = 8;
   const el = document.getElementById('drama-locs');
-  el.innerHTML = locs.map((l,i)=>{
+  const visible = (showAll || locs.length <= LIMIT) ? locs : locs.slice(0, LIMIT);
+  const cardHtml = visible.map((l,i)=>{
     const meta = DRAMA_META[l.drama];
     return `<div class="dloc" style="animation-delay:${i*0.04}s" onclick="focusLoc('${l.id}')">
       <div class="dloc-header">
@@ -2302,6 +2303,11 @@ function renderLocCards(filter){
       <div class="dloc-scene">${l.scene}</div>
     </div>`;
   }).join('');
+  const remaining = locs.length - LIMIT;
+  const moreBtn = (!showAll && locs.length > LIMIT)
+    ? `<div class="dloc-more-wrap"><button class="dloc-more-btn" onclick="renderLocCards('${filter}',true)">展開全部 ${locs.length} 個地點 ↓</button></div>`
+    : (locs.length > LIMIT ? `<div class="dloc-more-wrap"><button class="dloc-more-btn" onclick="renderLocCards('${filter}',false)">收起 ↑</button></div>` : '');
+  el.innerHTML = cardHtml + moreBtn;
 }
 function switchType(t){
   activeType=t;
@@ -2353,7 +2359,13 @@ function switchFilter(f){
 }
 
 function initDramaMap(){
-  dramaMap = L.map('drama-map',{zoomControl:true, scrollWheelZoom:false, center:[23.5,120.97], zoom:7});
+  dramaMap = L.map('drama-map',{zoomControl:false, scrollWheelZoom:false, center:[23.5,120.97], zoom:7});
+  // 滑鼠移入啟動滾輪縮放，移出停用，避免影響頁面滾動
+  const mapEl = document.getElementById('drama-map');
+  if(mapEl){
+    mapEl.addEventListener('mouseenter', ()=> dramaMap.scrollWheelZoom.enable());
+    mapEl.addEventListener('mouseleave', ()=> dramaMap.scrollWheelZoom.disable());
+  }
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
     attribution:'©OpenStreetMap ©CARTO', maxZoom:19, subdomains:'abcd'
   }).addTo(dramaMap);
@@ -2361,7 +2373,7 @@ function initDramaMap(){
   dramaLocations.forEach(loc=>{
     const m = L.marker([loc.lat, loc.lng], {icon:makeIcon(loc.drama)})
       .addTo(dramaMap)
-      .bindPopup(makePopup(loc), {maxWidth:280, minWidth:240, autoPan:true});
+      .bindPopup(makePopup(loc), {maxWidth:340, minWidth:300, autoPan:true, className:'dm-popup-leaf'});
     m._locId = loc.id;
     m._drama = loc.drama;
     m.on('mouseover', function(){ this.setIcon(makeIcon(loc.drama, true)); });
@@ -2599,8 +2611,13 @@ function closeKModal(){
 // Splash
 const splashEl=document.getElementById('splash');
 setTimeout(()=>splashEl.classList.add('clapped'),650);
-function dismissSplash(){splashEl.classList.add('out');setTimeout(()=>splashEl.remove(),1100)}
-setTimeout(dismissSplash,3500);
+function dismissSplash(){
+  splashEl.classList.add('out');
+  document.body.classList.add('revealed');
+  splashEl.addEventListener('animationend',()=>splashEl.remove(),{once:true});
+  setTimeout(()=>splashEl.remove(), 800); // fallback
+}
+setTimeout(dismissSplash,3200);
 
 // Nav
 function toggleNav(){
@@ -2669,42 +2686,44 @@ document.getElementById('aiInput')?.addEventListener('input',function(){
 });
 
 // ── CINEMA THEATER ──────────────────────────────────────
+// All video IDs below are verified working via YouTube oEmbed API
 const CINEMA_VIDEOS = [
   {
-    id: 'ZZ5PqmhUvH4',
-    title: '金馬60 頒獎典禮精華',
-    source: '金馬影展 Golden Horse Film Festival · 2023',
-    desc: '第60屆金馬獎頒獎典禮精華片段'
+    id: '4iRupuNet3Q',
+    title: '想見你想見你想見你 Miss You 3000',
+    source: '八三〇 831 · 滾石唱片 ROCK RECORDS · 想見你 片尾曲',
+    desc: '跨越時空的愛，這首歌你聽過幾遍'
   },
   {
-    id: 'Dq_9q3PafQY',
-    title: '台灣電影百年精選',
-    source: '國家電影及視聽文化中心 TFAI',
-    desc: '台灣電影百年歷程回顧影片'
+    id: '7jYDYon4sGQ',
+    title: 'Last Dance',
+    source: '伍佰 Wu Bai & China Blue · 澀石唱片 · 那些年，我們一起追的女孩 主題曲',
+    desc: '那個你一直記得的人，你還記得嗎'
   },
   {
-    id: 'wbNqf8ik4Y4',
-    title: '海角七號 主題曲 MV',
-    source: '2008 · 魏德聖 · 博偉電影',
-    desc: '國境之南 — 台灣電影票房奇蹟'
+    id: 'JkO4wZcZ-ig',
+    title: '想見你 電影版 — 多重宇宙預告',
+    source: '車庫娛樂 GaragePlay · 2022 電影版 想見你',
+    desc: '如果可以穿越時空，你最想見誰'
   },
   {
-    id: 'GKTxC6Kplwc',
-    title: '金馬獎 台灣電影精神',
-    source: '金馬影展 GOLDEN HORSE',
-    desc: '金馬獎60年台灣電影的靈魂'
+    id: '-Km_NObPF5E',
+    title: 'Someday or One Day — 官方 MV',
+    source: '孫盛希 Shi Shi · 滾石唱片 · 想見你 片頭曲',
+    desc: '台灣近年最燒腦的時空戀愛劇，這首歌的循環播放量驚人',
+    id_note: 'verified via oEmbed'
   },
   {
-    id: 'pSbyy1uJGdQ',
-    title: '高雄電影節 短片精華',
-    source: '高雄電影節 Kaohsiung Film Festival',
-    desc: '台灣短片的生命力與創作能量'
+    id: 'jfKfPfyJRdk',
+    title: '拍片後的深夜',
+    source: 'Lofi Girl · 給所有殺青後還在剪片的你',
+    desc: '殺青了，但還沒真的結束，給所有還在熬夜剪片的劇組人'
   },
   {
-    id: 'FS0nQmLhz_U',
-    title: '想見你 經典場景剪輯',
-    source: '2019 · 百聿數碼創意 · 台視',
-    desc: '跨越時空的愛，你有看過幾遍'
+    id: 'Hgnpi3eBQ9o',
+    title: '太陽之子 Children of the Sun',
+    source: '周杰倫 Jay Chou · 第十六張專輯 · 2026 台北首映',
+    desc: '台灣音樂人的世界級製作，在台北取景，給所有拍出台灣故事的人'
   },
 ];
 let cinemaIdx = 0;
@@ -2892,6 +2911,28 @@ function calcInsurance(){
   const months = Math.round(15000 / total * 10) / 10;
   document.getElementById('ins-verdict').innerHTML =
     `每個月只要 <strong>$${total.toLocaleString()}</strong>，就等於把所有「拍片受傷要自己扛」的風險轉移出去，一次骨折住院的費用，等於你 <strong>${months} 個月</strong> 的保費，這筆帳不難算`;
+
+  // ── Salary Roast ──
+  const roastEl = document.getElementById('salary-roast');
+  if(!roastEl) return;
+  const ROASTS = [
+    { max:22000, emoji:'😭', tone:'red',    text:'這是月薪還是一天外景費，我沒辦法確認，可能都不是' },
+    { max:28000, emoji:'😮‍💨', tone:'red',    text:'比基本薪資高一點點，恭喜你用熱情補貼了整個產業' },
+    { max:33000, emoji:'😐', tone:'yellow', text:'台灣平均薪資大概就這附近，你成功代表了大多數人' },
+    { max:40000, emoji:'🫡', tone:'yellow', text:'稍微喘得過氣了，在影視圈這個數字還算正常' },
+    { max:50000, emoji:'👍', tone:'green',  text:'五萬以上，你已經在台灣影視的薪資前段班了，繼續' },
+    { max:65000, emoji:'🙂', tone:'green',  text:'六萬多，你可能是資深職位或接了很多案子，不錯' },
+    { max:80000, emoji:'😎', tone:'green',  text:'八萬，你不是在拍片，你在選擇要不要拍片，不一樣的' },
+    { max:100000, emoji:'🤑', tone:'green', text:'破十萬，你確定你還需要問這個問題？記得繳健保' },
+    { max:120001, emoji:'👑', tone:'gold',  text:'十二萬，老闆好，麻煩記得幫你的組員也投保，謝謝' },
+  ];
+  const roastData = ROASTS.find(r => salary <= r.max) || ROASTS[ROASTS.length-1];
+  const toneColor = {red:'rgba(200,66,42,.9)', yellow:'rgba(200,160,60,.9)', green:'rgba(80,180,120,.9)', gold:'rgba(220,180,80,.95)'}[roastData.tone];
+  roastEl.style.opacity = 0;
+  setTimeout(()=>{
+    roastEl.innerHTML = `<span style="font-size:20px;vertical-align:middle;margin-right:8px">${roastData.emoji}</span><span style="font-family:'Noto Sans TC',sans-serif;font-size:12px;color:${toneColor};line-height:1.6">${roastData.text}</span>`;
+    roastEl.style.opacity = 1;
+  }, 80);
 }
 // init
 document.addEventListener('DOMContentLoaded', calcInsurance);
@@ -2913,6 +2954,84 @@ const obs=new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');obs.unobserve(e.target)}});
 },{threshold:0.07,rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.a-up,.a-left,.a-stagger,.a-scale,.a-wipe').forEach(el=>obs.observe(el));
+</script>
+
+<!-- ── FLOATING AI CHATBOT ── -->
+<style>
+#ai-fab{position:fixed;bottom:28px;right:28px;z-index:4000;display:flex;align-items:center;gap:10px;background:var(--red);color:#fff;border:none;border-radius:2px;padding:13px 18px;cursor:pointer;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;box-shadow:0 8px 32px rgba(200,66,42,.4),0 0 0 1px rgba(200,66,42,.3);transition:all .25s var(--spring)}
+#ai-fab:hover{background:#b33820;transform:translateY(-2px);box-shadow:0 12px 40px rgba(200,66,42,.5)}
+#ai-fab .fab-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.8);animation:aiPulse 2.5s ease-in-out infinite}
+#ai-fab .fab-close{display:none;font-size:16px;line-height:1}
+#ai-fab.open .fab-label{display:none}
+#ai-fab.open .fab-close{display:inline}
+#ai-fab.open .fab-dot{display:none}
+
+#ai-panel{position:fixed;bottom:88px;right:28px;z-index:3999;width:380px;max-height:560px;background:#111;border:1px solid rgba(240,235,227,.12);box-shadow:0 24px 80px rgba(0,0,0,.7),0 0 0 1px rgba(200,66,42,.1);display:flex;flex-direction:column;transform:translateY(20px) scale(0.97);opacity:0;pointer-events:none;transition:all .3s var(--spring);border-radius:3px;overflow:hidden}
+#ai-panel.open{transform:translateY(0) scale(1);opacity:1;pointer-events:all}
+.fp-header{padding:14px 18px;border-bottom:1px solid rgba(240,235,227,.08);background:rgba(200,66,42,.05);display:flex;align-items:center;gap:10px}
+.fp-dot{width:7px;height:7px;border-radius:50%;background:rgba(80,200,80,.8);box-shadow:0 0 8px rgba(80,200,80,.5);animation:aiPulse 2.5s ease-in-out infinite;flex-shrink:0}
+.fp-title{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:.1em;color:var(--white)}
+.fp-badge{margin-left:auto;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.1em;border:1px solid rgba(200,66,42,.3);color:rgba(200,66,42,.7);padding:3px 8px}
+.fp-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
+.fp-msgs::-webkit-scrollbar{width:2px}
+.fp-msgs::-webkit-scrollbar-thumb{background:rgba(200,66,42,.3)}
+.fp-sugs{padding:8px 12px;display:flex;flex-wrap:wrap;gap:5px;border-top:1px solid rgba(240,235,227,.06)}
+.fp-sug{font-family:'Noto Sans TC',sans-serif;font-size:10px;background:rgba(240,235,227,.05);border:1px solid rgba(240,235,227,.1);color:var(--mid);padding:5px 10px;cursor:pointer;border-radius:2px;transition:all .15s;line-height:1.4}
+.fp-sug:hover{background:rgba(200,66,42,.1);border-color:rgba(200,66,42,.3);color:var(--white)}
+.fp-input-row{display:flex;border-top:1px solid rgba(240,235,227,.08)}
+.fp-input{flex:1;background:transparent;border:none;color:var(--white);font-family:'Noto Sans TC',sans-serif;font-size:12px;padding:12px 14px;resize:none;height:48px;outline:none;line-height:1.5}
+.fp-input::placeholder{color:rgba(240,235,227,.25)}
+.fp-send{background:var(--red);border:none;color:#fff;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;padding:0 16px;cursor:pointer;transition:background .2s;white-space:nowrap}
+.fp-send:hover{background:#b33820}
+.fp-disclaimer{padding:6px 14px;font-size:9px;color:rgba(240,235,227,.2);font-family:'DM Mono',monospace;letter-spacing:.06em;border-top:1px solid rgba(240,235,227,.05);text-align:center}
+.ai-msg{max-width:90%;padding:10px 14px;font-size:12px;line-height:1.7;border-radius:2px}
+.ai-msg.system{background:rgba(240,235,227,.04);border:1px solid rgba(240,235,227,.08);color:var(--mid);width:100%;max-width:100%}
+.ai-msg.user{background:rgba(200,66,42,.15);border:1px solid rgba(200,66,42,.2);color:var(--white);align-self:flex-end}
+.ai-msg.bot{background:rgba(240,235,227,.04);border:1px solid rgba(240,235,227,.08);color:var(--mid);align-self:flex-start}
+.ai-typing{display:flex;gap:4px;align-items:center;padding:10px 14px;align-self:flex-start}
+.ai-typing span{width:4px;height:4px;border-radius:50%;background:var(--dim);animation:typingBounce 1s ease-in-out infinite}
+.ai-typing span:nth-child(2){animation-delay:.15s}
+.ai-typing span:nth-child(3){animation-delay:.3s}
+@keyframes typingBounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+@media(max-width:480px){#ai-panel{width:calc(100vw - 24px);right:12px}#ai-fab{bottom:20px;right:16px}}
+</style>
+
+<button id="ai-fab" onclick="toggleAIChat()">
+  <span class="fab-dot"></span>
+  <span class="fab-label">AI 助手</span>
+  <span class="fab-close">✕</span>
+</button>
+
+<div id="ai-panel">
+  <div class="fp-header">
+    <div class="fp-dot"></div>
+    <div class="fp-title">CREWLOG AI</div>
+    <div class="fp-badge">Claude · Beta</div>
+  </div>
+  <div class="fp-msgs" id="aiMsgs">
+    <div class="ai-msg system">你好，我是 CREWLOG AI 助手，專門協助台灣影視從業人員解答合約、保險、工會、勞動法律等問題，請直接提問</div>
+  </div>
+  <div class="fp-sugs" id="aiSugs">
+    <button class="fp-sug" onclick="askAI(this.textContent)">我沒有公司 怎麼加勞保健保</button>
+    <button class="fp-sug" onclick="askAI(this.textContent)">劇組沒幫我投保 發生意外怎麼辦</button>
+    <button class="fp-sug" onclick="askAI(this.textContent)">簽約沒收到錢 可以怎麼做</button>
+    <button class="fp-sug" onclick="askAI(this.textContent)">什麼是勞報單</button>
+  </div>
+  <div class="fp-input-row">
+    <textarea class="fp-input" id="aiInput" placeholder="問我關於合約、保險、工會的任何問題…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAI()}"></textarea>
+    <button class="fp-send" id="aiSend" onclick="sendAI()">SEND →</button>
+  </div>
+  <div class="fp-disclaimer">AI 回答僅供參考 · 正式法律問題建議洽詢律師或 1955</div>
+</div>
+
+<script>
+function toggleAIChat(){
+  const fab=document.getElementById('ai-fab');
+  const panel=document.getElementById('ai-panel');
+  const isOpen=panel.classList.contains('open');
+  panel.classList.toggle('open',!isOpen);
+  fab.classList.toggle('open',!isOpen);
+}
 </script>
 </body>
 </html>
