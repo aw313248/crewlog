@@ -1684,67 +1684,140 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
     <div class="sec">
       <div class="s-head a-left">
         <div>
-          <div class="s-label">現場知識 · On-Set & Film Culture</div>
-          <div class="s-en">燈光組的<br>現場眉角</div>
-          <div class="s-zh">Lighting know-how from the set floor</div>
+          <div class="s-label">現場知識庫 · On-Set Knowledge Base</div>
+          <div class="s-en">劇組人才<br>的眉角</div>
+          <div class="s-zh">Real knowledge from real Taiwan film crew — verified from industry sources</div>
         </div>
       </div>
 
-      <!-- Credit bar -->
-      <div class="credit-bar a-up">
+      <!-- Dept filter tabs -->
+      <div class="ftabs a-up" id="kdeptTabs" style="margin-bottom:24px">
+        <button class="ftab on" onclick="filterKDept('all',this)">全部</button>
+        <button class="ftab" onclick="filterKDept('gaffer',this)">燈光組</button>
+        <button class="ftab" onclick="filterKDept('prod',this)">製片組</button>
+        <button class="ftab" onclick="filterKDept('camera',this)">攝影組</button>
+        <button class="ftab" onclick="filterKDept('script',this)">場記</button>
+        <button class="ftab" onclick="filterKDept('labor',this)">勞動法規</button>
+        <button class="ftab" onclick="filterKDept('culture',this)">影視文化</button>
+      </div>
+
+      <!-- Credit bar — gaffer section credit -->
+      <div class="credit-bar a-up kcard-dept" data-dept="gaffer">
         <div class="credit-avatar">💡</div>
         <div class="credit-body">
           <div class="credit-name">維陽（蔡明熹）</div>
           <div class="credit-role">現役燈光師 · 朝陽科技大學傳播系</div>
-          <div class="credit-thanks">感謝前輩的整理與分享，以下內容由維陽前輩授權提供</div>
+          <div class="credit-thanks">燈光組知識由維陽前輩授權提供</div>
         </div>
       </div>
 
       <!-- Knowledge Cards -->
-      <div class="kgrid a-stagger">
-        <div class="kcard" onclick="openKModal('dimmer')">
+      <div class="kgrid a-stagger" id="kgrid">
+        <!-- 燈光組 -->
+        <div class="kcard kcard-dept" data-dept="gaffer" onclick="openKModal('dimmer')">
           <span class="kcard-icon">💡</span>
-          <span class="kcard-badge kb-diy">DIY</span>
+          <span class="kcard-badge kb-diy">DIY · 燈光</span>
           <div class="kcard-zh">鎢絲燈調光器製作</div>
           <div class="kcard-en">Tungsten Dimmer DIY</div>
           <span class="kcard-arrow">→</span>
         </div>
-        <div class="kcard" onclick="openKModal('cord')">
+        <div class="kcard kcard-dept" data-dept="gaffer" onclick="openKModal('cord')">
           <span class="kcard-icon">⚡</span>
-          <span class="kcard-badge kb-safety">Safety</span>
+          <span class="kcard-badge kb-safety">Safety · 燈光</span>
           <div class="kcard-zh">延長線安全知識</div>
           <div class="kcard-en">Extension Cord Safety</div>
           <span class="kcard-arrow">→</span>
         </div>
-        <div class="kcard" onclick="openKModal('tie')">
+        <div class="kcard kcard-dept" data-dept="gaffer" onclick="openKModal('tie')">
           <span class="kcard-icon">🔗</span>
-          <span class="kcard-badge kb-tools">Tools</span>
+          <span class="kcard-badge kb-tools">Tools · 燈光</span>
           <div class="kcard-zh">可退式束帶</div>
           <div class="kcard-en">Releasable Cable Ties</div>
           <span class="kcard-arrow">→</span>
         </div>
-        <div class="kcard" onclick="openKModal('bag')">
+        <div class="kcard kcard-dept" data-dept="gaffer" onclick="openKModal('bag')">
           <span class="kcard-icon">🎒</span>
-          <span class="kcard-badge kb-info">Essentials</span>
+          <span class="kcard-badge kb-info">Essentials · 燈光</span>
           <div class="kcard-zh">燈光腰包必備清單</div>
           <div class="kcard-en">Lighting Belt Bag</div>
           <span class="kcard-arrow">→</span>
         </div>
-        <div class="kcard" onclick="openKModal('workflow')">
+        <div class="kcard kcard-dept" data-dept="gaffer" onclick="openKModal('workflow')">
           <span class="kcard-icon">📋</span>
-          <span class="kcard-badge kb-info">Workflow</span>
+          <span class="kcard-badge kb-info">Workflow · 燈光</span>
           <div class="kcard-zh">燈光師前製作業流程</div>
           <div class="kcard-en">Pre-Production Flow</div>
           <span class="kcard-arrow">→</span>
         </div>
-        <div class="kcard" onclick="openKModal('power')">
+        <div class="kcard kcard-dept" data-dept="gaffer" onclick="openKModal('power')">
           <span class="kcard-icon">⚙️</span>
-          <span class="kcard-badge kb-safety">Safety</span>
+          <span class="kcard-badge kb-safety">Safety · 燈光</span>
           <div class="kcard-zh">用電及發電機注意事項</div>
           <div class="kcard-en">Power & Generator Safety</div>
           <span class="kcard-arrow">→</span>
         </div>
-        <div class="kcard" onclick="openKModal('kaishou')" style="border-top:2px solid rgba(200,66,42,.3)">
+        <!-- 製片組 -->
+        <div class="kcard kcard-dept" data-dept="prod" onclick="openKModal('salary')">
+          <span class="kcard-icon">💰</span>
+          <span class="kcard-badge kb-info">Data · 製片</span>
+          <div class="kcard-zh">台灣劇組薪資行情</div>
+          <div class="kcard-en">Taiwan Crew Pay Scales</div>
+          <div style="font-size:10px;color:var(--dim);margin-top:4px;line-height:1.6">政府統計數據 · 2021–2024年實績</div>
+          <span class="kcard-arrow">→</span>
+        </div>
+        <div class="kcard kcard-dept" data-dept="prod" onclick="openKModal('paytypes')">
+          <span class="kcard-icon">📑</span>
+          <span class="kcard-badge kb-info">Workflow · 製片</span>
+          <div class="kcard-zh">跳班制 vs 月薪制</div>
+          <div class="kcard-en">Jump-Shift vs Monthly Salary</div>
+          <div style="font-size:10px;color:var(--dim);margin-top:4px;line-height:1.6">兩種計酬制度的差異與適用場景</div>
+          <span class="kcard-arrow">→</span>
+        </div>
+        <!-- 攝影組 -->
+        <div class="kcard kcard-dept" data-dept="camera" onclick="openKModal('cameraRoles')">
+          <span class="kcard-icon">🎥</span>
+          <span class="kcard-badge kb-info">Roles · 攝影</span>
+          <div class="kcard-zh">攝影組職位架構</div>
+          <div class="kcard-en">Camera Dept Hierarchy</div>
+          <div style="font-size:10px;color:var(--dim);margin-top:4px;line-height:1.6">從 DP 到三助，各角色真正在做什麼</div>
+          <span class="kcard-arrow">→</span>
+        </div>
+        <div class="kcard kcard-dept" data-dept="camera" onclick="openKModal('cameraFormats')">
+          <span class="kcard-icon">📽</span>
+          <span class="kcard-badge kb-tools">Specs · 攝影</span>
+          <div class="kcard-zh">台灣製作常用攝影機規格</div>
+          <div class="kcard-en">Camera Formats in Taiwan</div>
+          <div style="font-size:10px;color:var(--dim);margin-top:4px;line-height:1.6">Netflix 認可攝影機 · ARRI · Sony VENICE</div>
+          <span class="kcard-arrow">→</span>
+        </div>
+        <!-- 場記 -->
+        <div class="kcard kcard-dept" data-dept="script" onclick="openKModal('scriptSup')">
+          <span class="kcard-icon">📝</span>
+          <span class="kcard-badge kb-tools">Tools · 場記</span>
+          <div class="kcard-zh">場記的工具箱</div>
+          <div class="kcard-en">Script Supervisor's Toolkit</div>
+          <div style="font-size:10px;color:var(--dim);margin-top:4px;line-height:1.6">Movie Slate · ScriptE · 紙本報表</div>
+          <span class="kcard-arrow">→</span>
+        </div>
+        <!-- 勞動法規 -->
+        <div class="kcard kcard-dept" data-dept="labor" onclick="openKModal('labor84')">
+          <span class="kcard-icon">⚖️</span>
+          <span class="kcard-badge kb-safety">Law · 勞動</span>
+          <div class="kcard-zh">勞基法第84條之1</div>
+          <div class="kcard-en">Labor Standards Act Art. 84-1</div>
+          <div style="font-size:10px;color:var(--dim);margin-top:4px;line-height:1.6">影視工作者責任制 — 你的權益說明</div>
+          <span class="kcard-arrow">→</span>
+        </div>
+        <div class="kcard kcard-dept" data-dept="labor" onclick="openKModal('laborStats')">
+          <span class="kcard-icon">📊</span>
+          <span class="kcard-badge kb-safety">Data · 勞動</span>
+          <div class="kcard-zh">台灣影視勞動現況數據</div>
+          <div class="kcard-en">Taiwan Film Labor Statistics</div>
+          <div style="font-size:10px;color:var(--dim);margin-top:4px;line-height:1.6">工時、職災、欠薪 — 台北市工會 2019 調查</div>
+          <span class="kcard-arrow">→</span>
+        </div>
+        <!-- 影視文化 -->
+        <div class="kcard kcard-dept" data-dept="culture" onclick="openKModal('kaishou')" style="border-top:2px solid rgba(200,66,42,.3)">
           <span class="kcard-icon">🧧</span>
           <span class="kcard-badge kb-diy" style="background:rgba(200,66,42,.12);color:rgba(200,66,42,.8);border-color:rgba(200,66,42,.25)">文化</span>
           <div class="kcard-zh">台灣開鏡儀式</div>
@@ -1752,7 +1825,7 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
           <div style="font-size:10px;color:var(--dim);margin-top:4px;line-height:1.6">紅布、三牲、祭拜順序，東西方差異全解析</div>
           <span class="kcard-arrow">→</span>
         </div>
-        <div class="kcard" onclick="openKModal('wrap')">
+        <div class="kcard kcard-dept" data-dept="culture" onclick="openKModal('wrap')">
           <span class="kcard-icon">🎬</span>
           <span class="kcard-badge kb-info">文化</span>
           <div class="kcard-zh">殺青儀式與潛規則</div>
@@ -1762,14 +1835,31 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
         </div>
       </div>
 
+      <!-- Resources row -->
+      <div style="display:flex;gap:1px;background:var(--border);border:1px solid var(--border);margin-top:24px" class="a-up">
+        <a href="https://edumovie-tfai.org.tw/" target="_blank" style="flex:1;background:var(--bg);padding:20px 18px;text-decoration:none;transition:background .2s" onmouseover="this.style.background='rgba(240,235,227,.028)'" onmouseout="this.style.background='var(--bg)'">
+          <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.18em;color:var(--red);text-transform:uppercase;margin-bottom:8px">官方知識庫</div>
+          <div style="font-family:'Noto Sans TC',sans-serif;font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px">TFAI 認識電影</div>
+          <div style="font-size:11px;color:var(--dim);line-height:1.7">國家電影及視聽文化中心官方出版，各職組完整說明，免費閱讀</div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--red);margin-top:10px;letter-spacing:.1em">edumovie-tfai.org.tw →</div>
+        </a>
+        <a href="https://www.movieu.org/" target="_blank" style="flex:1;background:var(--bg);padding:20px 18px;text-decoration:none;transition:background .2s" onmouseover="this.style.background='rgba(240,235,227,.028)'" onmouseout="this.style.background='var(--bg)'">
+          <div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.18em;color:var(--red);text-transform:uppercase;margin-bottom:8px">工會資源</div>
+          <div style="font-family:'Noto Sans TC',sans-serif;font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px">台北市電影戲劇業職業工會</div>
+          <div style="font-size:11px;color:var(--dim);line-height:1.7">影視從業者工會，勞動調查、法律諮詢、加入工會享勞保</div>
+          <div style="font-family:'DM Mono',monospace;font-size:9px;color:var(--red);margin-top:10px;letter-spacing:.1em">movieu.org →</div>
+        </a>
+        <div class="vs-icon" style="display:none"></div>
+      </div>
+
       <!-- 佳客來五金 -->
-      <div class="vendor-spot a-up">
+      <div class="vendor-spot a-up kcard-dept" data-dept="gaffer">
         <div class="vs-icon">🔧</div>
         <div class="vs-body">
           <div class="vs-zh">佳客來五金</div>
           <div class="vs-en">Jiake Hardware Store · Taichung</div>
           <div class="vs-addr">台中大里區國光路二段 541 號</div>
-          <div class="vs-note">非常大的五金行，東西非常齊全，燈光組相關材料、電工耗材採購推薦—— 維陽前輩推薦</div>
+          <div class="vs-note">東西非常齊全，燈光組電工耗材採購推薦 —— 維陽前輩推薦</div>
           <span class="vs-tag">前輩推薦 · Recommended</span>
         </div>
       </div>
@@ -3595,6 +3685,141 @@ const kModalData = {
       <div style="font-size:12px;color:var(--mid);line-height:1.9;background:rgba(240,235,227,.03);border:1px solid var(--border);padding:14px 16px">
         好萊塢喊 <strong style="color:var(--white)">WRAP</strong>（W.R.A.P. = Wind, Reel, and Print，有一說法），台灣喊 <strong style="color:var(--white)">殺青</strong>，感覺完全不同，但那份「終於拍完了」的鬆了一口氣，在全世界的片場都是一樣的
       </div>`
+  },
+  salary: {
+    icon:'💰', badge:'製片 · 薪資數據', badgeClass:'kb-info',
+    title:'台灣劇組薪資行情', sub:'TAIWAN FILM CREW PAY SCALES · SOURCE: 薪資公秤 + GoodJob 2021–2024',
+    html:`
+      <div class="km-section-label">政府統計數據（影片製作技術人員）</div>
+      <p style="font-size:11px;color:var(--dim);line-height:1.7;margin-bottom:16px">來源：勞動部薪資公秤，資料區間 2021–2024，樣本數 714,505 筆，大學學歷</p>
+      <div class="km-stat-row">
+        <div class="km-stat"><div class="km-stat-n">44,000</div><div class="km-stat-l">新台幣/月<br>0–1 年資歷</div></div>
+        <div class="km-stat"><div class="km-stat-n">52,800</div><div class="km-stat-l">新台幣/月<br>3–5 年資歷</div></div>
+        <div class="km-stat"><div class="km-stat-n">61,600</div><div class="km-stat-l">新台幣/月<br>7 年以上</div></div>
+      </div>
+      <div class="km-section-label" style="margin-top:20px">製片助理實際薪資（GoodJob 調查）</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:16px">
+        <div style="background:var(--bg);padding:12px 14px"><div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.14em;color:var(--dim);margin-bottom:4px">月薪範圍</div><div style="font-size:14px;font-weight:700;color:var(--white)">NT$22,000–28,000</div></div>
+        <div style="background:var(--bg);padding:12px 14px"><div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.14em;color:var(--dim);margin-bottom:4px">平均週工時</div><div style="font-size:14px;font-weight:700;color:var(--white)">69 小時</div></div>
+        <div style="background:var(--bg);padding:12px 14px"><div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.14em;color:var(--dim);margin-bottom:4px">法定週工時</div><div style="font-size:14px;font-weight:700;color:rgba(200,66,42,.9)">40 小時</div></div>
+        <div style="background:var(--bg);padding:12px 14px"><div style="font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.14em;color:var(--dim);margin-bottom:4px">超過比例</div><div style="font-size:14px;font-weight:700;color:rgba(200,66,42,.9)">172.5%</div></div>
+      </div>
+      <div class="km-section-label">資深自由接案行情（報導者調查）</div>
+      <p style="font-size:12px;color:var(--mid);line-height:1.8">資深執行製片 / 資深各組：<strong style="color:var(--white)">NT$70,000–80,000/月</strong><br>廣告、MV 跳班制單日（一助）：<strong style="color:var(--white)">NT$30,000 以上</strong><br>執行製作 / 製片助理求職開薪（1111，2024）：<strong style="color:var(--white)">NT$30,000–34,000/月</strong></p>
+      <div class="km-warn-box" style="margin-top:16px">📊 資料來源：勞動部薪資公秤 jobsalary.com.tw、GoodJob、報導者《影視工作者的血汗乙方困境》、NCCU unews</div>`
+  },
+  paytypes: {
+    icon:'📑', badge:'製片 · 計酬制度', badgeClass:'kb-info',
+    title:'跳班制 vs 月薪制', sub:'PAY SYSTEMS IN TAIWAN FILM PRODUCTION · SOURCE: 報導者 + NCCU UNEWS',
+    html:`
+      <div class="km-section-label">跳班制（Jump-Shift System）</div>
+      <p style="font-size:12px;color:var(--mid);line-height:1.8;margin-bottom:12px">將24小時分成 <strong style="color:var(--white)">8–6–6–4</strong> 四個班。每班名目薪酬相同，代表最後4小時的時薪是第一個8小時的兩倍。<br><br><strong style="color:var(--white)">主要用途</strong>：廣告、MV（1–2天的短期製作）。<br>單日總酬可能非常高，但非長期製作適用。</p>
+      <div style="background:rgba(240,235,227,.03);border:1px solid var(--border);padding:14px 16px;margin-bottom:20px;font-family:'DM Mono',monospace;font-size:11px;color:var(--mid);line-height:2">
+        班次 1：8hr &nbsp;→ X元<br>
+        班次 2：6hr &nbsp;→ X元（每小時貴33%）<br>
+        班次 3：6hr &nbsp;→ X元（每小時貴33%）<br>
+        班次 4：4hr &nbsp;→ X元（每小時貴100%）
+      </div>
+      <div class="km-section-label">月薪制（Monthly Salary）</div>
+      <p style="font-size:12px;color:var(--mid);line-height:1.8;margin-bottom:12px">固定月薪，不計加班費。業界有「工時吃到飽」之稱。<br><strong style="color:var(--white)">主要用途</strong>：電影、影集（長期製作）。<br>製作公司無成本壓力，拍多久就拍多久。</p>
+      <div class="km-section-label">包案制（Per-Project Fee）</div>
+      <p style="font-size:12px;color:var(--mid);line-height:1.8">整個專案議一個總價，風險在接案方。過去常見，現在已較少使用。</p>
+      <div class="km-warn-box" style="margin-top:16px">⚖️ 月薪制是目前影視圈超時工作爭議最大的根源。2021年勞動部已將電影現場工作者納入勞基法第84條之1，但實務上仍有落差。</div>`
+  },
+  cameraRoles: {
+    icon:'🎥', badge:'攝影 · 職位架構', badgeClass:'kb-info',
+    title:'攝影組職位架構', sub:'CAMERA DEPT HIERARCHY · SOURCE: TFAI 認識電影 edumovie-tfai.org.tw',
+    html:`
+      <div class="km-section-label">攝影組職位一覽</div>
+      <div class="km-checklist">
+        <div class="km-check"><span class="km-check-icon">🎬</span><div class="km-check-text"><strong>攝影指導 DP（Director of Photography）</strong> — 將導演的視覺概念轉化為畫面。掌控攝影機角度、運動方式，並統籌燈光部門。</div></div>
+        <div class="km-check"><span class="km-check-icon">🔭</span><div class="km-check-text"><strong>攝影大助（1st AC / Focus Puller）</strong> — 負責調整曝光/光圈，及拉焦（pull focus）。鏡頭清晰與否由他負責。</div></div>
+        <div class="km-check"><span class="km-check-icon">🔄</span><div class="km-check-text"><strong>攝影二助（2nd AC）</strong> — 鏡頭更換、協助架機、維護器材。</div></div>
+        <div class="km-check"><span class="km-check-icon">📦</span><div class="km-check-text"><strong>攝影三助 / 機助（Loader/DIT 助理）</strong> — 腳架管理、媒體檔案管理（數位製作）。</div></div>
+        <div class="km-check"><span class="km-check-icon">💾</span><div class="km-check-text"><strong>DIT（Digital Image Technician）</strong> — 現場素材備份、LUT 應用、色彩管理。大型製作才有專職 DIT。</div></div>
+        <div class="km-check"><span class="km-check-icon">📸</span><div class="km-check-text"><strong>劇照師（Still Photographer）</strong> — 拍攝新聞稿及宣傳用的靜態照片。</div></div>
+        <div class="km-check"><span class="km-check-icon">🎞</span><div class="km-check-text"><strong>隨行攝錄（BTS）</strong> — 幕後花絮拍攝，現在幾乎每個製作都有。</div></div>
+      </div>
+      <div class="km-warn-box" style="margin-top:16px">📚 資料來源：<a href="https://edumovie-tfai.org.tw/article/content/218" target="_blank" style="color:var(--red)">TFAI 認識電影 — 攝影組</a></div>`
+  },
+  cameraFormats: {
+    icon:'📽', badge:'攝影 · 規格', badgeClass:'kb-tools',
+    title:'台灣製作常用攝影機格式', sub:'CAMERA FORMATS IN TAIWAN PRODUCTION · 2024–2025',
+    html:`
+      <div class="km-section-label">Netflix 認可攝影機（台灣製作必知）</div>
+      <p style="font-size:12px;color:var(--mid);line-height:1.8;margin-bottom:12px">Netflix Originals 最低要求：4K 以上拍攝。以下為 Netflix 認可機型（台灣可租借）：</p>
+      <div class="km-checklist">
+        <div class="km-check"><span class="km-check-icon">⬛</span><div class="km-check-text"><strong>ARRI ALEXA LF / Mini LF</strong> — 全台首台 LF 由阿榮影業引進，全片幅感光元件，ARRIRAW 格式，12+ stops DR。業界首選。</div></div>
+        <div class="km-check"><span class="km-check-icon">🟦</span><div class="km-check-text"><strong>Sony VENICE 2</strong> — 8K 全片幅，雙基礎 ISO 800/3200，X-OCN 格式，15+ stops DR。台灣正式上市 2022。Netflix 認可。</div></div>
+        <div class="km-check"><span class="km-check-icon">🟦</span><div class="km-check-text"><strong>Sony BURANO</strong> — 8.6K 全片幅，2023年台灣上市，與 VENICE 2 同色科學，適合小組製作。Netflix 認可。</div></div>
+        <div class="km-check"><span class="km-check-icon">🔴</span><div class="km-check-text"><strong>RED MONSTRO / V-RAPTOR</strong> — R3D RAW 格式，8K，台灣廣告 MV 常用。</div></div>
+      </div>
+      <div class="km-section-label" style="margin-top:20px">台灣一般製作常見規格</div>
+      <div style="font-size:12px;color:var(--mid);line-height:2;background:rgba(240,235,227,.03);border:1px solid var(--border);padding:14px 16px">
+        院線電影：ARRIRAW 或 ProRes 4444 XQ，2.39:1 或 1.85:1，24fps<br>
+        Netflix 影集：X-OCN 或 ARRIRAW，4K 以上，24fps 或 25fps<br>
+        一般電視劇/OTT：Apple ProRes 4K，HDR10 或 HLG<br>
+        廣告 / MV：Sony FX3/FX6 ~ VENICE，格式彈性較大
+      </div>
+      <div class="km-warn-box" style="margin-top:16px">📹 台灣可租借 ARRI 系統首選：<a href="http://www.arrowcam.com" target="_blank" style="color:var(--red)">阿榮影業 arrowcam.com</a> — 引進多項亞洲首套設備</div>`
+  },
+  scriptSup: {
+    icon:'📝', badge:'場記 · 工具', badgeClass:'kb-tools',
+    title:'場記的工具箱', sub:'SCRIPT SUPERVISOR TOOLKIT · SOURCE: TFAI + Movie Slate + ScriptE',
+    html:`
+      <div class="km-section-label">場記的核心職責</div>
+      <div class="km-checklist">
+        <div class="km-check"><span class="km-check-icon">🔄</span><div class="km-check-text"><strong>連戲管理</strong> — 監控並記錄每個場次的道具、服裝、髮型、妝容、演員位置、動作，確保不同時間拍攝的鏡頭可以無縫剪接。</div></div>
+        <div class="km-check"><span class="km-check-icon">📐</span><div class="km-check-text"><strong>執行 180 度法則</strong> — 防止剪接時出現方向混亂，所有軸線關係都由場記監控確認。</div></div>
+        <div class="km-check"><span class="km-check-icon">📋</span><div class="km-check-text"><strong>記錄每個鏡次</strong> — 場景號、鏡次號、攝影機設定、使用鏡頭、OK或NG原因，每天整理成「場記日報」給剪輯部門。</div></div>
+        <div class="km-check"><span class="km-check-icon">📖</span><div class="km-check-text"><strong>劃本（Lining）</strong> — 在劇本上標記每個鏡頭精確涵蓋的台詞範圍，讓剪輯知道哪些素材對應哪些場次。</div></div>
+      </div>
+      <div class="km-section-label" style="margin-top:20px">常用工具</div>
+      <div class="km-checklist">
+        <div class="km-check"><span class="km-check-icon">📱</span><div class="km-check-text"><strong>Movie Slate（iPad App）</strong> — 匯入 PDF 劇本後可直接在 iPad 上標注、記錄每個鏡次。支援電子日報輸出。中大型製作主流工具。<a href="https://www.movie-slate.com/" target="_blank" style="color:var(--red)">movie-slate.com</a></div></div>
+        <div class="km-check"><span class="km-check-icon">📱</span><div class="km-check-text"><strong>ScriptE（iOS App）</strong> — 場記專屬 App，國際製作常用，支援劃本（tramline）、連戲備注、照片紀錄。</div></div>
+        <div class="km-check"><span class="km-check-icon">📄</span><div class="km-check-text"><strong>紙本報表</strong> — 小型製作、學生製作仍以自製 Excel/Word 表格為主。基本欄位：場景號、鏡次、OK/NG、備注、使用鏡頭。</div></div>
+      </div>
+      <div class="km-warn-box" style="margin-top:16px">🎓 TFAI 場記資源：<a href="https://edumovie-tfai.org.tw/" target="_blank" style="color:var(--red)">edumovie-tfai.org.tw</a> — 各職組完整介紹（免費閱讀）</div>`
+  },
+  labor84: {
+    icon:'⚖️', badge:'勞動法規 · 責任制', badgeClass:'kb-safety',
+    title:'勞基法第84條之1', sub:'LABOR STANDARDS ACT ART. 84-1 · 2021年11月影視工作者正式適用',
+    html:`
+      <div class="km-section-label">什麼是第84條之1？</div>
+      <p style="font-size:12px;color:var(--mid);line-height:1.9;margin-bottom:16px">2021年11月2日，勞動部正式公告：<strong style="color:var(--white)">「電影片製作業拍攝現場工作人員」</strong>納入勞基法第84條之1。這允許雇主與勞工以書面協議，調整正常工時限制，但仍須保障勞工基本健康和福祉。</p>
+      <div class="km-section-label">對你的影響</div>
+      <div class="km-checklist">
+        <div class="km-check"><span class="km-check-icon">✅</span><div class="km-check-text"><strong>合法加班最多到每天 12 小時</strong>（含2小時加班），超過須加成計費</div></div>
+        <div class="km-check"><span class="km-check-icon">✅</span><div class="km-check-text"><strong>兩個工作日之間，必須有連續 11 小時以上休息</strong>（台北市工會提案標準）</div></div>
+        <div class="km-check"><span class="km-check-icon">✅</span><div class="km-check-text"><strong>第11–12小時加成 1.33 倍</strong>（台北市工會提案標準）</div></div>
+        <div class="km-check"><span class="km-check-icon">⚠️</span><div class="km-check-text"><strong>必須簽訂書面協議並向勞工局報備</strong>，才能適用責任制，口頭約定無效</div></div>
+        <div class="km-check"><span class="km-check-icon">⚠️</span><div class="km-check-text"><strong>協議不得損及勞工健康及福祉</strong>，無限加班不合法</div></div>
+      </div>
+      <div class="km-section-label" style="margin-top:20px">如果遇到違規怎麼辦？</div>
+      <p style="font-size:12px;color:var(--mid);line-height:1.9">向<strong style="color:var(--white)">台北市電影戲劇業職業工會</strong>申訴：<a href="https://www.movieu.org/" target="_blank" style="color:var(--red)">movieu.org</a><br>直接向勞動部1955申訴專線舉報</p>
+      <div class="km-warn-box" style="margin-top:16px">📋 資料來源：<a href="https://law.moj.gov.tw/LawClass/LawSingle.aspx?flno=84-1&pcode=N0030001" target="_blank" style="color:var(--red)">全國法規資料庫 — 勞動基準法第84條之1</a>、PTS 新聞、威律法律事務所</div>`
+  },
+  laborStats: {
+    icon:'📊', badge:'勞動 · 調查數據', badgeClass:'kb-safety',
+    title:'台灣影視勞動現況數據', sub:'TAIWAN FILM LABOR STATISTICS · 台北市電影戲劇業職業工會 2019 SURVEY',
+    html:`
+      <div class="km-section-label">工時現況（2019年調查）</div>
+      <div class="km-stat-row">
+        <div class="km-stat"><div class="km-stat-n" style="font-size:28px">24%</div><div class="km-stat-l">每天工作<br>12–14 小時</div></div>
+        <div class="km-stat"><div class="km-stat-n" style="font-size:28px">18%</div><div class="km-stat-l">每天工作<br>14–16 小時</div></div>
+        <div class="km-stat"><div class="km-stat-n" style="font-size:28px">10%</div><div class="km-stat-l">每天工作<br>16–18 小時</div></div>
+      </div>
+      <p style="font-size:11px;color:var(--dim);margin-top:10px;margin-bottom:20px">有記錄的極端案例：單日工作 <strong style="color:rgba(200,66,42,.9)">22 小時</strong>。攝影一助記錄週工時：<strong style="color:rgba(200,66,42,.9)">98 小時</strong>（法定40小時的 2.45 倍）</p>
+      <div class="km-section-label">薪資與職災</div>
+      <div class="km-checklist">
+        <div class="km-check"><span class="km-check-icon">❌</span><div class="km-check-text"><strong>48% 曾遭欠薪或工資被剋扣</strong>，其中僅 34% 成功追回</div></div>
+        <div class="km-check"><span class="km-check-icon">🚑</span><div class="km-check-text"><strong>52% 在工作中受傷過</strong></div></div>
+        <div class="km-check"><span class="km-check-icon">🚗</span><div class="km-check-text"><strong>48% 的現場受傷是交通事故</strong>（趕場途中）；影視工作者交通事故率為一般勞工的 <strong>8 倍</strong></div></div>
+      </div>
+      <div class="km-section-label" style="margin-top:20px">你能做什麼</div>
+      <p style="font-size:12px;color:var(--mid);line-height:1.9">1. <strong style="color:var(--white)">加入工會</strong>：<a href="https://www.movieu.org/" target="_blank" style="color:var(--red)">台北市電影戲劇業職業工會 movieu.org</a><br>2. <strong style="color:var(--white)">保留所有通訊紀錄</strong>：Line 對話、合約、薪資單<br>3. 欠薪不要沉默，<strong style="color:var(--white)">1955 勞動部申訴專線</strong>可匿名舉報</p>
+      <div class="km-warn-box" style="margin-top:16px">📰 資料來源：報導者《影視工作者的血汗乙方困境》、台北市電影戲劇業職業工會 2019 勞動調查</div>`
   }
 };
 
@@ -3614,6 +3839,13 @@ function openKModal(id){
 function closeKModal(){
   document.getElementById('kmodal').classList.remove('show');
   document.body.style.overflow='';
+}
+function filterKDept(dept,btn){
+  document.querySelectorAll('#kdeptTabs .ftab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.kcard-dept').forEach(el=>{
+    el.style.display=(dept==='all'||el.dataset.dept===dept)?'':'none';
+  });
 }
 
 // ── ROLE EXPLORER ──────────────────────────────────────
