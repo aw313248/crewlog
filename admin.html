@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CREWLOG Admin — 內容管理系統</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&family=Noto+Sans+TC:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0a;--bg2:#111;--bg3:#1a1a1a;
+  --red:#C8422A;--white:#F0EBE3;--white2:rgba(240,235,227,.7);--white3:rgba(240,235,227,.35);
+  --border:rgba(240,235,227,.08);--border2:rgba(240,235,227,.15);
+  --green:#4caf78;--yellow:#f0c050;--blue:#4a9de0;
+}
+html,body{min-height:100%;background:var(--bg);color:var(--white);font-family:'Outfit','Noto Sans TC',sans-serif;font-size:14px;-webkit-font-smoothing:antialiased}
+
+/* ─ NAV ─ */
+#nav{height:52px;background:rgba(10,10,10,.96);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;gap:20px;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+#nav-logo{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:.12em;color:var(--white);text-decoration:none}
+#nav-logo span{color:var(--red)}
+.nav-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;padding:3px 8px;border:1px solid var(--red);color:var(--red)}
+.nav-spacer{flex:1}
+.nav-btn{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.12em;padding:8px 16px;background:none;border:1px solid var(--border2);color:var(--white3);cursor:pointer;transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.nav-btn:hover{border-color:var(--white);color:var(--white)}
+.nav-btn.primary{background:var(--red);border-color:var(--red);color:#fff}
+.nav-btn.primary:hover{background:#b33820}
+.nav-btn.success{background:var(--green);border-color:var(--green);color:#fff}
+
+/* ─ LAYOUT ─ */
+#layout{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 52px)}
+
+/* ─ SIDEBAR ─ */
+#sidebar{background:var(--bg2);border-right:1px solid var(--border);padding:20px 0;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto}
+.sb-section{padding:8px 16px 4px;font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.2em;color:var(--white3);text-transform:uppercase;margin-top:8px}
+.sb-item{display:flex;align-items:center;gap:10px;padding:9px 16px;cursor:pointer;transition:background .15s;font-size:13px;color:var(--white2)}
+.sb-item:hover{background:rgba(240,235,227,.04)}
+.sb-item.active{background:rgba(200,66,42,.12);color:var(--white);border-left:2px solid var(--red)}
+.sb-count{font-family:'DM Mono',monospace;font-size:9px;padding:1px 5px;background:rgba(240,235,227,.08);color:var(--white3);margin-left:auto}
+
+/* ─ MAIN ─ */
+#main{padding:28px 32px;overflow-y:auto}
+.page{display:none}
+.page.active{display:block}
+
+/* ─ DASHBOARD ─ */
+.dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-bottom:32px}
+.dash-card{background:var(--bg);padding:20px 24px}
+.dash-n{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:.06em;line-height:1;margin-bottom:4px}
+.dash-l{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;color:var(--white3)}
+.dash-delta{font-family:'DM Mono',monospace;font-size:9px;color:var(--green);margin-top:4px}
+
+.activity-list{border:1px solid var(--border)}
+.al-header{padding:12px 16px;border-bottom:1px solid var(--border);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;color:var(--white3)}
+.al-item{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.al-item:last-child{border-bottom:none}
+.al-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.al-text{flex:1;font-size:12.5px;color:var(--white2)}
+.al-time{font-family:'DM Mono',monospace;font-size:9px;color:var(--white3)}
+
+/* ─ DRAMA TABLE ─ */
+.page-header{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.06em}
+.page-count{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.14em;color:var(--white3);padding:4px 10px;border:1px solid var(--border)}
+
+.drama-table{width:100%;border-collapse:collapse;border:1px solid var(--border)}
+.drama-table th{font-family:'DM Mono',monospace;font-size:8.5px;letter-spacing:.15em;color:var(--white3);padding:10px 14px;text-align:left;border-bottom:1px solid var(--border);background:var(--bg2);text-transform:uppercase}
+.drama-table td{padding:10px 14px;border-bottom:1px solid var(--border);font-size:12.5px;vertical-align:middle}
+.drama-table tr:last-child td{border-bottom:none}
+.drama-table tr:hover td{background:rgba(240,235,227,.025)}
+
+.td-poster{width:40px;height:26px;background-size:cover;background-position:center;flex-shrink:0}
+.td-color-dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.td-type{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;padding:2px 6px;border:1px solid var(--border);color:var(--white3)}
+.td-actions{display:flex;gap:6px}
+.td-btn{font-family:'DM Mono',monospace;font-size:9px;padding:5px 10px;background:none;border:1px solid var(--border);color:var(--white3);cursor:pointer;transition:all .15s}
+.td-btn:hover{border-color:var(--white2);color:var(--white)}
+.td-btn.del:hover{border-color:var(--red);color:var(--red)}
+
+/* ─ FORM ─ */
+.form-wrap{background:var(--bg2);border:1px solid var(--border);padding:24px}
+.form-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:.06em;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-grid.cols3{grid-template-columns:1fr 1fr 1fr}
+.form-full{grid-column:1/-1}
+.form-group{display:flex;flex-direction:column;gap:6px}
+.form-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;color:var(--white3);text-transform:uppercase}
+.form-input,.form-select,.form-textarea{background:rgba(240,235,227,.05);border:1px solid var(--border2);color:var(--white);font-family:'Outfit','Noto Sans TC',sans-serif;font-size:13px;padding:9px 12px;transition:border-color .2s;outline:none;width:100%}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:rgba(240,235,227,.4)}
+.form-textarea{min-height:72px;resize:vertical}
+.form-select{appearance:none}
+.color-preview{width:20px;height:20px;border-radius:50%;display:inline-block;vertical-align:middle;margin-left:8px;transition:background .2s}
+.form-actions{display:flex;gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+
+/* ─ LOCATION TABLE ─ */
+.loc-group-head{padding:8px 14px;background:var(--bg3);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;color:var(--white3);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.loc-group-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* ─ EXPORT ─ */
+.export-area{background:var(--bg2);border:1px solid var(--border);padding:20px}
+.export-code{background:#000;border:1px solid var(--border);padding:16px;font-family:'DM Mono',monospace;font-size:11px;color:rgba(240,235,227,.7);line-height:1.6;max-height:320px;overflow-y:auto;white-space:pre;margin-bottom:12px;scrollbar-width:thin;scrollbar-color:rgba(240,235,227,.1) transparent}
+.export-instructions{font-size:12.5px;color:var(--white3);line-height:1.7;border-left:2px solid var(--red);padding-left:12px;margin-bottom:16px}
+
+/* ─ TOAST ─ */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--green);color:#fff;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.12em;padding:12px 20px;z-index:9999;transform:translateY(60px);opacity:0;transition:all .3s}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.error{background:var(--red)}
+
+/* ─ MODAL ─ */
+#modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:500;align-items:center;justify-content:center}
+#modal-overlay.open{display:flex}
+#modal{background:var(--bg2);border:1px solid var(--border2);width:min(640px,95vw);max-height:85vh;overflow-y:auto}
+#modal-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--bg2);z-index:1}
+#modal-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:.06em}
+#modal-close{background:none;border:none;color:var(--white3);font-size:20px;cursor:pointer;line-height:1}
+#modal-close:hover{color:var(--white)}
+#modal-body{padding:20px}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="/" id="nav-logo">CREW<span>.</span>LOG</a>
+  <span class="nav-badge">ADMIN</span>
+  <div class="nav-spacer"></div>
+  <button class="nav-btn" onclick="exportData()">⬇ 匯出程式碼</button>
+  <button class="nav-btn primary" onclick="showPage('export');generateExport()">📋 生成更新包</button>
+  <a href="/" class="nav-btn">← 返回主頁</a>
+</nav>
+
+<!-- LAYOUT -->
+<div id="layout">
+  <!-- SIDEBAR -->
+  <aside id="sidebar">
+    <div class="sb-section">概覽</div>
+    <div class="sb-item active" onclick="showPage('dashboard')">📊 Dashboard</div>
+    <div class="sb-section">內容管理</div>
+    <div class="sb-item" onclick="showPage('dramas')">🎬 影視作品 <span class="sb-count" id="sb-drama-count">0</span></div>
+    <div class="sb-item" onclick="showPage('locations')">📍 取景地點 <span class="sb-count" id="sb-loc-count">0</span></div>
+    <div class="sb-item" onclick="showPage('add-drama')">➕ 新增作品</div>
+    <div class="sb-item" onclick="showPage('add-location')">➕ 新增地點</div>
+    <div class="sb-section">工具</div>
+    <div class="sb-item" onclick="showPage('export');generateExport()">📦 匯出 / 更新</div>
+    <div class="sb-item" onclick="resetToOriginal()">↩ 重置原始資料</div>
+  </aside>
+
+  <!-- MAIN -->
+  <main id="main">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="dash-grid" id="dash-grid"></div>
+      <div class="activity-list">
+        <div class="al-header">最近活動記錄</div>
+        <div id="activity-list-items"></div>
+      </div>
+    </div>
+
+    <!-- DRAMAS -->
+    <div class="page" id="page-dramas">
+      <div class="page-header">
+        <div class="page-title">影視作品</div>
+        <div class="page-count" id="drama-count-badge">0 部</div>
+        <div style="flex:1"></div>
+        <button class="nav-btn primary" onclick="showPage('add-drama')">+ 新增作品</button>
+      </div>
+      <table class="drama-table" id="drama-table">
+        <thead><tr>
+          <th>劇照</th><th>作品名稱</th><th>年份</th><th>類型</th><th>導演</th><th>取景地</th><th>操作</th>
+        </tr></thead>
+        <tbody id="drama-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- LOCATIONS -->
+    <div class="page" id="page-locations">
+      <div class="page-header">
+        <div class="page-title">取景地點</div>
+        <div class="page-count" id="loc-count-badge">0 筆</div>
+        <div style="flex:1"></div>
+        <button class="nav-btn primary" onclick="showPage('add-location')">+ 新增地點</button>
+      </div>
+      <div id="loc-table-wrap"></div>
+    </div>
+
+    <!-- ADD DRAMA -->
+    <div class="page" id="page-add-drama">
+      <div class="page-header"><div class="page-title" id="add-drama-title">新增影視作品</div></div>
+      <div class="form-wrap">
+        <div class="form-title">作品基本資訊</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Key（英文ID）</label>
+            <input class="form-input" id="f-key" placeholder="e.g. mymovie2025">
+          </div>
+          <div class="form-group">
+            <label class="form-label">作品名稱</label>
+            <input class="form-input" id="f-name" placeholder="e.g. 我的電影">
+          </div>
+          <div class="form-group">
+            <label class="form-label">年份</label>
+            <input class="form-input" id="f-year" type="number" placeholder="2025">
+          </div>
+          <div class="form-group">
+            <label class="form-label">類型</label>
+            <select class="form-select" id="f-type">
+              <option value="電影">電影</option>
+              <option value="影集">影集</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">年代分類</label>
+            <select class="form-select" id="f-era">
+              <option value="近期">近期</option>
+              <option value="2010s">2010s</option>
+              <option value="2000s">2000s</option>
+              <option value="1990s">1990s</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">代表色（Hex）<span class="color-preview" id="color-preview" style="background:#C8422A"></span></label>
+            <input class="form-input" id="f-color" placeholder="#C8422A" value="#C8422A" oninput="document.getElementById('color-preview').style.background=this.value">
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">導演</label>
+            <input class="form-input" id="f-director" placeholder="導演姓名">
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">主要演員（逗號分隔）</label>
+            <input class="form-input" id="f-cast" placeholder="演員A、演員B、演員C">
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">劇情簡介</label>
+            <textarea class="form-textarea" id="f-synopsis" placeholder="一句話介紹這部作品的故事核心"></textarea>
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">幕後花絮（製作背景）</label>
+            <textarea class="form-textarea" id="f-behind" placeholder="拍攝過程的特殊背景、挑戰、趣事"></textarea>
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">社會影響／票房</label>
+            <textarea class="form-textarea" id="f-impact" placeholder="作品上映後的影響力、話題性、票房數字"></textarea>
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">海報圖片URL（YouTube縮圖格式）</label>
+            <input class="form-input" id="f-poster" placeholder="https://i.ytimg.com/vi/VIDEO_ID/hqdefault.jpg">
+            <small style="color:var(--white3);font-size:11px;margin-top:4px">貼上 YouTube 預告片網址，自動轉換為縮圖</small>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="nav-btn primary" onclick="saveDrama()">💾 儲存作品</button>
+          <button class="nav-btn" onclick="showPage('dramas')">取消</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD LOCATION -->
+    <div class="page" id="page-add-location">
+      <div class="page-header"><div class="page-title" id="add-loc-title">新增取景地點</div></div>
+      <div class="form-wrap">
+        <div class="form-title">地點資訊</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">ID（英文+數字）</label>
+            <input class="form-input" id="l-id" placeholder="e.g. abc1">
+          </div>
+          <div class="form-group">
+            <label class="form-label">所屬作品</label>
+            <select class="form-select" id="l-drama"></select>
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">地點名稱</label>
+            <input class="form-input" id="l-name" placeholder="e.g. 龍山寺">
+          </div>
+          <div class="form-group form-full">
+            <label class="form-label">拍攝場景說明</label>
+            <textarea class="form-textarea" id="l-scene" placeholder="在劇中用來拍攝什麼場景，有什麼重要意義"></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">緯度 (lat)</label>
+            <input class="form-input" id="l-lat" type="number" step="0.0001" placeholder="25.0374">
+          </div>
+          <div class="form-group">
+            <label class="form-label">經度 (lng)</label>
+            <input class="form-input" id="l-lng" type="number" step="0.0001" placeholder="121.4997">
+          </div>
+        </div>
+        <div style="margin-top:12px;padding:12px;background:rgba(240,235,227,.03);border:1px solid var(--border)">
+          <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;color:var(--white3);margin-bottom:6px">💡 如何找到 GPS 座標</div>
+          <div style="font-size:12px;color:var(--white3);line-height:1.6">在 Google Maps 上找到地點 → 右鍵點擊 → 複製座標 → 第一個數字是緯度（lat），第二個是經度（lng）</div>
+        </div>
+        <div class="form-actions">
+          <button class="nav-btn primary" onclick="saveLocation()">💾 儲存地點</button>
+          <button class="nav-btn" onclick="showPage('locations')">取消</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPORT -->
+    <div class="page" id="page-export">
+      <div class="page-header"><div class="page-title">匯出更新包</div></div>
+      <div class="export-instructions">
+        複製下方程式碼，替換 <code>index.html</code> 和 <code>map.html</code> 中的 <code>const DRAMA_META = {...}</code> 和 <code>const dramaLocations = [...]</code> 兩個區塊，然後存檔、commit、push → Vercel 自動部署。
+      </div>
+      <div class="export-area">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;color:var(--white3);margin-bottom:8px">▼ DRAMA_META</div>
+        <div class="export-code" id="export-dramas"></div>
+        <button class="nav-btn" onclick="copyCode('export-dramas')" style="margin-bottom:20px">📋 複製 DRAMA_META</button>
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;color:var(--white3);margin-bottom:8px">▼ dramaLocations</div>
+        <div class="export-code" id="export-locs"></div>
+        <button class="nav-btn" onclick="copyCode('export-locs')">📋 複製 dramaLocations</button>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL -->
+<div id="modal-overlay" onclick="closeModal()">
+  <div id="modal" onclick="e=>e.stopPropagation()">
+    <div id="modal-header">
+      <div id="modal-title">編輯</div>
+      <button id="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ─── EMBEDDED BASE DATA (from index.html) ─────────────────
+const BASE_DRAMA_META = {
+  sunshine: { name:'陽光女子合唱團', year:2025, color:'#C8422A', era:'近期', type:'電影', director:'林孝謙', cast:'陳意涵、翁倩玉、鍾欣凌、孫淑媚、苗可麗、安心亞、陳庭妮', synopsis:'一群中年女受刑人，在即將廢除的監獄裡組成合唱團，以歌聲找回自我尊嚴與人生的可能', behind:'林孝謙深入台灣矯正機構田調，與真實受刑人訪談，實地在宜蘭監獄取景', impact:'2025年台灣最受矚目的國片之一，引發社會對受刑人人權與獄政改革的廣泛討論', poster:'https://i.ytimg.com/vi/kGad1FVKnos/hqdefault.jpg' },
+  zero: { name:'零日攻擊', year:2025, color:'#4a9de0', era:'近期', type:'影集', director:'羅景壬（聯合執導）', cast:'連俞涵、莊凱勛、高橋一生、杜汶澤、謝章穎', synopsis:'台灣遭受史無前例的混合戰攻擊，政府、軍方、駭客與媒體在極短時間內應對國家存亡的緊急時刻', behind:'史上第一部獲准在總統府、台北賓館正式取景的台灣電視劇', impact:'播出後引爆台灣社會對戰爭準備、混合戰威脅的自發討論', poster:'https://i.ytimg.com/vi/nGaXThXWTLc/hqdefault.jpg' },
+  imperfect: { name:'不夠善良的我們', year:2024, color:'#c87ec8', era:'近期', type:'影集', director:'徐譽庭', cast:'林依晨、許瑋甯、賀軍翔、柯震東', synopsis:'兩個女人因同一個男人的出現，在中年時刻重新審視自己的選擇、委屈與遺憾', behind:'編劇徐譽庭親自執導，劇本靈感來自現實中對女性「委屈」的長期觀察', impact:'引發台灣女性觀眾極大共鳴，「你不夠善良嗎」成為流行詞', poster:'https://i.ytimg.com/vi/K9Mq9m_Qq2A/hqdefault.jpg' },
+  copycat: { name:'模仿犯', year:2023, color:'#e08020', era:'近期', type:'影集', director:'張榮吉、張亨如', cast:'吳慷仁、柯佳嬿、庹宗華、范少勳、林心如（特別演出）', synopsis:'改編宮部美幸犯罪小說，台灣版將背景移至1990年代台北，一名連續殺人犯與女檢察官的心理對決', behind:'為了重現1990年代台北氛圍，劇組大量蒐集當代服裝、物件', impact:'吳慷仁憑此劇橫掃各大視帝獎項；Netflix播出後創台劇海外收視紀錄', poster:'https://i.ytimg.com/vi/fWATsd9F_Kc/hqdefault.jpg' },
+  someday: { name:'想見你', year:2019, color:'#7ec87e', era:'近期', type:'影集', director:'黃天仁', cast:'柯佳嬿、許光漢、施柏宇、林哲熹', synopsis:'一個現代女生因一首歌和隨身聽穿越至1998年，靈魂互換謎題交織著時空戀愛與謀殺懸案', behind:'製作公司原本預算極小，播出後口碑爆炸追加宣傳費用', impact:'在台灣掀起「時空穿越」熱潮；許光漢因此暴紅', poster:'https://i.ytimg.com/vi/0o3E0IZTqgs/hqdefault.jpg' },
+  detention: { name:'返校', year:2019, color:'#70c0a0', era:'近期', type:'電影', director:'徐漢強', cast:'王淨、曾敬驊、傅孟柏、李銘順', synopsis:'1960年代白色恐怖台灣，一所山中高中的兩名學生在惡夢般的荒校中醒來，逐漸揭開那個時代最深的恐懼', behind:'改編赤燭遊戲同名電玩，金瓜石礦山廢墟成為最重要外景地', impact:'台灣票房逾1.3億；引爆白色恐怖史料的社群大討論', poster:'https://i.ytimg.com/vi/Cq0K2ipTaPM/hqdefault.jpg' },
+  magician: { name:'天橋上的魔術師', year:2021, color:'#60a8e0', era:'近期', type:'影集', director:'楊雅喆', cast:'莊凱勛、楊麗音、朱軒洋、王渝萱、李奕樵', synopsis:'1980年代西門町中華商場，一位神祕的魔術師穿梭在孩子們的生命之間，帶走一些東西，也留下一些無法忘記的魔法', behind:'公視斥資約2億台幣，在林口搭建一比一實際比例的中華商場', impact:'金鐘獎最佳戲劇節目等多項大獎；讓消失的中華商場重現於台灣人記憶中', poster:'https://i.ytimg.com/vi/6kQH_5UdWBI/hqdefault.jpg' },
+  imlove: { name:'我可能不會愛你', year:2011, color:'#f0c050', era:'2010s', type:'影集', director:'瞿友寧', cast:'陳柏霖、林依晨、柯宇綸', synopsis:'30歲的程又青和李大仁是無話不說的死黨，卻在人生轉折點上意識到彼此之間那說不清楚的感情', behind:'編劇徐譽庭以「最懂彼此的朋友」為核心', impact:'「大仁哥」成為台灣女性理想男友代名詞', poster:'https://i.ytimg.com/vi/AeWWFxplRC4/hqdefault.jpg' },
+  thosetimes: { name:'那些年，我們一起追的女孩', year:2011, color:'#ff8fa3', era:'2010s', type:'電影', director:'九把刀（柯景騰）', cast:'柯震東、陳妍希、郝劭文、蔡昌憲、鳳小岳', synopsis:'作者九把刀親身改編的青春回憶，一群高中死黨共同暗戀班上最好的女孩沈佳宜', behind:'九把刀首次執導長片，堅持在彰化精誠中學（自己的母校）拍攝', impact:'台灣票房4.16億；陳妍希成為「國民初戀」', poster:'https://i.ytimg.com/vi/3J6yuyjN5Wg/hqdefault.jpg' },
+  monga: { name:'艋舺', year:2010, color:'#c084d4', era:'2010s', type:'電影', director:'鈕承澤（豆導）', cast:'阮經天、趙又廷、馬如龍、鳳小岳、蔡昌憲', synopsis:'1980年代台北萬華，五個熱血少年在幫派義氣與兄弟情誼中長大，卻逃不過那個時代的命運', behind:'鈕承澤在萬華長大；阮經天為角色剃光頭並研究幫派肢體語言', impact:'台灣票房2.55億；帶動台灣黑幫電影復興浪潮', poster:'https://i.ytimg.com/vi/ztSLNCNCmM0/hqdefault.jpg' },
+  ultimate3k: { name:'終極三國', year:2010, color:'#d4884a', era:'2010s', type:'影集', director:'呂光隆', cast:'吳尊、汪東城、飛輪海、辰亦儒、羅志祥', synopsis:'三國英雄穿越到現代高中，在終極宇宙中展開決戰', behind:'終極系列橫跨多部作品，構建出台灣偶像劇史上最龐大的宇宙觀', impact:'「終極系列」是台灣三立都會台的象徵性製作' },
+  cape7: { name:'海角七號', year:2008, color:'#e8b84b', era:'2000s', type:'電影', director:'魏德聖', cast:'范逸臣、田中千繪、馬如龍、林曉培', synopsis:'台北落魄樂手阿嘉返鄉恆春，接下日本歌手友子演唱會開場任務，同時發現一批60年前日本教師未寄出的情書', behind:'魏德聖將房子抵押貸款才湊到拍攝資金', impact:'票房5.3億，打破台灣電影票房紀錄', poster:'https://i.ytimg.com/vi/wq2IGmNajy8/hqdefault.jpg' },
+  fated: { name:'命中注定我愛你', year:2008, color:'#50c8c8', era:'2000s', type:'影集', director:'陳銘章', cast:'陳喬恩、阮經天、謝祖武', synopsis:'便利貼女孩陳欣怡與精英商人紀存希在郵輪上意外懷孕，展開跌跌撞撞的愛情', behind:'陳喬恩憑欣怡一角成為台劇天后', impact:'創台灣偶像劇收視紀錄；帶動「便利貼女孩」流行語', poster:'https://i.ytimg.com/vi/46ZnoG9f0ls/hqdefault.jpg' },
+  kiss: { name:'惡作劇之吻', year:2005, color:'#e07090', era:'2000s', type:'影集', director:'瞿友寧', cast:'林依晨、鄭元暢', synopsis:'改編日漫，成績墊底的袁湘琴鍥而不捨追求第一名江直樹的愛情故事', behind:'靜宜大學橋樑等成為劇迷朝聖地', impact:'「山洞之吻」成為台劇史上最被模仿的接吻場景', poster:'https://i.ytimg.com/vi/cyH-0Lh4GYw/hqdefault.jpg' },
+  meteor: { name:'流星花園', year:2001, color:'#a080e0', era:'2000s', type:'影集', director:'蔡岳勳', cast:'言承旭、林志穎、周渝民、吳建豪、徐熙媛（大S）', synopsis:'平民女孩杉菜進入貴族學校，與四位帥氣富家子弟F4的愛恨情仇', behind:'原本被電視台擔心沒人看，播出後收視爆炸', impact:'台灣史上最具影響力的偶像劇，帶動整個亞洲偶像劇浪潮', poster:'https://i.ytimg.com/vi/ocTdA8NytIc/hqdefault.jpg' },
+  ultimate1: { name:'終極一班', year:2006, color:'#e8a030', era:'2000s', type:'影集', director:'呂光隆、羅大裕', cast:'王傳一、吳尊、汪東城、辰亦儒、鄭元暢', synopsis:'藍天高中最混亂的班級KO班，捲入校園派系鬥爭與宇宙級陰謀的青春故事', behind:'三立都會台為打造本土長青偶像劇全力押注', impact:'開創台灣偶像劇宇宙觀先河；捧紅吳尊、汪東城等人', poster:'https://i.ytimg.com/vi/y8npWn8CAns/hqdefault.jpg' },
+  hotteacher: { name:'麻辣鮮師', year:1999, color:'#f08040', era:'1990s', type:'影集', director:'吳文堯', cast:'陳嘉桺、方文琳、楊一展、楊謹華、陳喬恩', synopsis:'一位另類的熱血老師空降問題班級，用最不按牌理出牌的方式感化一群放棄自己的學生', behind:'台灣第一部以「問題學生」為主角的校園劇', impact:'許多80年代出生的台灣人視此劇為青春代表作', poster:'https://i.ytimg.com/vi/jL6D7rqk4SQ/hqdefault.jpg' }
+};
+
+const BASE_LOCATIONS = [
+  { id:'ss1', drama:'sunshine', name:'法務部矯正署宜蘭監獄', scene:'受刑人走廊、操場、圍牆旁合唱送別場景（主要外景）', lat:24.6581, lng:121.6527 },
+  { id:'ss2', drama:'sunshine', name:'新北市立萬里國民中學', scene:'電影中監獄禮堂場景', lat:25.1803, lng:121.6611 },
+  { id:'ss3', drama:'sunshine', name:'台北生技園區多功能廳', scene:'電影結尾大合唱最終演出場景', lat:25.0515, lng:121.6134 },
+  { id:'zd1', drama:'zero', name:'中華民國總統府', scene:'史上首次開放電視劇正式取景', lat:25.0401, lng:121.5122 },
+  { id:'zd2', drama:'zero', name:'台北賓館（舊總督官邸）', scene:'外交接見場景，史上首次開放給電視劇', lat:25.0408, lng:121.5159 },
+  { id:'zd3', drama:'zero', name:'凱達格蘭大道', scene:'緊急應變、群眾集結、軍政決策宣告場景', lat:25.0386, lng:121.5156 },
+  { id:'zd4', drama:'zero', name:'中正紀念堂廣場', scene:'大規模群眾戲、抗議示威場景', lat:25.0341, lng:121.5219 },
+  { id:'zd5', drama:'zero', name:'台北101周邊信義區', scene:'城市遭受攻擊、市民疏散場景', lat:25.0338, lng:121.5645 },
+  { id:'zd6', drama:'zero', name:'台北松山機場軍用區', scene:'軍機緊急起降、戰備場景', lat:25.0697, lng:121.5521 },
+  { id:'imp1', drama:'imperfect', name:'台北大安區樂埔町餐廳', scene:'主角Rebecca的約會餐廳，播出後訂位電話被打爆', lat:25.0278, lng:121.5392 },
+  { id:'imp2', drama:'imperfect', name:'大稻埕碼頭周邊', scene:'多處外景，懷舊台北氛圍', lat:25.0594, lng:121.5099 },
+  { id:'imp3', drama:'imperfect', name:'台北師範大學校園', scene:'主角年輕時代回憶場景', lat:25.0267, lng:121.5295 },
+  { id:'imp4', drama:'imperfect', name:'九份老街', scene:'主角許瑋甯回憶場景', lat:25.1091, lng:121.8443 },
+  { id:'cc1', drama:'copycat', name:'永和南清宮', scene:'阿西（陳博正）經營的宮廟場景', lat:25.0041, lng:121.5163 },
+  { id:'cc2', drama:'copycat', name:'IKON Taipei（ATT 4 FUN）', scene:'劇中「Kink 夜店」，范少勳關鍵戲份', lat:25.0363, lng:121.5672 },
+  { id:'cc3', drama:'copycat', name:'臺灣高等檢察署博愛大樓', scene:'檢察署及法庭場景', lat:25.0448, lng:121.5113 },
+  { id:'cc4', drama:'copycat', name:'坪林廉政研習中心', scene:'監獄、禁閉室場景（牢房原貌保留）', lat:24.9424, lng:121.7103 },
+  { id:'sd1', drama:'someday', name:'台南七股鹽山夕陽堤防', scene:'最關鍵的日落場景', lat:23.1467, lng:120.0728 },
+  { id:'sd2', drama:'someday', name:'新北市林口區某高中', scene:'1998年高中校園主場景', lat:25.0789, lng:121.3736 },
+  { id:'sd3', drama:'someday', name:'新北市林口麗林路', scene:'主要角色住宅區外景', lat:25.0737, lng:121.3745 },
+  { id:'sd4', drama:'someday', name:'基隆廢棄隧道', scene:'穿越時空的神秘隧道', lat:25.1285, lng:121.7399 },
+  { id:'dt1', drama:'detention', name:'金瓜石礦山（黃金博物館）', scene:'主要外景地，廢棄礦坑與山中學校場景', lat:25.1094, lng:121.8619 },
+  { id:'dt2', drama:'detention', name:'瑞芳猴硐（侯硐礦工文史館）', scene:'1960年代礦工聚落場景', lat:25.0917, lng:121.8258 },
+  { id:'mg1', drama:'magician', name:'林口攝影棚（中華商場復原場景）', scene:'整部劇核心場景，1:1還原中華商場', lat:25.0791, lng:121.3731 },
+  { id:'mg2', drama:'magician', name:'台北西門町紅樓戲院', scene:'商場外圍場景取景地', lat:25.0432, lng:121.5047 },
+  { id:'mg3', drama:'magician', name:'台北萬華龍山寺周邊', scene:'1980年代萬華日常氛圍場景', lat:25.0374, lng:121.4997 },
+  { id:'il1', drama:'imlove', name:'台北大稻埕碼頭', scene:'男女主角的多處戶外約會場景', lat:25.0594, lng:121.5099 },
+  { id:'il2', drama:'imlove', name:'台北東區某咖啡館', scene:'程又青與李大仁的聚面場景', lat:25.0418, lng:121.5569 },
+  { id:'tt1', drama:'thosetimes', name:'彰化精誠中學', scene:'青春主場景，九把刀母校', lat:24.0978, lng:120.5373 },
+  { id:'tt3', drama:'thosetimes', name:'台南老街某場景', scene:'陳妍希外景場景', lat:22.9954, lng:120.2049 },
+  { id:'mn1', drama:'monga', name:'龍山寺', scene:'太子幫儀式、全劇精神核心地點', lat:25.0374, lng:121.4997 },
+  { id:'mn2', drama:'monga', name:'剝皮寮歷史街區', scene:'1980年代萬華街頭幫派日常場景', lat:25.0365, lng:121.5003 },
+  { id:'mn3', drama:'monga', name:'萬華林家古厝', scene:'太子幫老大宇角頭總部場景', lat:25.0369, lng:121.4988 },
+  { id:'u3k1', drama:'ultimate3k', name:'台中亞洲大學', scene:'終極三國主要校園場景', lat:24.0682, lng:120.6917 },
+  { id:'c71', drama:'cape7', name:'恆春古城牆', scene:'阿嘉的家鄉，貫穿全劇的主要場景', lat:22.0053, lng:120.7419 },
+  { id:'c72', drama:'cape7', name:'恆春後壁湖海邊', scene:'演唱會場景取景地', lat:21.9569, lng:120.7525 },
+  { id:'c73', drama:'cape7', name:'恆春鎮公所廣場', scene:'貫穿全劇的鎮內活動場景', lat:22.0017, lng:120.7456 },
+  { id:'ft1', drama:'fated', name:'宜蘭冬山河親水公園', scene:'男女主角重要的愛情轉折場景', lat:24.6753, lng:121.7698 },
+  { id:'ft2', drama:'fated', name:'宜蘭薑母島', scene:'劇情重要外景地', lat:24.7564, lng:121.7541 },
+  { id:'ft3', drama:'fated', name:'台北某便利商店外景', scene:'便利貼女孩日常生活場景', lat:25.0621, lng:121.5246 },
+  { id:'ks1', drama:'kiss', name:'靜宜大學橋樑', scene:'「山洞之吻」經典場景', lat:24.2566, lng:120.6138 },
+  { id:'mt1', drama:'meteor', name:'國立中正大學', scene:'F4的貴族學校場景', lat:23.5853, lng:120.4681 },
+  { id:'u11', drama:'ultimate1', name:'台北景新街附近', scene:'藍天高中部分外景', lat:24.9929, lng:121.5669 },
+  { id:'ht1', drama:'hotteacher', name:'台北景新街某高中', scene:'麻辣鮮師校園主場景', lat:24.9935, lng:121.5675 }
+];
+
+// ─── STATE ─────────────────────────────────────────────
+let dramas = {};
+let locations = [];
+let activityLog = [];
+let _editingDramaKey = null;
+let _editingLocId = null;
+
+function loadState(){
+  try{
+    const sd = localStorage.getItem('crewlog_dramas');
+    const sl = localStorage.getItem('crewlog_locs');
+    const sa = localStorage.getItem('crewlog_activity');
+    dramas = sd ? JSON.parse(sd) : JSON.parse(JSON.stringify(BASE_DRAMA_META));
+    locations = sl ? JSON.parse(sl) : JSON.parse(JSON.stringify(BASE_LOCATIONS));
+    activityLog = sa ? JSON.parse(sa) : [];
+  } catch(e){
+    dramas = JSON.parse(JSON.stringify(BASE_DRAMA_META));
+    locations = JSON.parse(JSON.stringify(BASE_LOCATIONS));
+    activityLog = [];
+  }
+}
+
+function saveState(){
+  localStorage.setItem('crewlog_dramas', JSON.stringify(dramas));
+  localStorage.setItem('crewlog_locs', JSON.stringify(locations));
+  localStorage.setItem('crewlog_activity', JSON.stringify(activityLog.slice(0,50)));
+}
+
+function logActivity(msg, color='#4caf78'){
+  activityLog.unshift({msg, color, time: new Date().toLocaleTimeString('zh-TW')});
+  saveState();
+}
+
+function resetToOriginal(){
+  if(!confirm('確定要重置所有資料回到原始狀態？此操作無法復原。')) return;
+  localStorage.removeItem('crewlog_dramas');
+  localStorage.removeItem('crewlog_locs');
+  loadState();
+  renderAll();
+  toast('已重置回原始資料');
+}
+
+// ─── NAVIGATION ────────────────────────────────────────
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));
+  const pg = document.getElementById('page-'+id);
+  if(pg) pg.classList.add('active');
+  const sbItems = document.querySelectorAll('.sb-item');
+  sbItems.forEach(i=>{ if(i.getAttribute('onclick')&&i.getAttribute('onclick').includes("'"+id+"'")) i.classList.add('active'); });
+  if(id==='dramas') renderDramaTable();
+  if(id==='locations') renderLocTable();
+  if(id==='add-drama' && !_editingDramaKey){ clearDramaForm(); document.getElementById('add-drama-title').textContent='新增影視作品'; }
+  if(id==='add-location' && !_editingLocId){ clearLocForm(); document.getElementById('add-loc-title').textContent='新增取景地點'; }
+  if(id==='dashboard') renderDashboard();
+}
+
+// ─── DASHBOARD ─────────────────────────────────────────
+function renderDashboard(){
+  const g = document.getElementById('dash-grid');
+  const totalLocs = locations.length;
+  const types = Object.values(dramas);
+  const movies = types.filter(d=>d.type==='電影').length;
+  const series = types.filter(d=>d.type==='影集').length;
+  g.innerHTML = `
+    <div class="dash-card"><div class="dash-n" style="color:#C8422A">${Object.keys(dramas).length}</div><div class="dash-l">影視作品</div><div class="dash-delta">↑ 持續新增中</div></div>
+    <div class="dash-card"><div class="dash-n" style="color:#4a9de0">${totalLocs}</div><div class="dash-l">取景地點</div></div>
+    <div class="dash-card"><div class="dash-n">${movies}</div><div class="dash-l">電影</div></div>
+    <div class="dash-card"><div class="dash-n">${series}</div><div class="dash-l">影集</div></div>
+  `;
+  const al = document.getElementById('activity-list-items');
+  if(activityLog.length === 0){
+    al.innerHTML = '<div class="al-item"><div class="al-text" style="color:var(--white3)">尚無活動記錄</div></div>';
+    return;
+  }
+  al.innerHTML = activityLog.slice(0,8).map(a=>`
+    <div class="al-item">
+      <div class="al-dot" style="background:${a.color}"></div>
+      <div class="al-text">${a.msg}</div>
+      <div class="al-time">${a.time}</div>
+    </div>`).join('');
+}
+
+// ─── DRAMA TABLE ────────────────────────────────────────
+function renderDramaTable(){
+  const tbody = document.getElementById('drama-tbody');
+  const keys = Object.keys(dramas);
+  document.getElementById('drama-count-badge').textContent = keys.length + ' 部';
+  document.getElementById('sb-drama-count').textContent = keys.length;
+  tbody.innerHTML = keys.map(key=>{
+    const m = dramas[key];
+    const locCnt = locations.filter(l=>l.drama===key).length;
+    const thumb = m.poster ? `<div class="td-poster" style="background-image:url('${m.poster}');display:inline-block;vertical-align:middle;margin-right:8px"></div>` : '<div class="td-poster" style="background:#1a1a1a;display:inline-block;vertical-align:middle;margin-right:8px"></div>';
+    return `<tr>
+      <td>${thumb}</td>
+      <td><strong>${m.name}</strong></td>
+      <td><span style="font-family:'DM Mono',monospace;font-size:11px">${m.year}</span></td>
+      <td><span class="td-type">${m.type}</span></td>
+      <td style="color:var(--white2);font-size:12px">${m.director}</td>
+      <td><span style="font-family:'DM Mono',monospace;font-size:11px;color:${m.color}">${locCnt} 筆</span></td>
+      <td><div class="td-actions">
+        <button class="td-btn" onclick="editDrama('${key}')">編輯</button>
+        <button class="td-btn del" onclick="deleteDrama('${key}')">刪除</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+// ─── LOCATION TABLE ─────────────────────────────────────
+function renderLocTable(){
+  const wrap = document.getElementById('loc-table-wrap');
+  document.getElementById('loc-count-badge').textContent = locations.length + ' 筆';
+  document.getElementById('sb-loc-count').textContent = locations.length;
+  const byDrama = {};
+  locations.forEach(l=>{ if(!byDrama[l.drama]) byDrama[l.drama]=[]; byDrama[l.drama].push(l); });
+  wrap.innerHTML = Object.entries(byDrama).map(([dkey, locs])=>{
+    const m = dramas[dkey];
+    const name = m ? m.name : dkey;
+    const color = m ? m.color : '#888';
+    return `<div>
+      <div class="loc-group-head"><div class="loc-group-dot" style="background:${color}"></div>${name} (${locs.length})</div>
+      <table class="drama-table"><thead><tr><th>ID</th><th>地點名稱</th><th>場景說明</th><th>座標</th><th>操作</th></tr></thead>
+      <tbody>${locs.map(l=>`<tr>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--white3)">${l.id}</td>
+        <td><strong>${l.name}</strong></td>
+        <td style="font-size:11.5px;color:var(--white2);max-width:280px">${l.scene}</td>
+        <td style="font-family:'DM Mono',monospace;font-size:10px;color:var(--white3)">${l.lat.toFixed(4)}, ${l.lng.toFixed(4)}</td>
+        <td><div class="td-actions">
+          <button class="td-btn" onclick="editLoc('${l.id}')">編輯</button>
+          <button class="td-btn del" onclick="deleteLoc('${l.id}')">刪除</button>
+        </div></td>
+      </tr>`).join('')}</tbody></table></div>`;
+  }).join('');
+}
+
+// ─── DRAMA CRUD ─────────────────────────────────────────
+function clearDramaForm(){
+  _editingDramaKey = null;
+  ['f-key','f-name','f-director','f-cast','f-synopsis','f-behind','f-impact','f-poster'].forEach(id=>{
+    const el=document.getElementById(id); if(el) el.value='';
+  });
+  document.getElementById('f-year').value = new Date().getFullYear();
+  document.getElementById('f-type').value = '電影';
+  document.getElementById('f-era').value = '近期';
+  document.getElementById('f-color').value = '#C8422A';
+  document.getElementById('color-preview').style.background = '#C8422A';
+}
+
+function editDrama(key){
+  _editingDramaKey = key;
+  const m = dramas[key];
+  document.getElementById('f-key').value = key;
+  document.getElementById('f-key').readOnly = true;
+  document.getElementById('f-name').value = m.name||'';
+  document.getElementById('f-year').value = m.year||'';
+  document.getElementById('f-type').value = m.type||'電影';
+  document.getElementById('f-era').value = m.era||'近期';
+  document.getElementById('f-color').value = m.color||'#C8422A';
+  document.getElementById('color-preview').style.background = m.color||'#C8422A';
+  document.getElementById('f-director').value = m.director||'';
+  document.getElementById('f-cast').value = m.cast||'';
+  document.getElementById('f-synopsis').value = m.synopsis||'';
+  document.getElementById('f-behind').value = m.behind||'';
+  document.getElementById('f-impact').value = m.impact||'';
+  document.getElementById('f-poster').value = m.poster||'';
+  document.getElementById('add-drama-title').textContent = '編輯：' + m.name;
+  showPage('add-drama');
+}
+
+function saveDrama(){
+  const key = document.getElementById('f-key').value.trim().replace(/\s+/g,'');
+  if(!key){ toast('請填寫 Key（英文ID）','error'); return; }
+  const name = document.getElementById('f-name').value.trim();
+  if(!name){ toast('請填寫作品名稱','error'); return; }
+  let poster = document.getElementById('f-poster').value.trim();
+  // Auto-convert YouTube URL to thumbnail
+  const ytMatch = poster.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+  if(ytMatch) poster = `https://i.ytimg.com/vi/${ytMatch[1]}/hqdefault.jpg`;
+
+  dramas[key] = {
+    name, year: parseInt(document.getElementById('f-year').value)||2025,
+    color: document.getElementById('f-color').value||'#C8422A',
+    era: document.getElementById('f-era').value,
+    type: document.getElementById('f-type').value,
+    director: document.getElementById('f-director').value.trim(),
+    cast: document.getElementById('f-cast').value.trim(),
+    synopsis: document.getElementById('f-synopsis').value.trim(),
+    behind: document.getElementById('f-behind').value.trim(),
+    impact: document.getElementById('f-impact').value.trim(),
+    ...(poster ? {poster} : {})
+  };
+  saveState();
+  logActivity(`${_editingDramaKey ? '更新' : '新增'}作品：${name}`, dramas[key].color);
+  _editingDramaKey = null;
+  document.getElementById('f-key').readOnly = false;
+  toast(`✓ 已儲存「${name}」`);
+  showPage('dramas');
+}
+
+function deleteDrama(key){
+  if(!confirm(`確定刪除「${dramas[key].name}」？相關取景地點不會被刪除。`)) return;
+  const name = dramas[key].name;
+  delete dramas[key];
+  saveState();
+  logActivity(`刪除作品：${name}`, '#C8422A');
+  toast(`已刪除「${name}」`);
+  renderDramaTable();
+}
+
+// ─── LOCATION CRUD ──────────────────────────────────────
+function clearLocForm(){
+  _editingLocId = null;
+  ['l-id','l-name','l-scene','l-lat','l-lng'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  populateDramaSelect();
+}
+
+function populateDramaSelect(){
+  const sel = document.getElementById('l-drama');
+  sel.innerHTML = Object.entries(dramas).map(([k,m])=>`<option value="${k}">${m.name} (${m.year})</option>`).join('');
+}
+
+function editLoc(id){
+  const l = locations.find(x=>x.id===id);
+  if(!l) return;
+  _editingLocId = id;
+  populateDramaSelect();
+  document.getElementById('l-id').value = l.id;
+  document.getElementById('l-id').readOnly = true;
+  document.getElementById('l-drama').value = l.drama;
+  document.getElementById('l-name').value = l.name;
+  document.getElementById('l-scene').value = l.scene;
+  document.getElementById('l-lat').value = l.lat;
+  document.getElementById('l-lng').value = l.lng;
+  document.getElementById('add-loc-title').textContent = '編輯：' + l.name;
+  showPage('add-location');
+}
+
+function saveLocation(){
+  const id = document.getElementById('l-id').value.trim();
+  if(!id){ toast('請填寫 ID','error'); return; }
+  const name = document.getElementById('l-name').value.trim();
+  if(!name){ toast('請填寫地點名稱','error'); return; }
+  const lat = parseFloat(document.getElementById('l-lat').value);
+  const lng = parseFloat(document.getElementById('l-lng').value);
+  if(isNaN(lat)||isNaN(lng)){ toast('請填寫有效的 GPS 座標','error'); return; }
+  const loc = {
+    id, drama: document.getElementById('l-drama').value,
+    name, scene: document.getElementById('l-scene').value.trim(),
+    lat, lng
+  };
+  const idx = locations.findIndex(x=>x.id===id);
+  if(idx >= 0) locations[idx] = loc;
+  else locations.push(loc);
+  saveState();
+  logActivity(`${_editingLocId ? '更新' : '新增'}地點：${name}`,'#4a9de0');
+  _editingLocId = null;
+  document.getElementById('l-id').readOnly = false;
+  toast(`✓ 已儲存「${name}」`);
+  showPage('locations');
+}
+
+function deleteLoc(id){
+  const l = locations.find(x=>x.id===id);
+  if(!l||!confirm(`確定刪除取景地「${l.name}」？`)) return;
+  locations = locations.filter(x=>x.id!==id);
+  saveState();
+  logActivity(`刪除地點：${l.name}`,'#C8422A');
+  toast(`已刪除「${l.name}」`);
+  renderLocTable();
+}
+
+// ─── EXPORT ─────────────────────────────────────────────
+function generateExport(){
+  // DRAMA_META
+  const dramaCode = 'const DRAMA_META = ' + JSON.stringify(dramas, null, 2).replace(/"([^"]+)":/g, '$1:') + ';';
+  document.getElementById('export-dramas').textContent = dramaCode;
+  // dramaLocations
+  const locCode = 'const dramaLocations = ' + JSON.stringify(locations, null, 2).replace(/"([^"]+)":/g, '$1:') + ';';
+  document.getElementById('export-locs').textContent = locCode;
+}
+
+function copyCode(elId){
+  const text = document.getElementById(elId).textContent;
+  navigator.clipboard.writeText(text).then(()=>toast('✓ 已複製到剪貼簿'));
+}
+
+function exportData(){
+  const blob = new Blob([
+    '// CREWLOG Data Export — ' + new Date().toISOString() + '\n\n',
+    'const DRAMA_META = ' + JSON.stringify(dramas, null, 2) + ';\n\n',
+    'const dramaLocations = ' + JSON.stringify(locations, null, 2) + ';\n'
+  ], {type:'text/javascript'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'crewlog-data-' + new Date().toISOString().slice(0,10) + '.js';
+  a.click();
+  toast('✓ 已下載 crewlog-data.js');
+  logActivity('匯出資料檔案');
+}
+
+// ─── MODAL ──────────────────────────────────────────────
+function closeModal(){ document.getElementById('modal-overlay').classList.remove('open'); }
+
+// ─── TOAST ──────────────────────────────────────────────
+let _toastTimer;
+function toast(msg, type='success'){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show' + (type==='error' ? ' error' : '');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(()=>el.classList.remove('show'), 3000);
+}
+
+// ─── INIT ────────────────────────────────────────────────
+loadState();
+renderAll();
+function renderAll(){
+  renderDashboard();
+  document.getElementById('sb-drama-count').textContent = Object.keys(dramas).length;
+  document.getElementById('sb-loc-count').textContent = locations.length;
+  populateDramaSelect();
+}
+</script>
+</body>
+</html>
