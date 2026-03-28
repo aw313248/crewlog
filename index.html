@@ -554,15 +554,48 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
 
 /* Era filter groups */
 .drama-filter-wrap{margin-bottom:32px}
-.df-era-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-.df-era-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;color:rgba(240,235,227,.25);text-transform:uppercase;white-space:nowrap;padding-right:4px;border-right:1px solid var(--border)}
-.df-era-tabs{display:flex;gap:4px;flex-wrap:wrap}
+.df-era-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.df-era-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;color:rgba(240,235,227,.22);text-transform:uppercase;white-space:nowrap;padding-right:8px;border-right:1px solid var(--border);margin-top:6px;line-height:1}
+.df-era-tabs{display:flex;gap:5px;flex-wrap:wrap}
+
+/* Base tab (全部 / type buttons) */
 .dftab{background:transparent;border:1px solid rgba(240,235,227,.1);color:rgba(240,235,227,.45);font-family:'DM Mono',monospace;font-size:10px;font-weight:400;letter-spacing:.1em;padding:6px 14px;cursor:pointer;transition:all .22s;text-transform:uppercase;white-space:nowrap;position:relative;overflow:hidden}
 .dftab::before{content:'';position:absolute;inset:0;background:var(--red);opacity:0;transition:opacity .22s}
 .dftab:hover{border-color:rgba(240,235,227,.3);color:var(--white)}
 .dftab.on{border-color:var(--red);color:#fff;background:rgba(200,66,42,.15)}
 .dftab.on::before{opacity:.08}
 .dftab .df-year{display:block;font-size:8px;color:inherit;opacity:.6;margin-top:1px;letter-spacing:.08em}
+
+/* Poster-card variant for drama filter tabs */
+.dftab-poster{width:72px!important;height:90px!important;padding:0!important;white-space:normal!important;font-size:0!important;display:inline-flex!important;flex-direction:column;align-items:stretch;overflow:hidden;border-width:1.5px!important;transition:border-color .25s,box-shadow .25s!important}
+.dftab-poster .df-year{display:none}
+.dftab-poster-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+.dftab-poster:hover .dftab-poster-bg,.dftab-poster.on .dftab-poster-bg{transform:scale(1.08)}
+.dftab-poster-ov{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.05) 0%,rgba(0,0,0,.55) 50%,rgba(0,0,0,.88) 100%);z-index:1;transition:background .25s}
+.dftab-poster.on .dftab-poster-ov{background:linear-gradient(to bottom,rgba(0,0,0,.05) 0%,rgba(0,0,0,.4) 45%,rgba(0,0,0,.82) 100%)}
+.dftab-poster-info{position:absolute;bottom:0;left:0;right:0;padding:0 5px 7px;z-index:2;text-align:center}
+.dftab-poster-name{font-family:'Noto Sans TC',sans-serif;font-size:9.5px;color:rgba(240,235,227,.9);line-height:1.3;font-weight:500;letter-spacing:0;display:block}
+.dftab-poster-year{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.1em;display:block;margin-top:2px;opacity:.65}
+.dftab-poster-bar{position:absolute;bottom:0;left:0;right:0;height:2.5px;z-index:3;transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.16,1,.3,1)}
+.dftab-poster:hover .dftab-poster-bar,.dftab-poster.on .dftab-poster-bar{transform:scaleX(1)}
+.dftab-poster.on{box-shadow:0 0 0 1px currentColor inset,0 6px 20px rgba(0,0,0,.5)!important}
+
+/* Drama stats bar */
+.dm-stats-bar{display:flex;gap:0;margin-bottom:24px;border:1px solid var(--border)}
+.dm-stat-item{flex:1;padding:14px 20px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:3px}
+.dm-stat-item:last-child{border-right:none}
+.dm-stat-n{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.06em;color:var(--white);line-height:1}
+.dm-stat-l{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.15em;color:rgba(240,235,227,.3);text-transform:uppercase}
+
+/* Popup image improved */
+.dm-popup-img{width:100%;height:160px;background-size:cover;background-position:center;background-color:#1a1a1a;position:relative}
+.dm-popup-img-grad{position:absolute;bottom:0;left:0;right:0;height:60%;background:linear-gradient(to bottom,transparent,rgba(17,17,17,.96))}
+.dm-popup-img-drama{position:absolute;bottom:10px;left:14px;z-index:1;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;text-transform:uppercase;opacity:.9}
+
+/* Location card poster thumbnail */
+.dloc-poster-thumb{position:absolute;top:0;right:0;bottom:0;width:52px;background-size:cover;background-position:center;opacity:.18;transition:opacity .25s}
+.dloc:hover .dloc-poster-thumb{opacity:.28}
+.dloc-body{position:relative;z-index:1}
 
 /* Map container */
 .drama-map-wrap{position:relative;border:1px solid rgba(240,235,227,.18);overflow:hidden;box-shadow:0 0 0 1px rgba(200,66,42,.1),0 24px 64px rgba(0,0,0,.5)}
@@ -634,12 +667,15 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
 /* mobile map */
 @media(max-width:768px){
   #drama-map{height:340px}
-  .df-era-row{gap:6px}
+  .df-era-row{gap:5px}
   .df-era-tabs{gap:3px}
   .dftab{padding:5px 10px;font-size:9px}
+  .dftab-poster{width:54px!important;height:68px!important}
+  .dftab-poster-name{font-size:8px}
   .drama-locs{grid-template-columns:1fr 1fr}
   .dm-legend{display:none}
   .dm-count-badge{display:none}
+  .dm-stats-bar{display:none}
 }
 @media(max-width:420px){
   .drama-locs{grid-template-columns:1fr}
@@ -1393,12 +1429,18 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
 <!-- DRAMA MAP -->
 <section class="drama-map-sec" id="drama-map-section">
   <div class="wrap">
-    <div class="s-head a-up">
+    <div class="s-head a-up" style="margin-bottom:32px">
       <div>
         <div class="s-label">戲劇朝聖地圖 · DRAMA FILMING LOCATIONS</div>
         <div class="s-en">最愛的劇<br><span style="color:var(--red)">在這裡拍</span></div>
         <div class="s-zh">點開地圖，導航過去，親眼感受那個場景</div>
       </div>
+    </div>
+    <div class="dm-stats-bar a-up">
+      <div class="dm-stat-item"><span class="dm-stat-n">17</span><span class="dm-stat-l">部影視作品</span></div>
+      <div class="dm-stat-item"><span class="dm-stat-n" id="dm-total-count">–</span><span class="dm-stat-l">個取景地點</span></div>
+      <div class="dm-stat-item"><span class="dm-stat-n">5</span><span class="dm-stat-l">個年代橫跨</span></div>
+      <div class="dm-stat-item"><span class="dm-stat-n">16</span><span class="dm-stat-l">部有劇照</span></div>
     </div>
     <div class="drama-filter-wrap a-up" id="drama-filter">
       <div class="df-era-row">
@@ -2943,10 +2985,15 @@ function makeIcon(drama, big=false){
 function makePopup(loc){
   const meta = DRAMA_META[loc.drama];
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${loc.lat},${loc.lng}`;
-  const img = loc.img || '';
-  const imgHtml = img
-    ? `<div class="dm-popup-img" style="background-image:url('${img}')"></div>`
-    : `<div class="dm-popup-img dm-popup-img-color" style="background:linear-gradient(135deg,${meta.color}22 0%,${meta.color}08 100%)"><span style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.06em;color:${meta.color};opacity:.5">${meta.name}</span></div>`;
+  const imgSrc = loc.img || meta.poster || '';
+  const imgHtml = imgSrc
+    ? `<div class="dm-popup-img" style="background-image:url('${imgSrc}');background-color:${meta.color}22">
+        <div class="dm-popup-img-grad"></div>
+        <div class="dm-popup-img-drama" style="color:${meta.color}">${meta.name} · ${meta.year}</div>
+       </div>`
+    : `<div class="dm-popup-img dm-popup-img-color" style="background:linear-gradient(135deg,${meta.color}33 0%,${meta.color}0a 100%)">
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:.06em;color:${meta.color};opacity:.4">${meta.name}</span>
+       </div>`;
   return `<div class="dm-popup">
     ${imgHtml}
     <div class="dm-popup-body">
@@ -2954,15 +3001,12 @@ function makePopup(loc){
         <span class="dm-popup-type">${meta.type}</span>
         <span class="dm-popup-year" style="color:${meta.color}">${meta.year}</span>
       </div>
-      <div class="dm-popup-drama" style="color:${meta.color}">${meta.name}</div>
       <div class="dm-popup-title">${loc.name}</div>
       <div class="dm-popup-scene">${loc.scene || '劇組取景地'}</div>
-      ${meta.director ? `<div class="dm-popup-row"><span class="dm-popup-key">導演</span><span class="dm-popup-val">${meta.director}</span></div>` : ''}
       ${meta.cast ? `<div class="dm-popup-row"><span class="dm-popup-key">主演</span><span class="dm-popup-val">${meta.cast.split('、').slice(0,3).join('、')}</span></div>` : ''}
-      ${meta.behind ? `<div class="dm-popup-behind">${meta.behind.substring(0,80)}…</div>` : ''}
-      <div style="display:flex;gap:10px;align-items:center;margin-top:10px">
+      <div style="display:flex;gap:8px;align-items:center;margin-top:12px">
         <a class="dm-popup-nav" href="${mapsUrl}" target="_blank" style="margin-top:0;flex:1">📍 導航前往</a>
-        <span class="dm-popup-film-link" onclick="openFilmModal('${loc.drama}')">電影資訊 →</span>
+        <span class="dm-popup-film-link" onclick="openFilmModal('${loc.drama}')">完整電影資訊 →</span>
       </div>
     </div>
   </div>`;
@@ -2996,15 +3040,19 @@ function renderLocCards(filter, showAll){
   const visible = (showAll || locs.length <= LIMIT) ? locs : locs.slice(0, LIMIT);
   const cardHtml = visible.map((l,i)=>{
     const meta = DRAMA_META[l.drama];
+    const posterBg = meta.poster ? `<div class="dloc-poster-thumb" style="background-image:url('${meta.poster}')"></div>` : '';
     return `<div class="dloc" style="animation-delay:${i*0.04}s;border-left:3px solid ${meta.color}55" onclick="focusLoc('${l.id}')">
-      <div class="dloc-header">
-        <div class="dloc-num">${String(i+1).padStart(2,'0')}</div>
-        <div class="dloc-year-badge" style="color:${meta.color};border-color:${meta.color}50">${meta.year}</div>
+      ${posterBg}
+      <div class="dloc-body">
+        <div class="dloc-header">
+          <div class="dloc-num">${String(i+1).padStart(2,'0')}</div>
+          <div class="dloc-year-badge" style="color:${meta.color};border-color:${meta.color}50">${meta.year}</div>
+        </div>
+        <div class="dloc-drama" style="color:${meta.color}">${meta.name}</div>
+        <div class="dloc-name">${l.name}</div>
+        <div class="dloc-scene">${l.scene}</div>
+        <span class="dloc-film-link" onclick="event.stopPropagation();openFilmModal('${l.drama}')">看電影完整資訊 →</span>
       </div>
-      <div class="dloc-drama" style="color:${meta.color}">${meta.name}</div>
-      <div class="dloc-name">${l.name}</div>
-      <div class="dloc-scene">${l.scene}</div>
-      <span class="dloc-film-link" onclick="event.stopPropagation();openFilmModal('${l.drama}')">看電影完整資訊 →</span>
     </div>`;
   }).join('');
   const remaining = locs.length - LIMIT;
@@ -3101,17 +3149,57 @@ function initDramaMap(){
   updateLegend('all');
   updateCount('all');
 
-  // Add count badges to filter tabs
+  // Update total location count stat
+  const totalEl = document.getElementById('dm-total-count');
+  if(totalEl) totalEl.textContent = dramaLocations.length;
+
+  // Inject poster thumbnails into drama filter tabs
   document.querySelectorAll('.dftab[data-drama]').forEach(btn=>{
     const d = btn.dataset.drama;
     if(d === 'all') return;
+    const meta = DRAMA_META[d];
+    if(!meta) return;
+
+    btn.classList.add('dftab-poster');
+    btn.style.borderColor = meta.color+'55';
+
+    // Background image layer
+    const bg = document.createElement('div');
+    bg.className = 'dftab-poster-bg';
+    if(meta.poster){
+      bg.style.backgroundImage = `url('${meta.poster}')`;
+    } else {
+      bg.style.background = `linear-gradient(135deg,${meta.color}55 0%,${meta.color}11 100%)`;
+    }
+
+    // Gradient overlay
+    const ov = document.createElement('div');
+    ov.className = 'dftab-poster-ov';
+
+    // Name + year info
+    const info = document.createElement('div');
+    info.className = 'dftab-poster-info';
+    const nameFull = meta.name;
+    const shortName = nameFull.length > 7 ? nameFull.substring(0,7) : nameFull;
+    info.innerHTML = `<span class="dftab-poster-name">${shortName}</span><span class="dftab-poster-year" style="color:${meta.color}">${meta.year}</span>`;
+
+    // Count badge
     const cnt = dramaLocations.filter(l=>l.drama===d).length;
     if(cnt > 0){
-      const b = document.createElement('span');
-      b.style.cssText = 'display:inline-block;background:rgba(200,66,42,.18);color:rgba(200,66,42,.8);font-family:"DM Mono",monospace;font-size:7px;padding:0 4px;border-radius:1px;margin-left:5px;vertical-align:middle;line-height:13px';
-      b.textContent = cnt;
-      btn.appendChild(b);
+      const badge = document.createElement('div');
+      badge.style.cssText = `position:absolute;top:5px;right:5px;z-index:3;background:${meta.color};color:#fff;font-family:'DM Mono',monospace;font-size:7px;padding:1px 4px;line-height:14px`;
+      badge.textContent = cnt;
+      btn.appendChild(badge);
     }
+
+    // Bottom color bar
+    const bar = document.createElement('div');
+    bar.className = 'dftab-poster-bar';
+    bar.style.background = meta.color;
+
+    btn.prepend(bg, ov);
+    btn.appendChild(info);
+    btn.appendChild(bar);
   });
 
   document.querySelectorAll('.dftab').forEach(btn=>{
