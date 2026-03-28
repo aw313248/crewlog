@@ -1160,6 +1160,29 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
 .cl-gps-link{display:inline-flex;align-items:center;gap:4px;margin-top:14px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;color:rgba(240,235,227,.25);text-decoration:none;text-transform:uppercase;transition:color .2s}
 .cl-gps-link:hover{color:var(--red)}
 .cl-secret{display:inline-block;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.12em;padding:2px 7px;border:1px solid rgba(200,66,42,.3);color:rgba(200,66,42,.5);text-transform:uppercase;margin-bottom:8px}
+/* location card thumbnails */
+.cl-thumb{width:calc(100% + 48px);margin:-28px -24px 18px;aspect-ratio:16/9;background-size:cover;background-position:center;position:relative;overflow:hidden;flex-shrink:0}
+.cl-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 20%,rgba(10,10,10,.92))}
+.cl-thumb-shot{position:absolute;bottom:10px;left:12px;z-index:1;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.14em;color:rgba(240,235,227,.5);text-transform:uppercase}
+.cl-thumb-src{position:absolute;bottom:10px;right:10px;z-index:1;font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.12em;color:rgba(200,66,42,.6);text-transform:uppercase}
+/* shot suggestions */
+.cl-shots{margin-top:12px;padding-top:12px;border-top:1px solid var(--border)}
+.cl-shots-hd{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.15em;color:rgba(200,66,42,.45);text-transform:uppercase;margin-bottom:7px}
+.cl-shot-row{display:flex;gap:4px;flex-wrap:wrap}
+.cl-shot{font-size:9px;padding:2px 7px;border:1px solid rgba(240,235,227,.1);color:rgba(240,235,227,.38);font-family:'DM Mono',monospace;letter-spacing:.04em;white-space:nowrap}
+/* storyboard teaser */
+.sb-wrap{margin-top:48px;padding-top:48px;border-top:1px solid var(--border)}
+.sb-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+.sb-frame{background:#0d0d0d;aspect-ratio:16/9;position:relative;overflow:hidden;display:flex;align-items:flex-end}
+.sb-frame-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:grayscale(.6) brightness(.4)}
+.sb-frame-info{position:relative;z-index:1;padding:7px 8px;width:100%}
+.sb-num{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.15em;color:rgba(240,235,227,.3);text-transform:uppercase;display:block;margin-bottom:2px}
+.sb-type{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.06em;color:rgba(240,235,227,.55)}
+.sb-note{font-size:9px;font-family:'Noto Sans TC',sans-serif;color:rgba(240,235,227,.3);margin-top:2px;line-height:1.4}
+.sb-lock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:rgba(10,10,10,.75);z-index:2}
+.sb-lock-icon{font-size:18px;opacity:.3}
+.sb-lock-text{font-family:'DM Mono',monospace;font-size:7px;letter-spacing:.18em;color:rgba(240,235,227,.2);text-transform:uppercase}
+@media(max-width:768px){.sb-grid{grid-template-columns:repeat(2,1fr)}.cl-thumb{margin:-28px -24px 16px}}
 @media(max-width:768px){
   .role-grid{grid-template-columns:1fr 1fr}
   .role-modal-box{padding:28px 20px}
@@ -1779,7 +1802,13 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
     </div>
 
     <div class="cl-grid a-stagger" id="clGrid">
+
+      <!-- 虹揚橋 -->
       <div class="cl-card" data-tags="霓虹感 城市感 美式 台中 電影 MV 廣告">
+        <div class="cl-thumb" style="background-image:url(https://i.ytimg.com/vi/el31BoYptT0/hqdefault.jpg)">
+          <span class="cl-thumb-shot">夜景 · 霓虹</span>
+          <span class="cl-thumb-src">MV STILL</span>
+        </div>
         <div class="cl-city">台中 · 西屯區</div>
         <div class="cl-name">虹揚橋</div>
         <div class="cl-name-en">Honyang Bridge</div>
@@ -1791,26 +1820,36 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
           <div class="cl-meta-item"><span class="cl-meta-key">申請</span>不需要</div>
         </div>
         <div class="cl-known"><div class="cl-known-label">已知拍攝</div><div class="cl-known-item"><a href="https://www.youtube.com/watch?v=el31BoYptT0" target="_blank" style="color:var(--red);text-decoration:none">中部管轄區 2025 Cypher「Still In The Paint Remix」↗</a></div></div>
-        <div class="cl-notes">夜景七期大景，霓虹反射感強，城市美式氛圍。適合夜景街頭場景。</div>
+        <div class="cl-shots"><div class="cl-shots-hd">分鏡建議</div><div class="cl-shot-row"><span class="cl-shot">夜景廣角</span><span class="cl-shot">霓虹倒影特寫</span><span class="cl-shot">車跟拍</span><span class="cl-shot">橋樑仰角</span><span class="cl-shot">空拍</span></div></div>
+        <div class="cl-notes">夜景七期大景，霓虹反射感強，城市美式氛圍。全天開放，停車方便，無需申請。</div>
         <a class="cl-gps-link" href="https://maps.app.goo.gl/DTD85WUJLBVkyF5u5" target="_blank">↗ Google Maps</a>
       </div>
 
+      <!-- 小叮噹玩具城 -->
       <div class="cl-card" data-tags="台中 廣告 MV 短片">
+        <div class="cl-thumb" style="background:linear-gradient(135deg,#1a0030 0%,#6b0fa0 40%,#e91e8c 70%,#ff6b35 100%)">
+          <span class="cl-thumb-shot">色彩 · 童趣</span>
+        </div>
         <div class="cl-city">台中</div>
         <div class="cl-name">小叮噹玩具城</div>
         <div class="cl-name-en">Xiao Ding Dang Toy City</div>
         <div class="cl-vtags"><span class="cl-vtag">色彩雜亂</span><span class="cl-vtag">童趣</span></div>
         <div class="cl-stypes"><span class="cl-stype">廣告</span><span class="cl-stype">MV</span><span class="cl-stype">短片</span></div>
         <div class="cl-meta-row">
-          <div class="cl-meta-item"><span class="cl-meta-key">開放時間</span>需確認營業時間</div>
+          <div class="cl-meta-item"><span class="cl-meta-key">開放時間</span>需確認營業</div>
           <div class="cl-meta-item"><span class="cl-meta-key">停車</span>附近路邊</div>
           <div class="cl-meta-item"><span class="cl-meta-key">申請</span>需洽店家</div>
         </div>
+        <div class="cl-shots"><div class="cl-shots-hd">分鏡建議</div><div class="cl-shot-row"><span class="cl-shot">超廣角變形</span><span class="cl-shot">色彩特寫</span><span class="cl-shot">慢動作</span><span class="cl-shot">人物主觀</span></div></div>
         <div class="cl-notes">拍娃娃店場景首選。色彩密集，視覺衝擊強。需提前與店家溝通拍攝時段。</div>
         <a class="cl-gps-link" href="https://maps.app.goo.gl/SWr1pcruDGyPu2rM7" target="_blank">↗ Google Maps</a>
       </div>
 
+      <!-- 亞芳茶行 -->
       <div class="cl-card" data-tags="復古懷舊 台式 台中 電影 廣告">
+        <div class="cl-thumb" style="background:linear-gradient(135deg,#0d0600 0%,#3d1a00 50%,#6b3300 80%,#8b4a00 100%)">
+          <span class="cl-thumb-shot">騎樓 · 懷舊</span>
+        </div>
         <div class="cl-city">台中 · 西區</div>
         <div class="cl-name">亞芳茶行</div>
         <div class="cl-name-en">Yafang Tea House</div>
@@ -1818,14 +1857,19 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
         <div class="cl-stypes"><span class="cl-stype">電影</span><span class="cl-stype">廣告</span><span class="cl-stype">短片</span></div>
         <div class="cl-meta-row">
           <div class="cl-meta-item"><span class="cl-meta-key">開放時間</span>11:00–20:30</div>
-          <div class="cl-meta-item"><span class="cl-meta-key">停車</span>需找路邊</div>
+          <div class="cl-meta-item"><span class="cl-meta-key">停車</span>路邊</div>
           <div class="cl-meta-item"><span class="cl-meta-key">申請</span>需洽店家</div>
         </div>
+        <div class="cl-shots"><div class="cl-shots-hd">分鏡建議</div><div class="cl-shot-row"><span class="cl-shot">騎樓縱深</span><span class="cl-shot">街景廣角</span><span class="cl-shot">人物近景</span><span class="cl-shot">窗台光影</span></div></div>
         <div class="cl-notes">老派台中騎樓茶行，泡沫紅茶文化縮影。懷舊台式場景首選，顧客流量中等。</div>
         <a class="cl-gps-link" href="https://maps.app.goo.gl/guVFYZhnqiBCxMGm8" target="_blank">↗ Google Maps</a>
       </div>
 
+      <!-- 樂田公園 -->
       <div class="cl-card" data-tags="自然空曠 草地 台中 電影 MV 廣告">
+        <div class="cl-thumb" style="background:linear-gradient(160deg,#000d00 0%,#0a2a0a 40%,#0f3d0f 70%,#1a5c1a 100%)">
+          <span class="cl-thumb-shot">空曠 · 草地</span>
+        </div>
         <div class="cl-city">台中 · 南屯區</div>
         <div class="cl-name">樂田公園</div>
         <div class="cl-name-en">Letian Park</div>
@@ -1836,11 +1880,16 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
           <div class="cl-meta-item"><span class="cl-meta-key">停車</span>方便</div>
           <div class="cl-meta-item"><span class="cl-meta-key">申請</span>不需要</div>
         </div>
+        <div class="cl-shots"><div class="cl-shots-hd">分鏡建議</div><div class="cl-shot-row"><span class="cl-shot">空拍</span><span class="cl-shot">大景廣角</span><span class="cl-shot">日落逆光</span><span class="cl-shot">人物全景</span><span class="cl-shot">跟拍移動</span></div></div>
         <div class="cl-notes">廣闊草皮、人少。白天遮蔭少需注意強光，24 小時可進，停車方便。</div>
         <a class="cl-gps-link" href="https://maps.app.goo.gl/waZZvgpbTNBS4Agg8" target="_blank">↗ Google Maps</a>
       </div>
 
+      <!-- 廢棄鐵皮廠 -->
       <div class="cl-card" data-tags="工業廢墟 末日感 台中 電影 MV">
+        <div class="cl-thumb" style="background:linear-gradient(135deg,#0d0000 0%,#2a0800 50%,#4d1500 80%,#661a00 100%)">
+          <span class="cl-thumb-shot">工業 · 末日</span>
+        </div>
         <div class="cl-city">台中（無正式名稱）</div>
         <span class="cl-secret">SECRET SPOT</span>
         <div class="cl-name">廢棄鐵皮廠區</div>
@@ -1852,11 +1901,16 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
           <div class="cl-meta-item"><span class="cl-meta-key">停車</span>未知</div>
           <div class="cl-meta-item"><span class="cl-meta-key">申請</span>需確認所有權</div>
         </div>
+        <div class="cl-shots"><div class="cl-shots-hd">分鏡建議</div><div class="cl-shot-row"><span class="cl-shot">廣角環境</span><span class="cl-shot">手持晃動</span><span class="cl-shot">鐵皮材質特寫</span><span class="cl-shot">煙霧效果</span></div></div>
         <div class="cl-notes">大量廢棄鐵櫃與紅色鐵皮屋，工業末日氛圍強烈。僅 GPS 座標，建議先實勘。</div>
         <a class="cl-gps-link" href="https://www.google.com/maps?q=24.103016,120.6732434" target="_blank">↗ GPS 座標</a>
       </div>
 
+      <!-- 石龍宮 -->
       <div class="cl-card" data-tags="宗教氛圍 道教 南投 電影 紀錄片">
+        <div class="cl-thumb" style="background:linear-gradient(135deg,#0d0000 0%,#330000 40%,#660000 70%,#8b1a00 100%)">
+          <span class="cl-thumb-shot">宗教 · 夜火</span>
+        </div>
         <div class="cl-city">南投 · 中寮鄉</div>
         <div class="cl-name">石龍宮</div>
         <div class="cl-name-en">Shi Long Temple</div>
@@ -1867,11 +1921,16 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
           <div class="cl-meta-item"><span class="cl-meta-key">停車</span>有，假日繁忙</div>
           <div class="cl-meta-item"><span class="cl-meta-key">申請</span>需洽廟方</div>
         </div>
+        <div class="cl-shots"><div class="cl-shots-hd">分鏡建議</div><div class="cl-shot-row"><span class="cl-shot">廣角環境</span><span class="cl-shot">人流長曝</span><span class="cl-shot">香爐特寫</span><span class="cl-shot">神像仰角</span><span class="cl-shot">凌晨藍調</span></div></div>
         <div class="cl-notes">半夜香火未斷，泡麵文化獨特。凌晨人潮特殊，場面超問號。南投山區，需留意交通時間。</div>
         <a class="cl-gps-link" href="https://maps.app.goo.gl/szWMYppowuxWcGk39" target="_blank">↗ Google Maps</a>
       </div>
 
+      <!-- 中央公園停車場 -->
       <div class="cl-card" data-tags="建築感 橋樑 城市感 台中 電影 廣告 MV">
+        <div class="cl-thumb" style="background:linear-gradient(135deg,#000814 0%,#001d3d 50%,#003566 80%,#004d99 100%)">
+          <span class="cl-thumb-shot">橋樑 · 夜間</span>
+        </div>
         <div class="cl-city">台中 · 西屯區</div>
         <div class="cl-name">中央公園北側停車場</div>
         <div class="cl-name-en">Central Park North / Bridge</div>
@@ -1880,13 +1939,19 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
         <div class="cl-meta-row">
           <div class="cl-meta-item"><span class="cl-meta-key">開放時間</span>06:00–22:00</div>
           <div class="cl-meta-item"><span class="cl-meta-key">停車</span>就是停車場</div>
-          <div class="cl-meta-item"><span class="cl-meta-key">申請</span>公有，需向市府申請</div>
+          <div class="cl-meta-item"><span class="cl-meta-key">申請</span>需向市府申請</div>
         </div>
-        <div class="cl-notes">橋樑結構感強，夜間路燈偏暗有電影感。可拍車景，人煙稀少。官方記錄有拍攝組到訪。</div>
+        <div class="cl-shots"><div class="cl-shots-hd">分鏡建議</div><div class="cl-shot-row"><span class="cl-shot">車景廣角</span><span class="cl-shot">橋樑縱深</span><span class="cl-shot">夜間光柱</span><span class="cl-shot">低角度跟拍</span></div></div>
+        <div class="cl-notes">橋樑結構感強，夜間路燈偏暗有電影感。可拍車景，人煙稀少。</div>
         <a class="cl-gps-link" href="https://maps.app.goo.gl/841eYbj184Xtnm8z5" target="_blank">↗ Google Maps</a>
       </div>
 
+      <!-- 熱情如水度假所 -->
       <div class="cl-card" data-tags="住宅感 現代感 室內 台中 MV 廣告 短片">
+        <div class="cl-thumb" style="background-image:url(https://i.ytimg.com/vi/eI1O_9jBHU0/hqdefault.jpg)">
+          <span class="cl-thumb-shot">室內 · 現代</span>
+          <span class="cl-thumb-src">MV STILL</span>
+        </div>
         <div class="cl-city">台中 · 北屯區</div>
         <div class="cl-name">熱情如水度假所</div>
         <div class="cl-name-en">Private Villa · Beitun Taichung</div>
@@ -1898,12 +1963,17 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
           <div class="cl-meta-item"><span class="cl-meta-key">申請</span>需洽業主</div>
         </div>
         <div class="cl-known"><div class="cl-known-label">已知拍攝</div><div class="cl-known-item"><a href="https://www.youtube.com/watch?v=eI1O_9jBHU0" target="_blank" style="color:var(--red);text-decoration:none">Kolli (NN)「BRING ME YOUR LOVELY」MV ↗</a></div></div>
-        <div class="cl-notes">私人度假招待所，現代住宅室內設計，品味拔群。★4.9。僅供度假用途，需提前聯繫業主。東山路一段 191 巷 17 之 8 號。</div>
-        <a class="cl-gps-link" href="https://maps.app.goo.gl/" target="_blank">↗ Google Maps</a>
+        <div class="cl-shots"><div class="cl-shots-hd">分鏡建議</div><div class="cl-shot-row"><span class="cl-shot">室內廣角</span><span class="cl-shot">窗光人像</span><span class="cl-shot">環境漫遊</span><span class="cl-shot">材質特寫</span></div></div>
+        <div class="cl-notes">私人度假招待所，現代住宅室內設計，品味拔群。★4.9。僅供度假用途，需提前聯繫業主。</div>
+        <a class="cl-gps-link" href="https://www.google.com/maps/search/熱情如水度假所+台中北屯" target="_blank">↗ Google Maps</a>
       </div>
 
+      <!-- neü Café -->
       <div class="cl-card" data-tags="建築感 美式 台中 廣告 MV 短片">
-        <div class="cl-city">台中</div>
+        <div class="cl-thumb" style="background:linear-gradient(135deg,#0a0a0a 0%,#1a1a1a 40%,#222 70%,#2a2a2a 100%)">
+          <span class="cl-thumb-shot">工業 · 金屬</span>
+        </div>
+        <div class="cl-city">台中 · 烏日區</div>
         <div class="cl-name">neü &amp; Co. Café</div>
         <div class="cl-name-en">neü &amp; Co. Café</div>
         <div class="cl-vtags"><span class="cl-vtag">建築感</span><span class="cl-vtag">美式</span><span class="cl-vtag">金屬感</span></div>
@@ -1913,11 +1983,16 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
           <div class="cl-meta-item"><span class="cl-meta-key">停車</span>附近路邊</div>
           <div class="cl-meta-item"><span class="cl-meta-key">申請</span>需洽店家</div>
         </div>
-        <div class="cl-notes">金屬質感極重的美式咖啡廳，工業風室內設計。★4.9（176 則評論），氛圍感強，適合美式時尚類廣告或音樂 MV。需提前與店家溝通。</div>
+        <div class="cl-shots"><div class="cl-shots-hd">分鏡建議</div><div class="cl-shot-row"><span class="cl-shot">室內廣角</span><span class="cl-shot">金屬材質特寫</span><span class="cl-shot">側光人物</span><span class="cl-shot">光影對比</span></div></div>
+        <div class="cl-notes">金屬質感極重的美式咖啡廳，★4.9（176 則評論）。興新路 590 號，需提前與店家溝通。</div>
         <a class="cl-gps-link" href="https://maps.app.goo.gl/qmY5uXKLaR9XMoz86" target="_blank">↗ Google Maps</a>
       </div>
 
+      <!-- Purr大樓 -->
       <div class="cl-card" data-tags="建築感 台中 電影 廣告 MV">
+        <div class="cl-thumb" style="background:linear-gradient(135deg,#050510 0%,#0d0d2e 50%,#16163d 80%,#1e1e52 100%)">
+          <span class="cl-thumb-shot">建築 · 戲劇</span>
+        </div>
         <div class="cl-city">台中（無正式名稱）</div>
         <span class="cl-secret">SECRET SPOT</span>
         <div class="cl-name">Purr 泡泡後方大樓</div>
@@ -1929,8 +2004,42 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
           <div class="cl-meta-item"><span class="cl-meta-key">停車</span>未知</div>
           <div class="cl-meta-item"><span class="cl-meta-key">申請</span>未知</div>
         </div>
-        <div class="cl-notes">Purr 泡泡咖啡館後方建築，視覺衝擊強。以 GPS 座標定位，需實勘確認可及性。</div>
+        <div class="cl-shots"><div class="cl-shots-hd">分鏡建議</div><div class="cl-shot-row"><span class="cl-shot">建築仰角</span><span class="cl-shot">透視廣角</span><span class="cl-shot">光影對比</span><span class="cl-shot">夜間輪廓</span></div></div>
+        <div class="cl-notes">Purr 泡泡咖啡館後方建築，視覺衝擊強。GPS 座標定位，建議先實勘確認可及性。</div>
         <a class="cl-gps-link" href="https://www.google.com/maps?q=24.1555191,120.6681918" target="_blank">↗ GPS 座標</a>
+      </div>
+
+    </div>
+
+    <!-- DIRECTOR STORYBOARD TEASER -->
+    <div class="sb-wrap a-up">
+      <div class="s-head" style="margin-bottom:28px">
+        <div>
+          <div class="s-label">導演工具 · Director Tools</div>
+          <div style="font-family:'Noto Sans TC',sans-serif;font-size:clamp(22px,3vw,36px);font-weight:700;color:var(--white);margin-top:6px;line-height:1.2">分鏡預覽板</div>
+          <div style="font-size:13px;color:var(--dim);margin-top:6px">為每個場景生成可輸出的分鏡表 — Phase 2 功能</div>
+        </div>
+        <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;color:rgba(200,66,42,.5);border:1px solid rgba(200,66,42,.2);padding:4px 12px;align-self:flex-start;margin-top:4px">COMING SOON</span>
+      </div>
+      <div class="sb-grid">
+        <div class="sb-frame">
+          <div class="sb-frame-bg" style="background-image:url(https://i.ytimg.com/vi/el31BoYptT0/hqdefault.jpg)"></div>
+          <div class="sb-frame-info"><span class="sb-num">01 / EXT</span><div class="sb-type">夜景廣角 · 24mm</div><div class="sb-note">虹揚橋 — 建立鏡頭</div></div>
+        </div>
+        <div class="sb-frame">
+          <div class="sb-frame-bg" style="background:linear-gradient(135deg,#000814,#003566)"></div>
+          <div class="sb-frame-info"><span class="sb-num">02 / EXT</span><div class="sb-type">橋樑仰角 · 35mm</div><div class="sb-note">虹揚橋 — 情緒鏡頭</div></div>
+        </div>
+        <div class="sb-frame">
+          <div class="sb-frame-bg" style="background-image:url(https://i.ytimg.com/vi/eI1O_9jBHU0/hqdefault.jpg)"></div>
+          <div class="sb-frame-info"><span class="sb-num">03 / INT</span><div class="sb-type">室內廣角 · 21mm</div><div class="sb-note">熱情如水 — 場景建立</div></div>
+          <div class="sb-lock"><span class="sb-lock-icon">🔒</span><span class="sb-lock-text">登入解鎖</span></div>
+        </div>
+        <div class="sb-frame">
+          <div class="sb-frame-bg" style="background:linear-gradient(135deg,#0d0600,#6b3300)"></div>
+          <div class="sb-frame-info"><span class="sb-num">04 / EXT</span><div class="sb-type">騎樓縱深 · 50mm</div><div class="sb-note">亞芳茶行 — 過場</div></div>
+          <div class="sb-lock"><span class="sb-lock-icon">🔒</span><span class="sb-lock-text">登入解鎖</span></div>
+        </div>
       </div>
     </div>
 
