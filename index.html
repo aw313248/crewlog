@@ -548,9 +548,35 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
 .a-wipe{clip-path:inset(100% 0 0 0);transition:clip-path 1.1s var(--spring)}
 .a-wipe.in{clip-path:inset(0% 0 0 0)}
 
-/* ── DRAMA MAP ── */
-.drama-map-sec{background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 0;position:relative;overflow:hidden}
-.drama-map-sec::before{content:'TAIWAN';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Bebas Neue',sans-serif;font-size:clamp(100px,20vw,280px);color:rgba(200,66,42,.04);letter-spacing:.12em;pointer-events:none;white-space:nowrap;z-index:0;user-select:none}
+/* ── FILM MAP ENTRY ── */
+.film-map-entry{position:relative;overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);height:460px}
+.fme-poster-wall{position:absolute;inset:0;display:flex;flex-direction:column;gap:3px;padding:0}
+.fme-strip{display:flex;gap:3px;flex:1;min-height:0}
+.fme-strip.s2{animation:stripSlide 60s linear infinite}
+.fme-strip.s3{animation:stripSlide 80s linear infinite reverse}
+@keyframes stripSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.fme-poster{flex-shrink:0;height:100%;aspect-ratio:16/9;background-size:cover;background-position:center;background-color:#111}
+.fme-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(10,10,10,.97) 0%,rgba(10,10,10,.88) 35%,rgba(10,10,10,.55) 70%,rgba(10,10,10,.4) 100%)}
+.fme-overlay::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(10,10,10,1) 0%,transparent 40%,transparent 60%,rgba(10,10,10,1) 100%)}
+.fme-content{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;justify-content:center;padding-top:0}
+.fme-label{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.22em;color:rgba(240,235,227,.35);text-transform:uppercase;margin-bottom:18px}
+.fme-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,9vw,120px);letter-spacing:.04em;line-height:.95;color:var(--white);margin-bottom:28px}
+.fme-title em{color:var(--red);font-style:normal}
+.fme-stats{display:flex;gap:0;margin-bottom:40px;border:1px solid var(--border);width:fit-content}
+.fme-stat{padding:12px 24px;border-right:1px solid var(--border);display:flex;flex-direction:column;gap:3px}
+.fme-stat:last-child{border-right:none}
+.fme-stat-n{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.06em;color:var(--white);line-height:1}
+.fme-stat-l{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.15em;color:rgba(240,235,227,.3)}
+.fme-enter{display:inline-flex;align-items:center;gap:12px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.16em;text-decoration:none;color:#fff;background:var(--red);padding:14px 28px;transition:background .2s,gap .2s;width:fit-content;text-transform:uppercase}
+.fme-enter:hover{background:#b33820;gap:16px}
+.fme-enter::after{content:'→';font-size:14px}
+@media(max-width:768px){
+  .film-map-entry{height:420px}
+  .fme-overlay{background:linear-gradient(135deg,rgba(10,10,10,.97) 0%,rgba(10,10,10,.92) 60%,rgba(10,10,10,.7) 100%)}
+  .fme-stats{gap:0}
+  .fme-stat{padding:10px 16px}
+  .fme-stat-n{font-size:22px}
+}
 
 /* Era filter groups */
 .drama-filter-wrap{margin-bottom:32px}
@@ -1426,84 +1452,19 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
   </div>
 </div>
 
-<!-- DRAMA MAP -->
-<section class="drama-map-sec" id="drama-map-section">
-  <div class="wrap">
-    <div class="s-head a-up" style="margin-bottom:32px">
-      <div>
-        <div class="s-label">戲劇朝聖地圖 · DRAMA FILMING LOCATIONS</div>
-        <div class="s-en">最愛的劇<br><span style="color:var(--red)">在這裡拍</span></div>
-        <div class="s-zh">點開地圖，導航過去，親眼感受那個場景</div>
-      </div>
-      <a href="/map.html" style="display:inline-flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--red);text-decoration:none;border:1px solid rgba(200,66,42,0.4);padding:8px 16px;margin-top:16px;transition:all .2s" onmouseover="this.style.background='rgba(200,66,42,0.08)'" onmouseout="this.style.background='none'">↗ 進入全螢幕地圖</a>
+<!-- FILM MAP ENTRY -->
+<section class="film-map-entry a-up" id="drama-map-section">
+  <div class="fme-poster-wall" id="fme-poster-wall"></div>
+  <div class="fme-overlay"></div>
+  <div class="fme-content wrap">
+    <div class="fme-label">戲劇朝聖地圖 · DRAMA FILMING LOCATIONS</div>
+    <div class="fme-title">最愛的劇<br><em>在這裡拍</em></div>
+    <div class="fme-stats">
+      <div class="fme-stat"><span class="fme-stat-n">17</span><span class="fme-stat-l">部影視作品</span></div>
+      <div class="fme-stat"><span class="fme-stat-n">53</span><span class="fme-stat-l">個取景地點</span></div>
+      <div class="fme-stat"><span class="fme-stat-n">1999–2025</span><span class="fme-stat-l">橫跨年代</span></div>
     </div>
-    <div class="dm-stats-bar a-up">
-      <div class="dm-stat-item"><span class="dm-stat-n">17</span><span class="dm-stat-l">部影視作品</span></div>
-      <div class="dm-stat-item"><span class="dm-stat-n" id="dm-total-count">–</span><span class="dm-stat-l">個取景地點</span></div>
-      <div class="dm-stat-item"><span class="dm-stat-n">5</span><span class="dm-stat-l">個年代橫跨</span></div>
-      <div class="dm-stat-item"><span class="dm-stat-n">16</span><span class="dm-stat-l">部有劇照</span></div>
-    </div>
-    <div class="drama-filter-wrap a-up" id="drama-filter">
-      <div class="df-era-row">
-        <span class="df-era-label">全部</span>
-        <div class="df-era-tabs">
-          <button class="dftab on" data-drama="all">全部 <span class="df-year">ALL ERAS</span></button>
-        </div>
-      </div>
-      <div class="df-era-row">
-        <span class="df-era-label">近期</span>
-        <div class="df-era-tabs">
-          <button class="dftab" data-drama="sunshine">陽光女子合唱團 <span class="df-year">2025</span></button>
-          <button class="dftab" data-drama="zero">零日攻擊 <span class="df-year">2025</span></button>
-          <button class="dftab" data-drama="imperfect">不夠善良的我們 <span class="df-year">2024</span></button>
-          <button class="dftab" data-drama="copycat">模仿犯 <span class="df-year">2023</span></button>
-          <button class="dftab" data-drama="someday">想見你 <span class="df-year">2019</span></button>
-          <button class="dftab" data-drama="detention">返校 <span class="df-year">2019</span></button>
-          <button class="dftab" data-drama="magician">天橋上的魔術師 <span class="df-year">2021</span></button>
-        </div>
-      </div>
-      <div class="df-era-row">
-        <span class="df-era-label">2010s</span>
-        <div class="df-era-tabs">
-          <button class="dftab" data-drama="imlove">我可能不會愛你 <span class="df-year">2011</span></button>
-          <button class="dftab" data-drama="thosetimes">那些年，我們一起追的女孩 <span class="df-year">2011</span></button>
-          <button class="dftab" data-drama="monga">艋舺 <span class="df-year">2010</span></button>
-          <button class="dftab" data-drama="ultimate3k">終極三國 <span class="df-year">2010</span></button>
-        </div>
-      </div>
-      <div class="df-era-row">
-        <span class="df-era-label">2000s</span>
-        <div class="df-era-tabs">
-          <button class="dftab" data-drama="cape7">海角七號 <span class="df-year">2008</span></button>
-          <button class="dftab" data-drama="fated">命中注定我愛你 <span class="df-year">2008</span></button>
-          <button class="dftab" data-drama="kiss">惡作劇之吻 <span class="df-year">2005</span></button>
-          <button class="dftab" data-drama="meteor">流星花園 <span class="df-year">2001</span></button>
-          <button class="dftab" data-drama="ultimate1">終極一班 <span class="df-year">2006</span></button>
-        </div>
-      </div>
-      <div class="df-era-row">
-        <span class="df-era-label">1990s</span>
-        <div class="df-era-tabs">
-          <button class="dftab" data-drama="hotteacher">麻辣鮮師 <span class="df-year">1999</span></button>
-        </div>
-      </div>
-      <div class="df-type-row">
-        <span class="df-type-label">類型</span>
-        <button class="dftab-type on" data-type="all" onclick="switchType('all')">全部</button>
-        <button class="dftab-type" data-type="電影" onclick="switchType('電影')">電影</button>
-        <button class="dftab-type" data-type="影集" onclick="switchType('影集')">電視影集</button>
-      </div>
-    </div>
-    <div class="drama-map-wrap">
-      <div id="drama-map"></div>
-      <div class="dm-zoom-btns" id="dm-zoom-btns">
-        <button onclick="dramaMap&&dramaMap.zoomIn()">+</button>
-        <button onclick="dramaMap&&dramaMap.zoomOut()">−</button>
-      </div>
-      <div class="dm-count-badge" id="dm-count">0<span>個地點</span></div>
-      <div class="dm-legend" id="dm-legend"></div>
-    </div>
-    <div class="drama-locs a-scale" id="drama-locs"></div>
+    <a href="/map.html" class="fme-enter">進入互動地圖</a>
   </div>
 </section>
 
@@ -3119,100 +3080,38 @@ function switchFilter(f){
   }
 }
 
-function initDramaMap(){
-  dramaMap = L.map('drama-map',{zoomControl:false, scrollWheelZoom:false, center:[23.5,120.97], zoom:7});
-  // 滑鼠移入啟動滾輪縮放，移出停用，避免影響頁面滾動
-  const mapEl = document.getElementById('drama-map');
-  if(mapEl){
-    mapEl.addEventListener('mouseenter', ()=> dramaMap.scrollWheelZoom.enable());
-    mapEl.addEventListener('mouseleave', ()=> dramaMap.scrollWheelZoom.disable());
-  }
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
-    attribution:'©OpenStreetMap ©CARTO', maxZoom:19, subdomains:'abcd'
-  }).addTo(dramaMap);
-
-  dramaLocations.forEach(loc=>{
-    const m = L.marker([loc.lat, loc.lng], {icon:makeIcon(loc.drama)})
-      .addTo(dramaMap)
-      .bindPopup(window.innerWidth > 768 ? makePopup(loc) : '<div></div>', {maxWidth:340, minWidth:300, autoPan:window.innerWidth>768, className:'dm-popup-leaf'});
-    m._locId = loc.id;
-    m._drama = loc.drama;
-    m.on('mouseover', function(){ this.setIcon(makeIcon(loc.drama, true)); });
-    m.on('mouseout',  function(){ this.setIcon(makeIcon(loc.drama, false)); });
-    m.on('click', function(){
-      dramaMap.flyTo([loc.lat, loc.lng], 14, {duration:1.2, easeLinearity:0.4});
-      if(window.innerWidth <= 768){ openMapDrawer(loc); }
+// ── POSTER WALL for film-map-entry section ──────────────
+function initPosterWall(){
+  const wall = document.getElementById('fme-poster-wall');
+  if(!wall) return;
+  const posters = Object.values(DRAMA_META).filter(m=>m.poster).map(m=>m.poster);
+  // Build 3 strips, each row gets a shuffled subset, doubled for seamless loop
+  const rows = [
+    [...posters, ...posters],
+    [...posters.slice(6), ...posters.slice(0,6), ...posters.slice(6), ...posters.slice(0,6)],
+    [...posters.slice(10), ...posters.slice(0,10), ...posters.slice(10), ...posters.slice(0,10)]
+  ];
+  rows.forEach((row, i) => {
+    const strip = document.createElement('div');
+    strip.className = 'fme-strip s' + (i+1);
+    if(i === 0) strip.style.animationDuration = '50s';
+    if(i === 1) strip.style.animationDuration = '65s';
+    if(i === 2) strip.style.animationDuration = '45s';
+    row.forEach(src => {
+      const el = document.createElement('div');
+      el.className = 'fme-poster';
+      el.style.backgroundImage = `url('${src}')`;
+      strip.appendChild(el);
     });
-    allMarkers.push(m);
-  });
-
-  renderLocCards('all');
-  updateLegend('all');
-  updateCount('all');
-
-  // Update total location count stat
-  const totalEl = document.getElementById('dm-total-count');
-  if(totalEl) totalEl.textContent = dramaLocations.length;
-
-  // Inject poster thumbnails into drama filter tabs
-  document.querySelectorAll('.dftab[data-drama]').forEach(btn=>{
-    const d = btn.dataset.drama;
-    if(d === 'all') return;
-    const meta = DRAMA_META[d];
-    if(!meta) return;
-
-    btn.classList.add('dftab-poster');
-    btn.style.borderColor = meta.color+'55';
-
-    // Background image layer
-    const bg = document.createElement('div');
-    bg.className = 'dftab-poster-bg';
-    if(meta.poster){
-      bg.style.backgroundImage = `url('${meta.poster}')`;
-    } else {
-      bg.style.background = `linear-gradient(135deg,${meta.color}55 0%,${meta.color}11 100%)`;
-    }
-
-    // Gradient overlay
-    const ov = document.createElement('div');
-    ov.className = 'dftab-poster-ov';
-
-    // Name + year info
-    const info = document.createElement('div');
-    info.className = 'dftab-poster-info';
-    const nameFull = meta.name;
-    const shortName = nameFull.length > 7 ? nameFull.substring(0,7) : nameFull;
-    info.innerHTML = `<span class="dftab-poster-name">${shortName}</span><span class="dftab-poster-year" style="color:${meta.color}">${meta.year}</span>`;
-
-    // Count badge
-    const cnt = dramaLocations.filter(l=>l.drama===d).length;
-    if(cnt > 0){
-      const badge = document.createElement('div');
-      badge.style.cssText = `position:absolute;top:5px;right:5px;z-index:3;background:${meta.color};color:#fff;font-family:'DM Mono',monospace;font-size:7px;padding:1px 4px;line-height:14px`;
-      badge.textContent = cnt;
-      btn.appendChild(badge);
-    }
-
-    // Bottom color bar
-    const bar = document.createElement('div');
-    bar.className = 'dftab-poster-bar';
-    bar.style.background = meta.color;
-
-    btn.prepend(bg, ov);
-    btn.appendChild(info);
-    btn.appendChild(bar);
-  });
-
-  document.querySelectorAll('.dftab').forEach(btn=>{
-    btn.addEventListener('click', ()=> switchFilter(btn.dataset.drama));
+    wall.appendChild(strip);
   });
 }
 
-const mapObs = new IntersectionObserver(entries=>{
-  if(entries[0].isIntersecting){ initDramaMap(); mapObs.disconnect(); }
+const posterObs = new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting){ initPosterWall(); posterObs.disconnect(); }
 }, {threshold:0.1});
-const mapEl = document.getElementById('drama-map');
-if(mapEl) mapObs.observe(mapEl);
+const posterWallEl = document.getElementById('fme-poster-wall');
+if(posterWallEl) posterObs.observe(posterWallEl);
 
 // Knowledge Modal
 const kModalData = {
@@ -4012,13 +3911,13 @@ function openFilmModal(dramaKey){
       <div class="fm-section-label">台灣取景地點（${locs.length} 處）</div>
       <div class="fm-locs-grid">
         ${locs.map((l,i)=>`
-          <div class="fm-loc-item" onclick="closeFilmModal();switchFilter('${dramaKey}');setTimeout(()=>focusLoc('${l.id}'),400)">
+          <div class="fm-loc-item">
             <div class="fm-loc-num">${String(i+1).padStart(2,'0')}</div>
             <div class="fm-loc-name">${l.name}</div>
             <div class="fm-loc-scene">${l.scene}</div>
           </div>`).join('')}
       </div>
-      <a class="fm-map-btn" href="#drama-map" onclick="closeFilmModal();setTimeout(()=>switchFilter('${dramaKey}'),200)">在地圖上查看全部地點 →</a>
+      <a class="fm-map-btn" href="/map.html" onclick="closeFilmModal()">在地圖上查看全部地點 →</a>
     </div>` : '';
   document.getElementById('film-modal-content').innerHTML = `
     <div class="fm-hero">
