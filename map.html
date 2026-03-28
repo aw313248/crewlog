@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CREWLOG · FILM MAP — 台灣影視取景地圖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600&family=Noto+Sans+TC:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#0a0a0a;
+  --bg2:#111111;
+  --bg3:#181818;
+  --red:#C8422A;
+  --white:#F0EBE3;
+  --white2:rgba(240,235,227,0.7);
+  --white3:rgba(240,235,227,0.35);
+  --border:rgba(240,235,227,0.08);
+  --border2:rgba(240,235,227,0.14);
+  --nav-h:52px;
+  --sidebar-w:40%;
+}
+
+html,body{
+  height:100%;
+  overflow:hidden;
+  background:var(--bg);
+  color:var(--white);
+  font-family:'Outfit','Noto Sans TC',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ─── NAV ─── */
+#nav{
+  position:fixed;
+  top:0;left:0;right:0;
+  height:var(--nav-h);
+  background:rgba(10,10,10,0.96);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 20px;
+  z-index:1000;
+  backdrop-filter:blur(12px);
+}
+
+#nav-logo{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:18px;
+  letter-spacing:0.12em;
+  color:var(--white);
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-shrink:0;
+}
+#nav-logo span.dot{color:var(--red)}
+#nav-logo span.sub{
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  color:var(--white3);
+  letter-spacing:0.2em;
+  padding-left:10px;
+  border-left:1px solid var(--border2);
+}
+
+#nav-filters{
+  display:flex;
+  gap:2px;
+}
+.nf-btn{
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.12em;
+  padding:6px 14px;
+  background:none;
+  border:1px solid transparent;
+  color:var(--white3);
+  cursor:pointer;
+  transition:all .2s;
+}
+.nf-btn:hover{color:var(--white);border-color:var(--border2)}
+.nf-btn.active{
+  color:var(--white);
+  border-color:var(--border2);
+  background:rgba(240,235,227,0.06);
+}
+
+#nav-back{
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.1em;
+  color:var(--white3);
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  transition:color .2s;
+  flex-shrink:0;
+}
+#nav-back:hover{color:var(--white)}
+#nav-back::before{content:'←';font-size:13px}
+
+/* ─── LAYOUT ─── */
+#layout{
+  position:fixed;
+  top:var(--nav-h);
+  left:0;right:0;bottom:0;
+  display:flex;
+}
+
+/* ─── MAP ─── */
+#map-panel{
+  flex:1;
+  min-width:0;
+  position:relative;
+}
+#map{
+  width:100%;
+  height:100%;
+}
+
+/* Leaflet popup override */
+.leaflet-popup-content-wrapper{
+  background:rgba(14,14,14,0.97)!important;
+  border:1px solid var(--border2)!important;
+  border-radius:0!important;
+  box-shadow:0 8px 40px rgba(0,0,0,0.8)!important;
+  padding:0!important;
+}
+.leaflet-popup-tip-container{display:none!important}
+.leaflet-popup-content{margin:0!important;width:220px!important}
+.leaflet-popup-close-button{
+  color:var(--white3)!important;
+  font-size:16px!important;
+  top:8px!important;
+  right:10px!important;
+}
+.leaflet-popup-close-button:hover{color:var(--white)!important}
+
+.map-popup{padding:12px 14px}
+.map-popup-drama{
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.15em;
+  margin-bottom:5px;
+}
+.map-popup-name{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:16px;
+  letter-spacing:0.05em;
+  color:var(--white);
+  line-height:1.2;
+  margin-bottom:4px;
+}
+.map-popup-scene{
+  font-size:11px;
+  color:var(--white3);
+  line-height:1.5;
+}
+
+/* Map attribution */
+.leaflet-control-attribution{
+  background:rgba(10,10,10,0.8)!important;
+  color:rgba(240,235,227,0.3)!important;
+  font-size:9px!important;
+}
+.leaflet-control-attribution a{color:rgba(240,235,227,0.4)!important}
+
+/* Zoom controls */
+.leaflet-control-zoom{
+  border:1px solid var(--border2)!important;
+  border-radius:0!important;
+}
+.leaflet-control-zoom a{
+  background:rgba(14,14,14,0.95)!important;
+  color:var(--white)!important;
+  border-bottom:1px solid var(--border)!important;
+}
+.leaflet-control-zoom a:hover{background:rgba(30,30,30,0.98)!important}
+
+/* ─── SIDEBAR ─── */
+#sidebar{
+  width:var(--sidebar-w);
+  min-width:340px;
+  max-width:520px;
+  display:flex;
+  flex-direction:column;
+  border-left:1px solid var(--border);
+  background:var(--bg);
+  overflow:hidden;
+}
+
+/* Poster strip */
+#poster-strip{
+  height:140px;
+  min-height:140px;
+  border-bottom:1px solid var(--border);
+  overflow-x:auto;
+  overflow-y:hidden;
+  display:flex;
+  align-items:stretch;
+  gap:0;
+  scrollbar-width:none;
+  -ms-overflow-style:none;
+  background:var(--bg2);
+}
+#poster-strip::-webkit-scrollbar{display:none}
+
+.poster-card{
+  flex-shrink:0;
+  width:88px;
+  height:140px;
+  position:relative;
+  cursor:pointer;
+  overflow:hidden;
+  border-right:1px solid var(--border);
+  transition:transform .2s;
+}
+.poster-card:hover .pc-bg{transform:scale(1.08)}
+.poster-card.selected .pc-accent{opacity:1}
+.poster-card.selected .pc-overlay{background:rgba(0,0,0,0.15)}
+
+.pc-bg{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  transition:transform .4s ease;
+}
+.pc-overlay{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,0.45);
+  transition:background .2s;
+}
+.pc-accent{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  height:3px;
+  opacity:0.35;
+  transition:opacity .2s;
+}
+.pc-info{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  padding:6px 6px 8px;
+  background:linear-gradient(to top,rgba(0,0,0,0.85) 0%,transparent 100%);
+}
+.pc-name{
+  font-family:'Noto Sans TC',sans-serif;
+  font-size:9px;
+  font-weight:500;
+  color:var(--white);
+  line-height:1.3;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.pc-year{
+  font-family:'DM Mono',monospace;
+  font-size:8px;
+  color:var(--white3);
+  margin-top:2px;
+}
+.pc-type-badge{
+  position:absolute;
+  top:6px;left:6px;
+  font-family:'DM Mono',monospace;
+  font-size:7px;
+  letter-spacing:0.08em;
+  padding:2px 4px;
+  background:rgba(0,0,0,0.7);
+  color:var(--white3);
+}
+.pc-count{
+  position:absolute;
+  top:6px;right:6px;
+  font-family:'DM Mono',monospace;
+  font-size:8px;
+  font-weight:500;
+  width:18px;height:18px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;
+  background:rgba(0,0,0,0.7);
+}
+
+/* Film detail */
+#film-detail{
+  height:200px;
+  min-height:200px;
+  border-bottom:1px solid var(--border);
+  position:relative;
+  overflow:hidden;
+  flex-shrink:0;
+}
+#fd-bg{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center top;
+  filter:blur(2px) brightness(0.3);
+  transform:scale(1.05);
+  transition:background-image .4s;
+}
+#fd-content{
+  position:relative;
+  z-index:1;
+  padding:16px 18px;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+}
+#fd-meta-top{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:6px;
+}
+#fd-type{
+  font-family:'DM Mono',monospace;
+  font-size:9px;
+  letter-spacing:0.18em;
+  padding:3px 7px;
+  border:1px solid rgba(240,235,227,0.3);
+  color:var(--white2);
+}
+#fd-year{
+  font-family:'DM Mono',monospace;
+  font-size:9px;
+  letter-spacing:0.12em;
+  color:var(--white3);
+}
+#fd-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:28px;
+  letter-spacing:0.06em;
+  line-height:1.1;
+  margin-bottom:8px;
+  transition:color .3s;
+}
+#fd-director{
+  font-size:11px;
+  color:var(--white3);
+  margin-bottom:3px;
+  font-family:'DM Mono',monospace;
+}
+#fd-cast{
+  font-size:11px;
+  color:var(--white2);
+  margin-bottom:8px;
+  line-height:1.5;
+  display:-webkit-box;
+  -webkit-line-clamp:1;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+#fd-synopsis{
+  font-size:11.5px;
+  color:var(--white2);
+  line-height:1.65;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+#fd-loc-count{
+  position:absolute;
+  top:14px;right:16px;
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  color:var(--white3);
+  letter-spacing:0.1em;
+}
+#fd-empty{
+  position:relative;
+  z-index:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  height:100%;
+  gap:8px;
+}
+#fd-empty-label{
+  font-family:'DM Mono',monospace;
+  font-size:11px;
+  letter-spacing:0.15em;
+  color:var(--white3);
+}
+
+/* Location list */
+#loc-list{
+  flex:1;
+  overflow-y:auto;
+  scrollbar-width:thin;
+  scrollbar-color:rgba(240,235,227,0.1) transparent;
+}
+#loc-list::-webkit-scrollbar{width:3px}
+#loc-list::-webkit-scrollbar-thumb{background:rgba(240,235,227,0.1)}
+
+#loc-list-header{
+  padding:10px 18px 8px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  background:var(--bg);
+  z-index:10;
+}
+#loc-list-title{
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.18em;
+  color:var(--white3);
+}
+#loc-list-count{
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  color:var(--white3);
+}
+
+.loc-item{
+  display:flex;
+  align-items:flex-start;
+  padding:12px 18px;
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+  transition:background .15s;
+  gap:12px;
+}
+.loc-item:hover{background:rgba(240,235,227,0.03)}
+.loc-item.active{background:rgba(240,235,227,0.05)}
+
+.loc-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:16px;
+  letter-spacing:0.05em;
+  min-width:22px;
+  line-height:1.2;
+  flex-shrink:0;
+  margin-top:1px;
+}
+.loc-body{flex:1;min-width:0}
+.loc-name{
+  font-size:12.5px;
+  font-weight:500;
+  color:var(--white);
+  margin-bottom:3px;
+  line-height:1.35;
+}
+.loc-scene{
+  font-size:11px;
+  color:var(--white3);
+  line-height:1.5;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.loc-drama-tag{
+  font-family:'DM Mono',monospace;
+  font-size:9px;
+  letter-spacing:0.1em;
+  padding:2px 6px;
+  margin-bottom:4px;
+  display:inline-block;
+}
+
+/* Group header for 全部 mode */
+.loc-group-header{
+  padding:10px 18px 8px;
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.15em;
+  color:var(--white3);
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.loc-group-dot{
+  width:8px;height:8px;
+  border-radius:50%;
+  flex-shrink:0;
+}
+
+/* ─── MOBILE ─── */
+@media(max-width:767px){
+  :root{--nav-h:48px}
+
+  #layout{flex-direction:column}
+  #map-panel{
+    height:55vh;
+    flex:none;
+  }
+  #sidebar{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    height:45vh;
+    border-left:none;
+    border-top:1px solid var(--border);
+    position:relative;
+  }
+
+  #poster-strip{height:100px;min-height:100px}
+  .poster-card{width:72px;height:100px}
+  #film-detail{display:none}
+
+  #drag-handle{
+    position:absolute;
+    top:0;left:0;right:0;
+    height:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:ns-resize;
+    z-index:10;
+  }
+  #drag-handle::after{
+    content:'';
+    width:32px;height:3px;
+    background:rgba(240,235,227,0.2);
+    border-radius:2px;
+  }
+
+  #nav-logo span.sub{display:none}
+  .nf-btn{padding:5px 10px;font-size:10px}
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.loc-item{animation:fadeIn .2s ease both}
+
+/* Marker pulse on select */
+@keyframes markerPulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.4)}
+  100%{transform:scale(1)}
+}
+.marker-selected{animation:markerPulse .3s ease}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="/" id="nav-logo">
+    CREWLOG<span class="dot">.</span>
+    <span class="sub">FILM MAP</span>
+  </a>
+  <div id="nav-filters">
+    <button class="nf-btn active" data-filter="all">全部</button>
+    <button class="nf-btn" data-filter="電影">電影</button>
+    <button class="nf-btn" data-filter="影集">影集</button>
+  </div>
+  <a href="/" id="nav-back">返回主頁</a>
+</nav>
+
+<!-- LAYOUT -->
+<div id="layout">
+  <!-- MAP -->
+  <div id="map-panel">
+    <div id="map"></div>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div id="drag-handle"></div>
+
+    <!-- Poster strip -->
+    <div id="poster-strip"></div>
+
+    <!-- Film detail -->
+    <div id="film-detail">
+      <div id="fd-bg"></div>
+      <div id="fd-content">
+        <div id="fd-loc-count"></div>
+        <div id="fd-meta-top">
+          <span id="fd-type"></span>
+          <span id="fd-year"></span>
+        </div>
+        <div id="fd-title"></div>
+        <div id="fd-director"></div>
+        <div id="fd-cast"></div>
+        <div id="fd-synopsis"></div>
+      </div>
+    </div>
+
+    <!-- Location list -->
+    <div id="loc-list">
+      <div id="loc-list-header">
+        <span id="loc-list-title">FILMING LOCATIONS</span>
+        <span id="loc-list-count"></span>
+      </div>
+      <div id="loc-items"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───────────────────────────────────────────────
+const DRAMA_META = {
+  sunshine: { name:'陽光女子合唱團', year:2025, color:'#C8422A', era:'近期', type:'電影', director:'林孝謙', cast:'陳意涵、翁倩玉、鍾欣凌、孫淑媚、苗可麗、安心亞、陳庭妮', synopsis:'一群中年女受刑人，在即將廢除的監獄裡組成合唱團，以歌聲找回自我尊嚴與人生的可能', behind:'林孝謙深入台灣矯正機構田調，與真實受刑人訪談，實地在宜蘭監獄取景', impact:'2025年台灣最受矚目的國片之一，引發社會對受刑人人權與獄政改革的廣泛討論', poster:'https://i.ytimg.com/vi/kGad1FVKnos/hqdefault.jpg' },
+  zero: { name:'零日攻擊', year:2025, color:'#4a9de0', era:'近期', type:'影集', director:'羅景壬（聯合執導）', cast:'連俞涵、莊凱勛、高橋一生、杜汶澤、謝章穎', synopsis:'台灣遭受史無前例的混合戰攻擊，政府、軍方、駭客與媒體在極短時間內應對國家存亡的緊急時刻', behind:'史上第一部獲准在總統府、台北賓館正式取景的台灣電視劇', impact:'播出後引爆台灣社會對戰爭準備、混合戰威脅的自發討論', poster:'https://i.ytimg.com/vi/nGaXThXWTLc/hqdefault.jpg' },
+  imperfect: { name:'不夠善良的我們', year:2024, color:'#c87ec8', era:'近期', type:'影集', director:'徐譽庭', cast:'林依晨、許瑋甯、賀軍翔、柯震東', synopsis:'兩個女人因同一個男人的出現，在中年時刻重新審視自己的選擇、委屈與遺憾', behind:'編劇徐譽庭親自執導，劇本靈感來自現實中對女性「委屈」的長期觀察', impact:'引發台灣女性觀眾極大共鳴，「你不夠善良嗎」成為流行詞', poster:'https://i.ytimg.com/vi/K9Mq9m_Qq2A/hqdefault.jpg' },
+  copycat: { name:'模仿犯', year:2023, color:'#e08020', era:'近期', type:'影集', director:'張榮吉、張亨如', cast:'吳慷仁、柯佳嬿、庹宗華、范少勳、林心如（特別演出）', synopsis:'改編宮部美幸犯罪小說，台灣版將背景移至1990年代台北，一名連續殺人犯與女檢察官的心理對決', behind:'為了重現1990年代台北氛圍，劇組大量蒐集當代服裝、物件', impact:'吳慷仁憑此劇橫掃各大視帝獎項；Netflix播出後創台劇海外收視紀錄', poster:'https://i.ytimg.com/vi/fWATsd9F_Kc/hqdefault.jpg' },
+  someday: { name:'想見你', year:2019, color:'#7ec87e', era:'近期', type:'影集', director:'黃天仁', cast:'柯佳嬿、許光漢、施柏宇、林哲熹', synopsis:'一個現代女生因一首歌和隨身聽穿越至1998年，靈魂互換謎題交織著時空戀愛與謀殺懸案', behind:'製作公司原本預算極小，播出後口碑爆炸追加宣傳費用', impact:'在台灣掀起「時空穿越」熱潮；許光漢因此暴紅', poster:'https://i.ytimg.com/vi/0o3E0IZTqgs/hqdefault.jpg' },
+  detention: { name:'返校', year:2019, color:'#70c0a0', era:'近期', type:'電影', director:'徐漢強', cast:'王淨、曾敬驊、傅孟柏、李銘順', synopsis:'1960年代白色恐怖台灣，一所山中高中的兩名學生在惡夢般的荒校中醒來，逐漸揭開那個時代最深的恐懼', behind:'改編赤燭遊戲同名電玩，金瓜石礦山廢墟成為最重要外景地', impact:'台灣票房逾1.3億；引爆白色恐怖史料的社群大討論', poster:'https://i.ytimg.com/vi/Cq0K2ipTaPM/hqdefault.jpg' },
+  magician: { name:'天橋上的魔術師', year:2021, color:'#60a8e0', era:'近期', type:'影集', director:'楊雅喆', cast:'莊凱勛、楊麗音、朱軒洋、王渝萱、李奕樵', synopsis:'1980年代西門町中華商場，一位神祕的魔術師穿梭在孩子們的生命之間，帶走一些東西，也留下一些無法忘記的魔法', behind:'公視斥資約2億台幣，在林口搭建一比一實際比例的中華商場', impact:'金鐘獎最佳戲劇節目等多項大獎；讓消失的中華商場重現於台灣人記憶中', poster:'https://i.ytimg.com/vi/6kQH_5UdWBI/hqdefault.jpg' },
+  imlove: { name:'我可能不會愛你', year:2011, color:'#f0c050', era:'2010s', type:'影集', director:'瞿友寧', cast:'陳柏霖、林依晨、柯宇綸', synopsis:'30歲的程又青和李大仁是無話不說的死黨，卻在人生轉折點上意識到彼此之間那說不清楚的感情', behind:'編劇徐譽庭以「最懂彼此的朋友」為核心', impact:'「大仁哥」成為台灣女性理想男友代名詞', poster:'https://i.ytimg.com/vi/AeWWFxplRC4/hqdefault.jpg' },
+  thosetimes: { name:'那些年，我們一起追的女孩', year:2011, color:'#ff8fa3', era:'2010s', type:'電影', director:'九把刀（柯景騰）', cast:'柯震東、陳妍希、郝劭文、蔡昌憲、鳳小岳', synopsis:'作者九把刀親身改編的青春回憶，一群高中死黨共同暗戀班上最好的女孩沈佳宜', behind:'九把刀首次執導長片，堅持在彰化精誠中學（自己的母校）拍攝', impact:'台灣票房4.16億；陳妍希成為「國民初戀」', poster:'https://i.ytimg.com/vi/3J6yuyjN5Wg/hqdefault.jpg' },
+  monga: { name:'艋舺', year:2010, color:'#c084d4', era:'2010s', type:'電影', director:'鈕承澤（豆導）', cast:'阮經天、趙又廷、馬如龍、鳳小岳、蔡昌憲', synopsis:'1980年代台北萬華，五個熱血少年在幫派義氣與兄弟情誼中長大，卻逃不過那個時代的命運', behind:'鈕承澤在萬華長大；阮經天為角色剃光頭並研究幫派肢體語言', impact:'台灣票房2.55億；帶動台灣黑幫電影復興浪潮', poster:'https://i.ytimg.com/vi/ztSLNCNCmM0/hqdefault.jpg' },
+  ultimate3k: { name:'終極三國', year:2010, color:'#d4884a', era:'2010s', type:'影集', director:'呂光隆', cast:'吳尊、汪東城、飛輪海、辰亦儒、羅志祥', synopsis:'三國英雄穿越到現代高中，在終極宇宙中展開決戰', behind:'終極系列橫跨多部作品，構建出台灣偶像劇史上最龐大的宇宙觀', impact:'「終極系列」是台灣三立都會台的象徵性製作' },
+  cape7: { name:'海角七號', year:2008, color:'#e8b84b', era:'2000s', type:'電影', director:'魏德聖', cast:'范逸臣、田中千繪、馬如龍、林曉培', synopsis:'台北落魄樂手阿嘉返鄉恆春，接下日本歌手友子演唱會開場任務，同時發現一批60年前日本教師未寄出的情書', behind:'魏德聖將房子抵押貸款才湊到拍攝資金', impact:'票房5.3億，打破台灣電影票房紀錄', poster:'https://i.ytimg.com/vi/wq2IGmNajy8/hqdefault.jpg' },
+  fated: { name:'命中注定我愛你', year:2008, color:'#50c8c8', era:'2000s', type:'影集', director:'陳銘章', cast:'陳喬恩、阮經天、謝祖武', synopsis:'便利貼女孩陳欣怡與精英商人紀存希在郵輪上意外懷孕，展開跌跌撞撞的愛情', behind:'陳喬恩憑欣怡一角成為台劇天后', impact:'創台灣偶像劇收視紀錄；帶動「便利貼女孩」流行語', poster:'https://i.ytimg.com/vi/46ZnoG9f0ls/hqdefault.jpg' },
+  kiss: { name:'惡作劇之吻', year:2005, color:'#e07090', era:'2000s', type:'影集', director:'瞿友寧', cast:'林依晨、鄭元暢', synopsis:'改編日漫，成績墊底的袁湘琴鍥而不捨追求第一名江直樹的愛情故事', behind:'靜宜大學橋樑等成為劇迷朝聖地', impact:'「山洞之吻」成為台劇史上最被模仿的接吻場景', poster:'https://i.ytimg.com/vi/cyH-0Lh4GYw/hqdefault.jpg' },
+  meteor: { name:'流星花園', year:2001, color:'#a080e0', era:'2000s', type:'影集', director:'蔡岳勳', cast:'言承旭、林志穎、周渝民、吳建豪、徐熙媛（大S）', synopsis:'平民女孩杉菜進入貴族學校，與四位帥氣富家子弟F4的愛恨情仇', behind:'原本被電視台擔心沒人看，播出後收視爆炸', impact:'台灣史上最具影響力的偶像劇，帶動整個亞洲偶像劇浪潮', poster:'https://i.ytimg.com/vi/ocTdA8NytIc/hqdefault.jpg' },
+  ultimate1: { name:'終極一班', year:2006, color:'#e8a030', era:'2000s', type:'影集', director:'呂光隆、羅大裕', cast:'王傳一、吳尊、汪東城、辰亦儒、鄭元暢', synopsis:'藍天高中最混亂的班級KO班，捲入校園派系鬥爭與宇宙級陰謀的青春故事', behind:'三立都會台為打造本土長青偶像劇全力押注', impact:'開創台灣偶像劇宇宙觀先河；捧紅吳尊、汪東城等人', poster:'https://i.ytimg.com/vi/y8npWn8CAns/hqdefault.jpg' },
+  hotteacher: { name:'麻辣鮮師', year:1999, color:'#f08040', era:'1990s', type:'影集', director:'吳文堯', cast:'陳嘉桺、方文琳、楊一展、楊謹華、陳喬恩', synopsis:'一位另類的熱血老師空降問題班級，用最不按牌理出牌的方式感化一群放棄自己的學生', behind:'台灣第一部以「問題學生」為主角的校園劇', impact:'許多80年代出生的台灣人視此劇為青春代表作', poster:'https://i.ytimg.com/vi/jL6D7rqk4SQ/hqdefault.jpg' }
+};
+
+const dramaLocations = [
+  { id:'ss1', drama:'sunshine', name:'法務部矯正署宜蘭監獄', scene:'受刑人走廊、操場、圍牆旁合唱送別場景（主要外景）', lat:24.6581, lng:121.6527 },
+  { id:'ss2', drama:'sunshine', name:'新北市立萬里國民中學', scene:'電影中監獄禮堂場景', lat:25.1803, lng:121.6611 },
+  { id:'ss3', drama:'sunshine', name:'台北生技園區多功能廳', scene:'電影結尾大合唱最終演出場景', lat:25.0515, lng:121.6134 },
+  { id:'zd1', drama:'zero', name:'中華民國總統府', scene:'史上首次開放電視劇正式取景', lat:25.0401, lng:121.5122 },
+  { id:'zd2', drama:'zero', name:'台北賓館（舊總督官邸）', scene:'外交接見場景，史上首次開放給電視劇', lat:25.0408, lng:121.5159 },
+  { id:'zd3', drama:'zero', name:'凱達格蘭大道', scene:'緊急應變、群眾集結、軍政決策宣告場景', lat:25.0386, lng:121.5156 },
+  { id:'zd4', drama:'zero', name:'中正紀念堂廣場', scene:'大規模群眾戲、抗議示威場景', lat:25.0341, lng:121.5219 },
+  { id:'zd5', drama:'zero', name:'台北101周邊信義區', scene:'城市遭受攻擊、市民疏散場景', lat:25.0338, lng:121.5645 },
+  { id:'zd6', drama:'zero', name:'台北松山機場軍用區', scene:'軍機緊急起降、戰備場景', lat:25.0697, lng:121.5521 },
+  { id:'imp1', drama:'imperfect', name:'台北大安區樂埔町餐廳', scene:'主角Rebecca的約會餐廳，播出後訂位電話被打爆', lat:25.0278, lng:121.5392 },
+  { id:'imp2', drama:'imperfect', name:'大稻埕碼頭周邊', scene:'多處外景，懷舊台北氛圍', lat:25.0594, lng:121.5099 },
+  { id:'imp3', drama:'imperfect', name:'台北師範大學校園', scene:'主角年輕時代回憶場景', lat:25.0267, lng:121.5295 },
+  { id:'imp4', drama:'imperfect', name:'九份老街', scene:'主角許瑋甯回憶場景', lat:25.1091, lng:121.8443 },
+  { id:'cc1', drama:'copycat', name:'永和南清宮', scene:'阿西（陳博正）經營的宮廟場景', lat:25.0041, lng:121.5163 },
+  { id:'cc2', drama:'copycat', name:'IKON Taipei（ATT 4 FUN）', scene:'劇中「Kink 夜店」，范少勳關鍵戲份', lat:25.0363, lng:121.5672 },
+  { id:'cc3', drama:'copycat', name:'臺灣高等檢察署博愛大樓', scene:'檢察署及法庭場景', lat:25.0448, lng:121.5113 },
+  { id:'cc4', drama:'copycat', name:'坪林廉政研習中心', scene:'監獄、禁閉室場景（牢房原貌保留）', lat:24.9424, lng:121.7103 },
+  { id:'sd1', drama:'someday', name:'台南七股鹽山夕陽堤防', scene:'最關鍵的日落場景，曾亞涵坐在堤防上的經典畫面', lat:23.1467, lng:120.0728 },
+  { id:'sd2', drama:'someday', name:'新北市林口區某高中', scene:'1998年高中校園主場景', lat:25.0789, lng:121.3736 },
+  { id:'sd3', drama:'someday', name:'新北市林口麗林路', scene:'主要角色住宅區外景', lat:25.0737, lng:121.3745 },
+  { id:'sd4', drama:'someday', name:'基隆廢棄隧道', scene:'穿越時空的神秘隧道', lat:25.1285, lng:121.7399 },
+  { id:'dt1', drama:'detention', name:'金瓜石礦山（黃金博物館）', scene:'主要外景地，廢棄礦坑與山中學校場景；本山礦場廢墟氛圍逼真', lat:25.1094, lng:121.8619 },
+  { id:'dt2', drama:'detention', name:'瑞芳猴硐（侯硐礦工文史館）', scene:'1960年代礦工聚落場景，白色恐怖時代背景地', lat:25.0917, lng:121.8258 },
+  { id:'mg1', drama:'magician', name:'林口攝影棚（中華商場復原場景）', scene:'整部劇核心場景，1:1還原1992年拆除的西門町中華商場', lat:25.0791, lng:121.3731 },
+  { id:'mg2', drama:'magician', name:'台北西門町紅樓戲院', scene:'商場外圍場景取景地', lat:25.0432, lng:121.5047 },
+  { id:'mg3', drama:'magician', name:'台北萬華龍山寺周邊', scene:'1980年代萬華日常氛圍場景', lat:25.0374, lng:121.4997 },
+  { id:'il1', drama:'imlove', name:'台北大稻埕碼頭', scene:'男女主角的多處戶外約會場景', lat:25.0594, lng:121.5099 },
+  { id:'il2', drama:'imlove', name:'台北東區某咖啡館', scene:'程又青與李大仁的聚面場景', lat:25.0418, lng:121.5569 },
+  { id:'tt1', drama:'thosetimes', name:'彰化精誠中學', scene:'柯景騰與沈佳宜的青春主場景，九把刀母校', lat:24.0978, lng:120.5373 },
+  { id:'tt2', drama:'thosetimes', name:'彰化市區老街', scene:'主角追女孩騎車場景', lat:24.0984, lng:120.5379 },
+  { id:'tt3', drama:'thosetimes', name:'台南老街某場景', scene:'陳妍希外景場景', lat:22.9954, lng:120.2049 },
+  { id:'mn1', drama:'monga', name:'龍山寺', scene:'蚊子（趙又廷）求神、太子幫儀式、老大日常場景，全劇精神核心地點', lat:25.0374, lng:121.4997 },
+  { id:'mn2', drama:'monga', name:'剝皮寮歷史街區', scene:'1980年代萬華街頭幫派日常場景，老街道追逐械鬥', lat:25.0365, lng:121.5003 },
+  { id:'mn3', drama:'monga', name:'萬華林家古厝', scene:'太子幫老大宇角頭總部場景', lat:25.0369, lng:121.4988 },
+  { id:'u3k1', drama:'ultimate3k', name:'台中亞洲大學', scene:'終極三國主要校園場景，開放校方配合', lat:24.0682, lng:120.6917 },
+  { id:'u3k2', drama:'ultimate3k', name:'台中某高中校園', scene:'校園打鬥場景', lat:24.1469, lng:120.6839 },
+  { id:'c71', drama:'cape7', name:'恆春古城牆', scene:'阿嘉的家鄉，貫穿全劇的主要場景', lat:22.0053, lng:120.7419 },
+  { id:'c72', drama:'cape7', name:'恆春後壁湖海邊', scene:'演唱會場景取景地', lat:21.9569, lng:120.7525 },
+  { id:'c73', drama:'cape7', name:'恆春鎮公所廣場', scene:'貫穿全劇的鎮內活動場景', lat:22.0017, lng:120.7456 },
+  { id:'ft1', drama:'fated', name:'宜蘭冬山河親水公園', scene:'男女主角重要的愛情轉折場景，播出後成為戀人必訪景點', lat:24.6753, lng:121.7698 },
+  { id:'ft2', drama:'fated', name:'宜蘭薑母島', scene:'劇情重要外景地，浪漫場景', lat:24.7564, lng:121.7541 },
+  { id:'ft3', drama:'fated', name:'台北某便利商店外景', scene:'便利貼女孩日常生活場景', lat:25.0621, lng:121.5246 },
+  { id:'ks1', drama:'kiss', name:'靜宜大學橋樑', scene:'男女主角「山洞之吻」經典場景，台劇史上最被模仿的吻戲地點', lat:24.2566, lng:120.6138 },
+  { id:'ks2', drama:'kiss', name:'陽明山某地下道', scene:'惡作劇之吻另一個知名接吻場景', lat:25.1644, lng:121.5596 },
+  { id:'ks3', drama:'kiss', name:'某高中校園（劇中背景）', scene:'主角就讀的中學場景', lat:25.0478, lng:121.5139 },
+  { id:'mt1', drama:'meteor', name:'國立中正大學', scene:'劇中英德學校場景，F4的貴族學校', lat:23.5853, lng:120.4681 },
+  { id:'u11', drama:'ultimate1', name:'台北景新街附近', scene:'藍天高中部分外景', lat:24.9929, lng:121.5669 },
+  { id:'u12', drama:'ultimate1', name:'台北某攝影棚搭景', scene:'KO班教室及校內場景', lat:25.0478, lng:121.5145 },
+  { id:'u13', drama:'ultimate1', name:'台北縣新店地區', scene:'多處戶外動作場景', lat:24.9651, lng:121.5399 },
+  { id:'ht1', drama:'hotteacher', name:'台北景新街某高中', scene:'麻辣鮮師校園主場景', lat:24.9935, lng:121.5675 }
+];
+
+// ─── STATE ───────────────────────────────────────────────
+let selectedDrama = 'sunshine';
+let typeFilter = 'all'; // 'all', '電影', '影集'
+let map, markersLayer = {};
+let allMarkersGroup;
+
+// ─── MAP INIT ───────────────────────────────────────────
+function initMap() {
+  map = L.map('map', {
+    center: [23.5, 120.97],
+    zoom: 7,
+    zoomControl: true,
+    attributionControl: true
+  });
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19
+  }).addTo(map);
+
+  // Build all markers
+  buildMarkers();
+  // Initial render
+  selectDrama('sunshine', false);
+}
+
+// ─── BUILD MARKERS ──────────────────────────────────────
+function buildMarkers() {
+  // Remove all existing markers
+  Object.values(markersLayer).forEach(m => map.removeLayer(m));
+  markersLayer = {};
+
+  const visibleDramas = getVisibleDramas();
+
+  dramaLocations.forEach(loc => {
+    if (!visibleDramas.includes(loc.drama)) return;
+    const meta = DRAMA_META[loc.drama];
+    if (!meta) return;
+
+    const icon = L.divIcon({
+      className: '',
+      html: `<div style="
+        width:12px;height:12px;
+        background:${meta.color};
+        border-radius:50%;
+        border:2px solid rgba(255,255,255,0.3);
+        box-shadow:0 0 8px ${meta.color}88;
+        cursor:pointer;
+        transition:transform .15s;
+      "></div>`,
+      iconSize: [12, 12],
+      iconAnchor: [6, 6]
+    });
+
+    const marker = L.marker([loc.lat, loc.lng], { icon })
+      .addTo(map)
+      .on('click', () => {
+        selectDrama(loc.drama, true);
+        highlightLocItem(loc.id);
+        showMarkerPopup(marker, loc, meta);
+      });
+
+    marker._locId = loc.id;
+    marker._dramaKey = loc.drama;
+    markersLayer[loc.id] = marker;
+  });
+}
+
+function showMarkerPopup(marker, loc, meta) {
+  const popup = L.popup({ closeButton: true, offset: [0, -6], maxWidth: 240 })
+    .setLatLng([loc.lat, loc.lng])
+    .setContent(`
+      <div class="map-popup">
+        <div class="map-popup-drama" style="color:${meta.color}">${meta.name} · ${meta.year}</div>
+        <div class="map-popup-name">${loc.name}</div>
+        <div class="map-popup-scene">${loc.scene}</div>
+      </div>
+    `)
+    .openOn(map);
+}
+
+// ─── FILTER ─────────────────────────────────────────────
+function getVisibleDramas() {
+  if (typeFilter === 'all') return Object.keys(DRAMA_META);
+  return Object.keys(DRAMA_META).filter(k => DRAMA_META[k].type === typeFilter);
+}
+
+function applyTypeFilter(newFilter) {
+  typeFilter = newFilter;
+
+  // Update nav filter buttons
+  document.querySelectorAll('.nf-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.filter === typeFilter);
+  });
+
+  // Rebuild markers
+  buildMarkers();
+
+  // Update poster strip
+  renderPosterStrip();
+
+  // Re-select or reset
+  const visible = getVisibleDramas();
+  if (visible.includes(selectedDrama)) {
+    selectDrama(selectedDrama, false);
+  } else if (visible.length > 0) {
+    selectDrama(visible[0], false);
+  }
+}
+
+// ─── SELECT DRAMA ────────────────────────────────────────
+function selectDrama(key, flyToFirst) {
+  selectedDrama = key;
+
+  // Update poster strip selection
+  document.querySelectorAll('.poster-card').forEach(el => {
+    el.classList.toggle('selected', el.dataset.key === key);
+    if (el.dataset.key === key) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+  });
+
+  // Update film detail panel
+  renderFilmDetail(key);
+
+  // Update location list
+  renderLocList(key);
+
+  // Fly map to first location
+  if (flyToFirst) {
+    const locs = dramaLocations.filter(l => l.drama === key);
+    if (locs.length > 0) {
+      map.flyTo([locs[0].lat, locs[0].lng], 12, { duration: 1.2 });
+    }
+  }
+
+  // Highlight markers
+  Object.values(markersLayer).forEach(m => {
+    const el = m.getElement();
+    if (!el) return;
+    const dot = el.querySelector('div');
+    if (!dot) return;
+    if (m._dramaKey === key) {
+      dot.style.width = '14px';
+      dot.style.height = '14px';
+      dot.style.border = '2px solid rgba(255,255,255,0.7)';
+      dot.style.zIndex = '1000';
+    } else {
+      dot.style.width = '10px';
+      dot.style.height = '10px';
+      dot.style.border = '2px solid rgba(255,255,255,0.15)';
+      dot.style.opacity = '0.5';
+    }
+  });
+}
+
+// ─── RENDER POSTER STRIP ────────────────────────────────
+function renderPosterStrip() {
+  const strip = document.getElementById('poster-strip');
+  strip.innerHTML = '';
+
+  const visible = getVisibleDramas();
+
+  visible.forEach(key => {
+    const meta = DRAMA_META[key];
+    if (!meta) return;
+    const locCount = dramaLocations.filter(l => l.drama === key).length;
+
+    const card = document.createElement('div');
+    card.className = 'poster-card' + (key === selectedDrama ? ' selected' : '');
+    card.dataset.key = key;
+
+    const bgStyle = meta.poster
+      ? `background-image:url('${meta.poster}');background-color:${meta.color}33`
+      : `background:linear-gradient(135deg,${meta.color}66,${meta.color}22)`;
+
+    card.innerHTML = `
+      <div class="pc-bg" style="${bgStyle}"></div>
+      <div class="pc-overlay"></div>
+      <div class="pc-type-badge">${meta.type}</div>
+      <div class="pc-count" style="color:${meta.color}">${locCount}</div>
+      <div class="pc-info">
+        <div class="pc-name">${meta.name}</div>
+        <div class="pc-year">${meta.year}</div>
+      </div>
+      <div class="pc-accent" style="background:${meta.color}"></div>
+    `;
+
+    card.addEventListener('click', () => selectDrama(key, true));
+    strip.appendChild(card);
+  });
+}
+
+// ─── RENDER FILM DETAIL ──────────────────────────────────
+function renderFilmDetail(key) {
+  const meta = DRAMA_META[key];
+  if (!meta) return;
+
+  const locs = dramaLocations.filter(l => l.drama === key);
+
+  const fdBg = document.getElementById('fd-bg');
+  if (meta.poster) {
+    fdBg.style.backgroundImage = `url('${meta.poster}')`;
+  } else {
+    fdBg.style.backgroundImage = `linear-gradient(135deg, ${meta.color}55, transparent)`;
+  }
+
+  document.getElementById('fd-title').textContent = meta.name;
+  document.getElementById('fd-title').style.color = meta.color;
+  document.getElementById('fd-type').textContent = meta.type;
+  document.getElementById('fd-year').textContent = meta.year;
+  document.getElementById('fd-director').textContent = '導演：' + meta.director;
+  document.getElementById('fd-cast').textContent = meta.cast;
+  document.getElementById('fd-synopsis').textContent = meta.synopsis;
+  document.getElementById('fd-loc-count').textContent = locs.length + ' 個取景地';
+}
+
+// ─── RENDER LOCATION LIST ────────────────────────────────
+function renderLocList(key) {
+  const container = document.getElementById('loc-items');
+  const header = document.getElementById('loc-list-title');
+  const countEl = document.getElementById('loc-list-count');
+  container.innerHTML = '';
+
+  const locs = dramaLocations.filter(l => l.drama === key);
+  const meta = DRAMA_META[key];
+
+  header.textContent = 'FILMING LOCATIONS';
+  countEl.textContent = locs.length + ' 筆';
+
+  locs.forEach((loc, i) => {
+    const item = document.createElement('div');
+    item.className = 'loc-item';
+    item.id = 'loc-' + loc.id;
+    item.style.animationDelay = (i * 0.04) + 's';
+
+    item.innerHTML = `
+      <div class="loc-num" style="color:${meta.color}">${String(i + 1).padStart(2, '0')}</div>
+      <div class="loc-body">
+        <div class="loc-name">${loc.name}</div>
+        <div class="loc-scene">${loc.scene}</div>
+      </div>
+    `;
+
+    item.addEventListener('click', () => {
+      map.flyTo([loc.lat, loc.lng], 14, { duration: 1.0 });
+      highlightLocItem(loc.id);
+      const marker = markersLayer[loc.id];
+      if (marker) showMarkerPopup(marker, loc, meta);
+    });
+
+    container.appendChild(item);
+  });
+}
+
+function highlightLocItem(locId) {
+  document.querySelectorAll('.loc-item').forEach(el => {
+    el.classList.toggle('active', el.id === 'loc-' + locId);
+  });
+  const el = document.getElementById('loc-' + locId);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ─── NAV FILTER BUTTONS ──────────────────────────────────
+document.querySelectorAll('.nf-btn').forEach(btn => {
+  btn.addEventListener('click', () => applyTypeFilter(btn.dataset.filter));
+});
+
+// ─── INIT ────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderPosterStrip();
+  initMap();
+});
+</script>
+</body>
+</html>
