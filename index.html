@@ -1194,6 +1194,51 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
   .role-grid{grid-template-columns:1fr}
   .cl-grid{grid-template-columns:1fr}
 }
+/* ── Film Detail Modal ── */
+#film-modal-overlay{position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.75);opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(10px)}
+#film-modal-overlay.open{opacity:1;pointer-events:all}
+#film-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-48%) scale(.96);z-index:3001;background:#111;width:min(740px,94vw);max-height:88svh;overflow-y:auto;border:1px solid rgba(255,255,255,.07);box-shadow:0 24px 80px rgba(0,0,0,.9);opacity:0;pointer-events:none;transition:all .35s cubic-bezier(.16,1,.3,1)}
+#film-modal.open{opacity:1;pointer-events:all;transform:translate(-50%,-50%) scale(1)}
+#film-modal-close{position:absolute;top:14px;right:16px;background:rgba(10,10,10,.6);border:1px solid rgba(255,255,255,.1);color:rgba(240,235,227,.5);font-size:18px;cursor:pointer;line-height:1;padding:5px 10px;z-index:10;transition:color .2s,border-color .2s}
+#film-modal-close:hover{color:var(--white);border-color:rgba(255,255,255,.3)}
+.fm-hero{position:relative;width:100%;aspect-ratio:21/9;overflow:hidden;flex-shrink:0}
+.fm-hero-bg{position:absolute;inset:0;background-size:cover;background-position:center}
+.fm-hero-grad{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,rgba(10,10,10,.5) 40%,rgba(10,10,10,.98) 100%)}
+.fm-hero-inner{position:absolute;bottom:0;left:0;right:0;padding:28px 32px 24px}
+.fm-hero-badges{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.fm-type-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;color:var(--white);background:var(--red);padding:3px 8px;text-transform:uppercase}
+.fm-era-badge{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;color:rgba(240,235,227,.4);border:1px solid rgba(240,235,227,.15);padding:2px 7px}
+.fm-hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,5vw,52px);letter-spacing:.04em;line-height:1;margin-bottom:6px}
+.fm-hero-en{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.18em;color:rgba(240,235,227,.35);text-transform:uppercase}
+.fm-body{padding:24px 32px 40px}
+.fm-meta-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 24px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.fm-meta-item{display:flex;flex-direction:column;gap:3px}
+.fm-meta-k{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;color:rgba(200,66,42,.6);text-transform:uppercase}
+.fm-meta-v{font-family:'Noto Sans TC',sans-serif;font-size:13px;color:rgba(240,235,227,.8);line-height:1.5}
+.fm-section{margin-bottom:22px}
+.fm-section-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;color:rgba(240,235,227,.25);text-transform:uppercase;margin-bottom:10px}
+.fm-text{font-family:'Noto Sans TC',sans-serif;font-size:14px;color:rgba(240,235,227,.7);line-height:1.85;letter-spacing:.04em}
+.fm-locs-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);margin-top:12px}
+.fm-loc-item{background:var(--bg);padding:14px 16px;cursor:pointer;transition:background .2s}
+.fm-loc-item:hover{background:#1a1a1a}
+.fm-loc-num{font-family:'DM Mono',monospace;font-size:9px;color:rgba(200,66,42,.4);margin-bottom:5px}
+.fm-loc-name{font-family:'Noto Sans TC',sans-serif;font-size:13px;color:rgba(240,235,227,.8);margin-bottom:4px;font-weight:500}
+.fm-loc-scene{font-family:'Noto Sans TC',sans-serif;font-size:11px;color:rgba(240,235,227,.4);line-height:1.5}
+.fm-map-btn{display:block;text-align:center;margin-top:20px;padding:12px;border:1px solid rgba(200,66,42,.35);color:rgba(200,66,42,.8);font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.15em;text-decoration:none;transition:all .2s}
+.fm-map-btn:hover{background:rgba(200,66,42,.1);border-color:rgba(200,66,42,.6);color:var(--red)}
+/* film info links in location cards */
+.dloc-film-link{display:inline-block;margin-top:6px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:rgba(200,66,42,.6);cursor:pointer;border-bottom:1px solid rgba(200,66,42,.25);line-height:1.4;transition:color .2s}
+.dloc-film-link:hover{color:var(--red)}
+/* film info link in popup */
+.dm-popup-film-link{display:block;margin-top:8px;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.12em;color:rgba(200,66,42,.7);cursor:pointer;text-decoration:none;transition:color .2s}
+.dm-popup-film-link:hover{color:var(--red)}
+@media(max-width:600px){
+  .fm-hero{aspect-ratio:16/9}
+  .fm-hero-inner{padding:20px}
+  .fm-body{padding:20px}
+  .fm-meta-grid{grid-template-columns:1fr}
+  .fm-locs-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
@@ -2660,16 +2705,16 @@ const DRAMA_META = {
   // ── 近期 ──
   sunshine: {
     name:'陽光女子合唱團', year:2025, color:'#C8422A', era:'近期', type:'電影',
-    director:'鄭有傑',
-    cast:'謝盈萱、林美秀、徐若瑄、温貞菱',
+    director:'林孝謙',
+    cast:'陳意涵、翁倩玉、鍾欣凌、孫淑媚、苗可麗、安心亞、陳庭妮',
     synopsis:'一群中年女受刑人，在即將廢除的監獄裡組成合唱團，以歌聲找回自我尊嚴與人生的可能',
     behind:'鄭有傑深入台灣矯正機構田調數年，與真實受刑人訪談，真正在宜蘭監獄取景；謝盈萱為備戰角色學習真聲合唱達一年',
     impact:'2025年台灣最受矚目的國片之一，引發社會對受刑人人權與獄政改革的廣泛討論，映後座談屢屢爆滿'
   },
   zero: {
     name:'零日攻擊', year:2025, color:'#4a9de0', era:'近期', type:'影集',
-    director:'林君陽',
-    cast:'吳慷仁、林心如、湯志偉、謝章穎',
+    director:'羅景壬（聯合執導）',
+    cast:'連俞涵、莊凱勛、高橋一生、杜汶澤、謝章穎',
     synopsis:'台灣遭受史無前例的混合戰攻擊，政府、軍方、駭客與媒體在極短時間內應對國家存亡的緊急時刻',
     behind:'史上第一部獲准在總統府、台北賓館正式取景的台灣電視劇；劇本歷時三年，廣泛諮詢國安、資安與軍事專家',
     impact:'播出後引爆台灣社會對戰爭準備、混合戰威脅的自發討論；Netflix全球上架，讓台海議題觸及國際觀眾'
@@ -2677,15 +2722,15 @@ const DRAMA_META = {
   imperfect: {
     name:'不夠善良的我們', year:2024, color:'#c87ec8', era:'近期', type:'影集',
     director:'徐譽庭',
-    cast:'林依晨、許瑋甯、賀軍翔、柯叔元',
+    cast:'林依晨、許瑋甯、賀軍翔、柯震東',
     synopsis:'兩個女人因同一個男人的出現，在中年時刻重新審視自己的選擇、委屈與遺憾',
     behind:'編劇徐譽庭親自執導，劇本靈感來自現實中對女性「委屈」的長期觀察；樂埔町餐廳配合拍攝後單日訂位電話被打爆',
     impact:'引發台灣女性觀眾極大共鳴，「你不夠善良嗎」成為流行詞；中年女性情感與婚姻議題成為社群討論核心'
   },
   copycat: {
     name:'模仿犯', year:2023, color:'#e08020', era:'近期', type:'影集',
-    cast:'吳慷仁、江宜蓉、柯叔元、陳博正、范少勳',
-    director:'楊哲銘',
+    cast:'吳慷仁、柯佳嬿、庹宗華、范少勳、林心如（特別演出）',
+    director:'張榮吉、張亨如',
     synopsis:'改編宮部美幸犯罪小說，台灣版將背景移至1990年代台北，一名連續殺人犯與女檢察官的心理對決',
     behind:'為了重現1990年代台北氛圍，劇組大量蒐集當代服裝、物件；范少勳飾演的反派被認為是台劇史上造型最完整的殺人犯',
     impact:'吳慷仁憑此劇橫掃各大視帝獎項；引發觀眾對犯罪心理學與司法制度的濃厚興趣；Netflix播出後創台劇海外收視紀錄'
@@ -2899,7 +2944,10 @@ function makePopup(loc){
       ${meta.director ? `<div class="dm-popup-row"><span class="dm-popup-key">導演</span><span class="dm-popup-val">${meta.director}</span></div>` : ''}
       ${meta.cast ? `<div class="dm-popup-row"><span class="dm-popup-key">主演</span><span class="dm-popup-val">${meta.cast.split('、').slice(0,3).join('、')}</span></div>` : ''}
       ${meta.behind ? `<div class="dm-popup-behind">${meta.behind.substring(0,80)}…</div>` : ''}
-      <a class="dm-popup-nav" href="${mapsUrl}" target="_blank">📍 導航前往</a>
+      <div style="display:flex;gap:10px;align-items:center;margin-top:10px">
+        <a class="dm-popup-nav" href="${mapsUrl}" target="_blank" style="margin-top:0;flex:1">📍 導航前往</a>
+        <span class="dm-popup-film-link" onclick="openFilmModal('${loc.drama}')">電影資訊 →</span>
+      </div>
     </div>
   </div>`;
 }
@@ -2940,6 +2988,7 @@ function renderLocCards(filter, showAll){
       <div class="dloc-drama" style="color:${meta.color}">${meta.name}</div>
       <div class="dloc-name">${l.name}</div>
       <div class="dloc-scene">${l.scene}</div>
+      <span class="dloc-film-link" onclick="event.stopPropagation();openFilmModal('${l.drama}')">看電影完整資訊 →</span>
     </div>`;
   }).join('');
   const remaining = locs.length - LIMIT;
@@ -3735,6 +3784,13 @@ window.addEventListener('scroll', updateNavSpy, {passive:true});
 </script>
 
 <!-- MAP DRAWER (mobile only) -->
+<!-- Film Detail Modal -->
+<div id="film-modal-overlay" onclick="closeFilmModal()"></div>
+<div id="film-modal">
+  <button id="film-modal-close" onclick="closeFilmModal()">✕</button>
+  <div id="film-modal-content"></div>
+</div>
+
 <div id="map-drawer-overlay" onclick="closeMapDrawer()"></div>
 <div id="map-drawer">
   <button id="map-drawer-close" onclick="closeMapDrawer()">✕</button>
@@ -3836,6 +3892,63 @@ function toggleAIChat(){
   const isOpen=panel.classList.contains('open');
   panel.classList.toggle('open',!isOpen);
   fab.classList.toggle('open',!isOpen);
+}
+
+// Film Detail Modal
+function openFilmModal(dramaKey){
+  const meta = DRAMA_META[dramaKey];
+  if(!meta) return;
+  const locs = dramaLocations.filter(l=>l.drama===dramaKey);
+  const heroStyle = meta.poster
+    ? `background-image:url('${meta.poster}')`
+    : `background:linear-gradient(135deg,${meta.color}55 0%,${meta.color}18 40%,#0d0d0d 100%)`;
+  const locsHtml = locs.length ? `
+    <div class="fm-section">
+      <div class="fm-section-label">台灣取景地點（${locs.length} 處）</div>
+      <div class="fm-locs-grid">
+        ${locs.map((l,i)=>`
+          <div class="fm-loc-item" onclick="closeFilmModal();switchFilter('${dramaKey}');setTimeout(()=>focusLoc('${l.id}'),400)">
+            <div class="fm-loc-num">${String(i+1).padStart(2,'0')}</div>
+            <div class="fm-loc-name">${l.name}</div>
+            <div class="fm-loc-scene">${l.scene}</div>
+          </div>`).join('')}
+      </div>
+      <a class="fm-map-btn" href="#drama-map" onclick="closeFilmModal();setTimeout(()=>switchFilter('${dramaKey}'),200)">在地圖上查看全部地點 →</a>
+    </div>` : '';
+  document.getElementById('film-modal-content').innerHTML = `
+    <div class="fm-hero">
+      <div class="fm-hero-bg" style="${heroStyle}"></div>
+      <div class="fm-hero-grad"></div>
+      <div class="fm-hero-inner">
+        <div class="fm-hero-badges">
+          <span class="fm-type-badge">${meta.type}</span>
+          <span class="fm-era-badge">${meta.era}</span>
+        </div>
+        <div class="fm-hero-title" style="color:${meta.color}">${meta.name}</div>
+        <div class="fm-hero-en">${meta.year}</div>
+      </div>
+    </div>
+    <div class="fm-body">
+      <div class="fm-meta-grid">
+        ${meta.director ? `<div class="fm-meta-item"><span class="fm-meta-k">導演</span><span class="fm-meta-v">${meta.director}</span></div>` : ''}
+        ${meta.cast ? `<div class="fm-meta-item"><span class="fm-meta-k">主演</span><span class="fm-meta-v">${meta.cast}</span></div>` : ''}
+        <div class="fm-meta-item"><span class="fm-meta-k">年份</span><span class="fm-meta-v">${meta.year}</span></div>
+        <div class="fm-meta-item"><span class="fm-meta-k">類型</span><span class="fm-meta-v">${meta.type}</span></div>
+      </div>
+      ${meta.synopsis ? `<div class="fm-section"><div class="fm-section-label">劇情簡介</div><div class="fm-text">${meta.synopsis}</div></div>` : ''}
+      ${meta.behind ? `<div class="fm-section"><div class="fm-section-label">幕後故事</div><div class="fm-text">${meta.behind}</div></div>` : ''}
+      ${meta.impact ? `<div class="fm-section"><div class="fm-section-label">文化影響</div><div class="fm-text">${meta.impact}</div></div>` : ''}
+      ${locsHtml}
+    </div>
+  `;
+  document.getElementById('film-modal-overlay').classList.add('open');
+  document.getElementById('film-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeFilmModal(){
+  document.getElementById('film-modal-overlay').classList.remove('open');
+  document.getElementById('film-modal').classList.remove('open');
+  document.body.style.overflow = '';
 }
 </script>
 </body>
