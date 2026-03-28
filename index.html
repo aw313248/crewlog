@@ -1068,6 +1068,32 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
   .ins-result-grid{gap:1px}
 }
 
+/* ── VETERAN VOICES ── */
+.vv-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
+.vv-card{background:var(--bg);padding:36px 32px}
+.vv-card-header{display:flex;align-items:center;gap:16px;margin-bottom:28px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.vv-avatar{width:52px;height:52px;border-radius:50%;background:rgba(200,66,42,.12);border:1px solid rgba(200,66,42,.25);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.vv-name{font-family:'Noto Sans TC',sans-serif;font-size:16px;font-weight:700;color:var(--white);margin-bottom:3px}
+.vv-role-tag{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.18em;color:var(--red);text-transform:uppercase;display:block;margin-bottom:2px}
+.vv-years{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.1em;color:rgba(240,235,227,.28)}
+.vv-draft-badge{display:inline-block;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.14em;padding:3px 9px;border:1px solid rgba(240,235,227,.12);color:rgba(240,235,227,.28);text-transform:uppercase;margin-bottom:22px}
+.vv-qa{display:flex;flex-direction:column;gap:22px}
+.vv-item{border-left:1px solid var(--border);padding-left:16px}
+.vv-q{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;color:rgba(200,66,42,.7);text-transform:uppercase;margin-bottom:7px}
+.vv-a{font-family:'Noto Sans TC',sans-serif;font-size:14px;color:rgba(240,235,227,.72);line-height:1.85}
+.vv-invite-card{background:rgba(200,66,42,.03);border:1px dashed rgba(200,66,42,.2);padding:36px 32px;display:flex;flex-direction:column;justify-content:center;gap:12px}
+.vv-invite-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;color:rgba(200,66,42,.45);text-transform:uppercase}
+.vv-invite-zh{font-family:'Noto Sans TC',sans-serif;font-size:18px;font-weight:700;color:rgba(240,235,227,.45);line-height:1.5}
+.vv-invite-zh em{color:rgba(200,66,42,.65);font-style:normal}
+.vv-invite-desc{font-family:'Noto Sans TC',sans-serif;font-size:13px;color:rgba(240,235,227,.3);line-height:1.7}
+/* vendor upgrade */
+.ven-coming{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:40px 24px;border:1px dashed rgba(240,235,227,.1);cursor:pointer;transition:background .2s;text-align:center}
+.ven-coming:hover{background:rgba(240,235,227,.02)}
+.ven-coming-icon{font-size:22px;opacity:.25}
+.ven-coming-zh{font-family:'Noto Sans TC',sans-serif;font-size:13px;color:rgba(240,235,227,.3);font-weight:500}
+.ven-coming-en{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.14em;color:rgba(240,235,227,.18);text-transform:uppercase}
+.vbadge.vb-sample{background:rgba(240,235,227,.06);color:rgba(240,235,227,.3);border-color:rgba(240,235,227,.12)}
+@media(max-width:768px){.vv-grid{grid-template-columns:1fr}}
 /* ── ROLE EXPLORER ── */
 .role-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border)}
 .role-card{background:var(--bg);padding:32px 28px 28px;cursor:pointer;transition:background .2s;position:relative;display:flex;flex-direction:column;gap:0}
@@ -1616,6 +1642,65 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
   </div>
 </div>
 
+<!-- VETERAN VOICES -->
+<hr class="div">
+<div class="wrap" id="veterans">
+  <div class="sec">
+    <div class="s-head a-left">
+      <div>
+        <div class="s-label">前輩訪談 · Veteran Voices</div>
+        <div class="s-en" style="font-family:'Noto Sans TC',sans-serif;font-size:clamp(32px,5vw,64px);font-weight:700;letter-spacing:-.01em;line-height:1.1">業界的話<br><span style="color:var(--red)">我們替你問</span></div>
+        <div class="s-zh">真正在現場的人，說真正有用的話。不是雜誌訪問，是劇組人對劇組人說的那種。</div>
+      </div>
+    </div>
+
+    <div class="vv-grid a-stagger">
+      <!-- 維陽訪談（示範稿，待正式訪談後更新）-->
+      <div class="vv-card">
+        <span class="vv-draft-badge">SAMPLE INTERVIEW · 示範稿</span>
+        <div class="vv-card-header">
+          <div class="vv-avatar">💡</div>
+          <div>
+            <div class="vv-name">維陽（蔡明熹）</div>
+            <span class="vv-role-tag">燈光師 · Gaffer</span>
+            <span class="vv-years">朝陽科技大學傳播系 · 現役</span>
+          </div>
+        </div>
+        <div class="vv-qa">
+          <div class="vv-item">
+            <div class="vv-q">你是怎麼進入燈光這行的？</div>
+            <div class="vv-a">其實一開始是因為喜歡攝影，覺得光有它自己的語言。學校拍片的時候我開始幫燈光組跑腿，漸漸發現怎麼打光比按快門更有趣。燈光是比較少人關注的職組，但它幾乎決定了整個畫面的情緒。</div>
+          </div>
+          <div class="vv-item">
+            <div class="vv-q">現場最難的事情是什麼？</div>
+            <div class="vv-a">時間壓力。每一個燈位都要在 DP 說「好，來」之前架好。你沒有很多時間去思考，你要靠經驗和手感。而且每個拍攝環境都不一樣——室內、戶外、工廠、舊公寓——你要快速判斷現有光源，再決定要補什麼、壓什麼。</div>
+          </div>
+          <div class="vv-item">
+            <div class="vv-q">給想入行燈光的學生一句話</div>
+            <div class="vv-a">先學會安全用電。很多人覺得燈光很迷人、很有藝術感，但電不是藝術，電會傷人。基礎沒打好，你連現場的資格都沒有。等你安全了，再來談光的語言。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 邀請入口卡 -->
+      <div class="vv-invite-card">
+        <div class="vv-invite-label">NEXT INTERVIEW · 下一個是誰</div>
+        <div class="vv-invite-zh">你有<em> 10 年</em>的現場<br>我們有 5 個問題</div>
+        <div class="vv-invite-desc">CREWLOG 正在邀請各職組的真實從業者分享工作經驗。格式輕鬆，5 題文字回覆，20-30 分鐘完成。署名或匿名皆可。</div>
+        <button class="btn-r" style="margin-top:8px;font-size:10px;padding:12px 24px" onclick="showJoinModal()">我想接受訪談 →</button>
+      </div>
+    </div>
+
+    <div class="cta-bar a-up" style="margin-top:1px">
+      <div class="cta-bar-text">
+        <span class="cta-en">Every veteran was once a student who stayed.</span>
+        <span class="cta-zh">你說的那句話，可能是某個學生決定留在這行的理由。</span>
+      </div>
+      <button class="btn-r" onclick="showJoinModal()">成為下一位受訪者</button>
+    </div>
+  </div>
+</div>
+
 <!-- VENDORS -->
 <hr class="div">
 <div class="wrap" id="vendors">
@@ -1630,44 +1715,37 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
     </div>
 
     <div class="v-grid a-wipe">
-      <div class="ven">
+      <div class="ven" style="opacity:.55">
         <div class="ven-top">
           <div class="ven-icon">🍱</div>
-          <span class="vbadge vb-ok">Verified</span>
+          <span class="vbadge" style="border-color:rgba(240,235,227,.2);color:rgba(240,235,227,.4);font-size:9px;letter-spacing:.12em">招募驗證中</span>
         </div>
-        <div class="ven-zh">好味外燴便當</div>
-        <div class="ven-en">Haowei Catering</div>
-        <div class="ven-cat">片場外燴 · 大型製作 · 學生優惠</div>
+        <div class="ven-zh">外燴便當廠商</div>
+        <div class="ven-en">On-set Catering</div>
+        <div class="ven-cat">正在聯繫真實廠商中 · 片場外燴 · 學生製作</div>
         <div class="ven-foot">
-          <span class="ven-loc">台中</span>
+          <span class="ven-loc">台中 / 全台</span>
           <span class="ven-type">外燴便當</span>
         </div>
       </div>
-      <div class="ven">
+      <div class="ven" style="opacity:.55">
         <div class="ven-top">
           <div class="ven-icon">🎥</div>
-          <span class="vbadge vb-ok">Verified</span>
+          <span class="vbadge" style="border-color:rgba(240,235,227,.2);color:rgba(240,235,227,.4);font-size:9px;letter-spacing:.12em">招募驗證中</span>
         </div>
-        <div class="ven-zh">光影器材租借</div>
-        <div class="ven-en">Guangying Equipment Rental</div>
-        <div class="ven-cat">Sony / ARRI / DJI · 學生優惠 · 操作說明</div>
+        <div class="ven-zh">器材租借廠商</div>
+        <div class="ven-en">Equipment Rental</div>
+        <div class="ven-cat">正在聯繫真實廠商中 · Sony / ARRI / DJI · 台灣在地</div>
         <div class="ven-foot">
-          <span class="ven-loc">台北</span>
+          <span class="ven-loc">台北 / 台中</span>
           <span class="ven-type">器材租借</span>
         </div>
       </div>
-      <div class="ven">
-        <div class="ven-top">
-          <div class="ven-icon">✂️</div>
-          <span class="vbadge vb-new">New</span>
-        </div>
-        <div class="ven-zh">剪輯工作室 CUTS</div>
-        <div class="ven-en">CUTS Post Studio</div>
-        <div class="ven-cat">調光 / 混音 / 剪輯 · 時段計費 · 學生作品歡迎</div>
-        <div class="ven-foot">
-          <span class="ven-loc">台北</span>
-          <span class="ven-type">後製剪輯</span>
-        </div>
+      <div class="ven" style="background:rgba(200,66,42,.03);border:1px dashed rgba(200,66,42,.2);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:8px">
+        <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.15em;color:rgba(200,66,42,.6);text-transform:uppercase">Open Invitation</div>
+        <div style="font-family:'Noto Sans TC',sans-serif;font-size:18px;font-weight:700;color:var(--white);line-height:1.3">你的廠商<br>應該在這裡</div>
+        <div style="font-size:13px;color:var(--dim);line-height:1.6">我們正在招募真實的影視相關廠商：外燴、器材、後製、服裝、道具。不付費排名，以口碑與評分為主。</div>
+        <a href="mailto:crewlog@example.com" style="margin-top:4px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--red);text-decoration:none;border-bottom:1px solid rgba(200,66,42,.3);padding-bottom:2px">申請上架 →</a>
       </div>
     </div>
   </div>
@@ -1694,6 +1772,7 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
       <button class="cl-filter-btn" onclick="filterLoc('宗教氛圍',this)">宗教氛圍</button>
       <button class="cl-filter-btn" onclick="filterLoc('復古懷舊',this)">復古懷舊</button>
       <button class="cl-filter-btn" onclick="filterLoc('建築感',this)">建築感</button>
+      <button class="cl-filter-btn" onclick="filterLoc('美式',this)">美式</button>
       <button class="cl-filter-btn" onclick="filterLoc('台中',this)">台中</button>
       <button class="cl-filter-btn" onclick="filterLoc('南投',this)">南投</button>
     </div>
@@ -1804,6 +1883,21 @@ footer{border-top:1px solid rgba(200,66,42,.15);padding:40px 48px;display:flex;a
         </div>
         <div class="cl-notes">橋樑結構感強，夜間路燈偏暗有電影感。可拍車景，人煙稀少。官方記錄有拍攝組到訪。</div>
         <a class="cl-gps-link" href="https://maps.app.goo.gl/841eYbj184Xtnm8z5" target="_blank">↗ Google Maps</a>
+      </div>
+
+      <div class="cl-card" data-tags="建築感 美式 台中 廣告 MV 短片">
+        <div class="cl-city">台中</div>
+        <div class="cl-name">neü &amp; Co. Café</div>
+        <div class="cl-name-en">neü &amp; Co. Café</div>
+        <div class="cl-vtags"><span class="cl-vtag">建築感</span><span class="cl-vtag">美式</span><span class="cl-vtag">金屬感</span></div>
+        <div class="cl-stypes"><span class="cl-stype">廣告</span><span class="cl-stype">MV</span><span class="cl-stype">短片</span></div>
+        <div class="cl-meta-row">
+          <div class="cl-meta-item"><span class="cl-meta-key">開放時間</span>需確認營業</div>
+          <div class="cl-meta-item"><span class="cl-meta-key">停車</span>附近路邊</div>
+          <div class="cl-meta-item"><span class="cl-meta-key">申請</span>需洽店家</div>
+        </div>
+        <div class="cl-notes">金屬質感極重的美式咖啡廳，工業風室內設計。★4.9（176 則評論），氛圍感強，適合美式時尚類廣告或音樂 MV。需提前與店家溝通。</div>
+        <a class="cl-gps-link" href="https://maps.app.goo.gl/qmY5uXKLaR9XMoz86" target="_blank">↗ Google Maps</a>
       </div>
 
       <div class="cl-card" data-tags="建築感 台中 電影 廣告 MV">
